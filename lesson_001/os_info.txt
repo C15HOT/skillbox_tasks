@@ -1,0 +1,4 @@
+OS info is 
+uname_result(system='Windows', node='Nout-Irina', release='10', version='10.0.18362', machine='AMD64', processor='Intel64 Family 6 Model 58 Stepping 9, GenuineIntel')
+
+Python version is 3.7.9 (tags/v3.7.9:13c94747c7, Aug 17 2020, 18:58:18) [MSC v.1900 64 bit (AMD64)] ('64bit', 'WindowsPE')
