@@ -13,3 +13,5 @@ print(info)
 
 with open('os_info.txt', 'w', encoding='utf8') as ff:
     ff.write(info)
+
+#зачёт!
