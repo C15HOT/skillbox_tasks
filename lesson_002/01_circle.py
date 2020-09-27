@@ -11,10 +11,9 @@ radius = 42
 #       точность указывается в функции round()
 
 pi = 3.1415926
-S = round(pi * radius ** 2,4)
+S = round(pi * radius ** 2, 4)
 
 print('площадь круга: ', S)
-
 
 # Далее, пусть есть координаты точки
 point_1 = (23, 34)
@@ -28,7 +27,7 @@ point_1 = (23, 34)
 #       квадратный корень - это возведение в степень 0.5
 #       операции сравнения дают булевы константы True и False
 
-distance = ((point_1[0]**2)+(point_1[1])**2)**0.5
+distance = ((point_1[0] ** 2) + (point_1[1]) ** 2) ** 0.5
 
 print(radius <= distance)
 
@@ -37,7 +36,7 @@ point_2 = (30, 30)
 # Если точка point_2 лежит внутри круга (radius = 42), то выведите на консоль True,
 # Или False, если точка лежит вовне круга.
 
-distance = ((point_2[0]**2)+(point_2[1])**2)**0.5
+distance = ((point_2[0] ** 2) + (point_2[1]) ** 2) ** 0.5
 
 print(radius <= distance)
 
@@ -46,3 +45,4 @@ print(radius <= distance)
 # 77777.7777
 # False
 # False
+#зачёт!

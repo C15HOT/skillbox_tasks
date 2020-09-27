@@ -37,3 +37,4 @@ print(secret_message[1][9:13])
 print(secret_message[2][5:15:2])
 print(secret_message[3][-20:-26:-1])
 print(secret_message[4][-12:-17:-1])
+#зачёт!
