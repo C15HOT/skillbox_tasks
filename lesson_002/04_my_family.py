@@ -15,5 +15,5 @@ my_family_height = [ ['Андрей', 180],['Ирина', 170],['Марина', 
 print('Рост отца - ', my_family_height[0][1])
 # Выведите на консоль общий рост вашей семьи как сумму ростов всех членов
 #   Общий рост моей семьи - ХХ см
-print('Общий рост моей семьи - ', my_family_height[0][1]+my_family_height[1][1]+my_family_height[2][1])
-# TODO вычисления лучше всего вынести в переменную, а её уже печатать
+rost = my_family_height[0][1]+my_family_height[1][1]+my_family_height[2][1]
+print('Общий рост моей семьи - ', rost)
