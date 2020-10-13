@@ -10,5 +10,10 @@
 #   Студенту надо попросить ХХХ.ХХ рублей
 
 educational_grant, expenses = 10000, 12000
-
-# TODO здесь ваш код
+i=0
+sum=0
+while i < 10:
+    sum =sum+ expenses - educational_grant
+    expenses= expenses*1.03
+    i+=1
+print('Студенту надо попросить ', '%.2f' %(sum), 'рублей')
