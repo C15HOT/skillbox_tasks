@@ -81,3 +81,4 @@ elif hole_y >= brick_z:
             print('нет')
 else:
     print('нет')
+#зачёт!

@@ -9,6 +9,8 @@ rainbow_colors = (sd.COLOR_RED, sd.COLOR_ORANGE, sd.COLOR_YELLOW, sd.COLOR_GREEN
 
 # Нарисовать радугу: 7 линий разного цвета толщиной 4 с шагом 5 из точки (50, 50) в точку (350, 450)
 i=0
+# TODO Не забывайте о стиле (можно поправить его например через Code/Reformat code или CTRL + ALT + L на windows)
+
 for color in rainbow_colors:
    start = sd.get_point(50+i, 50)
    end = sd.get_point(350+i, 450)

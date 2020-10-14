@@ -11,7 +11,7 @@ for _ in range(3):
     sd.circle(center_position=point, radius=radius)
     radius += 5
 # Написать функцию рисования пузырька, принммающую 3 (или более) параметра: точка рисования, шаг и цвет
-
+# TODO Не забывайте о стиле (можно поправить его например через Code/Reformat code или CTRL + ALT + L на windows)
 def print_buble(point,step,color,amount):
     radius = 10
     for _ in range(amount):
@@ -46,7 +46,7 @@ for _ in range(100):
     point=sd.random_point()
     step = random.randint(1,10)
     color = sd.random_color()
-    print_buble(point,step,color,1)
+    print_buble(point,step,color,3)
 
 
 sd.pause()
