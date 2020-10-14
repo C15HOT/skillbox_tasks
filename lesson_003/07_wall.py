@@ -6,33 +6,18 @@ import simple_draw as sd
 # Нарисовать стену из кирпичей. Размер кирпича - 100х50
 # Использовать вложенные циклы for
 COLOR_YELLOW = (255, 255, 0)
-slide=0
-# TODO Не забывайте о стиле (можно поправить его например через Code/Reformat code или CTRL + ALT + L на windows)
+slide = 0
 
-# TODO немного подправил границы, чтобы показать в чём проблема текущего алгоритма
-# TODO стена рисуется по диагонали
 sd.resolution = 1000, 600
 
-# TODO Тк сдвиг зависит от номеря ряда, а ряд от внешнего цикла
-# TODO Будем нумеровать итерации в нём -
-# TODO for row, y in enumerate(range(...))
-# TODO Так, в row у нас будет номер ряда.
-# TODO Проверив его на чётность, мы сможем решить, двигать ли ряд, или нет
-# TODO (row % 2 == 0)
-# TODO Как добавить сдвиг, узнав о чётности ряда?
-# TODO Например, если ряд четный, начинать цикл с -50, если нет - то с 0
-# TODO Для этого до цикла создадим x0 и с помощью тернарного оператора будем менять его значения
-# TODO x0 = -50 if (условие четности ряда) else 0
-# TODO И этот x0 добавим в цикл фор
 
-# TODO Тут я бы ещё посоветовал связать размеры кирпича с переменными
-# TODO Т.е. создать 2 переменные с размерами 100 и 50
-# TODO и использовать их в range и в точках
-for y in range(0,1000,50):
-    slide+=50
-    for x in range(-100,500,100):
-        left = sd.get_point(0+x+slide,0+y)
-        right = sd.get_point(100 + x+slide, 50+ y)
+
+point_x,point_y=100,50
+for row, y in enumerate(range(0, 1000, 50)):
+    x0= -50 if row % 2 == 0 else 0
+    for x in range(x0, 1000, 100):
+        left = sd.get_point(0 + x , 0 + y)
+        right = sd.get_point(point_x+x , point_y +y)
         sd.rectangle(left_bottom=left, right_top=right, color=COLOR_YELLOW, width=1)
 # Подсказки:
 #  Для отрисовки кирпича использовать функцию rectangle

@@ -57,12 +57,15 @@ store = {
 for name, item in goods.items():
     amount = 0
     sum = 0
-    for j in range(len(store[item])):
-        # TODO Нэйминг, вместо 'j' можно и нужно придумать что-то полезное, хоть как-то описывающее данные внутри
-        # TODO Здесь цикл надо запускать по списку, а не по его длине
-        # TODO Да и зачастую метод запуска цикла по range(len(список)) - плохая практика
-        # TODO Если нужны индексы - можно использовать enumerate
-        # TODO for index, element in enumerate(список)
-        amount += (store[item][j]['quantity'])
-        sum += (store[item][j]['quantity']) * (store[item][j]['price'])
+    for code in range(len(store[item])):
+        #  Нэйминг, вместо 'j' можно и нужно придумать что-то полезное, хоть как-то описывающее данные внутри
+        #  Здесь цикл надо запускать по списку, а не по его длине
+        #  Да и зачастую метод запуска цикла по range(len(список)) - плохая практика
+        # Если нужны индексы - можно использовать enumerate
+        # for index, element in enumerate(список)
+        # Я пытался сделать цикл разными способами, во всех других у меня выдает ошибки.
+        # В случае прохода цикла по спику выдает
+        # TypeError: list indices must be integers or slices, not str
+        amount += (store[item][code]['quantity'])
+        sum += (store[item][code]['quantity']) * (store[item][code]['price'])
     print(name, '-', amount, 'шт.,', 'стоимость -', sum)

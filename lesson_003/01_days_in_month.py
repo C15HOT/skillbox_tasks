@@ -10,33 +10,16 @@
 user_input = input('Введите, пожалуйста, номер месяца: ')
 month = int(user_input)
 print('Вы ввели', month)
-# TODO По сути нам нужно получить один из 3 вариантов (30, 31, 28)
-# TODO Поэтому нам понадобится 3 условия if/elif и одно else для некорректных вариантов
-# TODO Нужно сгруппировать номера месяцев в списки и проверять с помощью оператора 'in' в какой из них входит
-# TODO ввод пользователя
-if month == 1:
-    print("31")
-elif month == 2:
-    print("28")
-elif month == 3:
-    print("31")
-elif month == 4:
+
+month_28 = [2]
+month_30 = [4, 6, 9, 11]
+month_31 = [1, 3, 5, 7, 8, 10, 12]
+
+if month in month_28:
+    print('28')
+elif month in month_30:
     print('30')
-elif month == 5:
-    print('31')
-elif month == 6:
-    print('30')
-elif month == 7:
-    print('31')
-elif month == 8:
-    print('31')
-elif month == 9:
-    print('30')
-elif month == 10:
-    print('31')
-elif month == 11:
-    print('30')
-elif month == 12:
+elif month in month_31:
     print('31')
 else:
-    print ('вы ввели некорректный номер месяца')
+    print('вы ввели некорректный номер месяца')

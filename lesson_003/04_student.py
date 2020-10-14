@@ -8,13 +8,13 @@
 # чтобы можно было прожить учебный год (10 месяцев), используя только эти деньги и стипендию.
 # Формат вывода:
 #   Студенту надо попросить ХХХ.ХХ рублей
-# TODO Не забывайте о стиле (можно поправить его например через Code/Reformat code или CTRL + ALT + L на windows)
+
 
 educational_grant, expenses = 10000, 12000
-i=0  # TODO Нэйминг - стоит назвать переменную полезнее, что-то вроде month
-sum=0
-while i < 10:
-    sum =sum+ expenses - educational_grant  # TODO тут и ниже можно использовать += и *=
-    expenses= expenses*1.03
-    i+=1
-print('Студенту надо попросить ', '%.2f' %(sum), 'рублей')
+month = 0
+sum = 0
+while month < 10:
+    sum += expenses - educational_grant
+    expenses *= 1.03
+    month += 1
+print('Студенту надо попросить ', '%.2f' % (sum), 'рублей')
