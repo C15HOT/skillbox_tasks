@@ -57,20 +57,9 @@ store = {
 for name, item in goods.items():
     amount = 0
     sum = 0
-    for element in store[item]:  # TODO А так пробовали?
-        print(element)  # TODO при этом не нужно добавлять никакие индексы и коды
-        # TODO можно прямо к переменной цикла добавлять ключ из словаря
-    for code in range(len(store[item])):
-        # TODO А циклы range(len()) лучше вообще избегать - это антипаттерн
-
-        #  Нэйминг, вместо 'j' можно и нужно придумать что-то полезное, хоть как-то описывающее данные внутри
-        #  Здесь цикл надо запускать по списку, а не по его длине
-        #  Да и зачастую метод запуска цикла по range(len(список)) - плохая практика
-        # Если нужны индексы - можно использовать enumerate
-        # for index, element in enumerate(список)
-        # Я пытался сделать цикл разными способами, во всех других у меня выдает ошибки.
-        # В случае прохода цикла по спику выдает
-        # TypeError: list indices must be integers or slices, not str
-        amount += (store[item][code]['quantity'])
-        sum += (store[item][code]['quantity']) * (store[item][code]['price'])
+    for element in store[item]:
+        #при этом не нужно добавлять никакие индексы и коды
+        #можно прямо к переменной цикла добавлять ключ из словаря
+        amount += element['quantity']
+        sum += element['quantity'] * element['price']
     print(name, '-', amount, 'шт.,', 'стоимость -', sum)
