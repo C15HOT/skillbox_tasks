@@ -58,6 +58,11 @@ for name, item in goods.items():
     amount = 0
     sum = 0
     for j in range(len(store[item])):
+        # TODO Нэйминг, вместо 'j' можно и нужно придумать что-то полезное, хоть как-то описывающее данные внутри
+        # TODO Здесь цикл надо запускать по списку, а не по его длине
+        # TODO Да и зачастую метод запуска цикла по range(len(список)) - плохая практика
+        # TODO Если нужны индексы - можно использовать enumerate
+        # TODO for index, element in enumerate(список)
         amount += (store[item][j]['quantity'])
         sum += (store[item][j]['quantity']) * (store[item][j]['price'])
     print(name, '-', amount, 'шт.,', 'стоимость -', sum)
