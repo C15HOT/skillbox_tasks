@@ -51,3 +51,4 @@ for _ in range(100):
     print_buble(point, step, color, 3)
 
 sd.pause()
+#зачёт!

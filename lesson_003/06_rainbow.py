@@ -29,3 +29,4 @@ for color in rainbow_colors:
     i += 20
 
 sd.pause()
+#зачёт!
