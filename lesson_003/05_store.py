@@ -58,8 +58,9 @@ for name, item in goods.items():
     amount = 0
     sum = 0
     for element in store[item]:
-        #при этом не нужно добавлять никакие индексы и коды
-        #можно прямо к переменной цикла добавлять ключ из словаря
+        # при этом не нужно добавлять никакие индексы и коды
+        # можно прямо к переменной цикла добавлять ключ из словаря
         amount += element['quantity']
         sum += element['quantity'] * element['price']
     print(name, '-', amount, 'шт.,', 'стоимость -', sum)
+#зачёт!
