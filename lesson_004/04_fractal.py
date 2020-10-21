@@ -16,8 +16,6 @@ import simple_draw as sd
 #   и параметром "длина ветвей" в 0.75 меньшей чем длина только что нарисованной ветви
 
 # 3) Запустить вашу рекурсивную функцию, используя следующие параметры:
-# root_point = sd.get_point(300, 30)
-# draw_branches(start_point=root_point, angle=90, length=100)
 
 # Пригодятся функции
 # sd.get_point()
@@ -26,7 +24,22 @@ import simple_draw as sd
 
 # можно поиграть -шрифтами- цветами и углами отклонения
 
-# TODO здесь ваш код
+def draw_branches(start_point, angle, length,delta):
+    if length < 10:
+        return
+    v1 = sd.get_vector(start_point=start_point, angle=angle, length=length, width=3)
+    v1.draw()
+
+    next_point = v1.end_point
+    next_angle = angle - delta
+    next_length = length * .75
+    draw_branches(start_point=next_point, angle=next_angle, length=next_length, delta=delta)
+
+
+root_point = sd.get_point(300, 30)
+
+draw_branches(start_point=root_point, angle=90, length=100,delta=delta)
+
 
 # 4) Усложненное задание (делать по желанию)
 # - сделать рандомное отклонение угла ветвей в пределах 40% от 30-ти градусов

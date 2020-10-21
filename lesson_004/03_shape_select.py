@@ -2,6 +2,7 @@
 
 import simple_draw as sd
 
+
 # Запросить у пользователя желаемую фигуру посредством выбора из существующих
 #   вывести список всех фигур с номерами и ждать ввода номера желаемой фигуры.
 # и нарисовать эту фигуру в центре экрана
@@ -20,9 +21,6 @@ def triangle(point, length, angle=0):
     v3.draw()
 
 
-
-
-
 def square(point, length, angle=0):
     v1 = sd.get_vector(start_point=point, angle=angle, length=length, width=3)
     v1.draw()
@@ -35,10 +33,6 @@ def square(point, length, angle=0):
 
     v4 = sd.get_vector(start_point=v3.end_point, angle=angle + 270, length=length, width=3)
     v4.draw()
-
-
-
-
 
 
 def pentagon(point, length, angle=0):
@@ -56,10 +50,6 @@ def pentagon(point, length, angle=0):
 
     v5 = sd.get_vector(start_point=v4.end_point, angle=angle + 72 * 4, length=length, width=3)
     v5.draw()
-
-
-
-
 
 
 def hexagon(point, length, angle=0):
@@ -82,30 +72,24 @@ def hexagon(point, length, angle=0):
     v6.draw()
 
 
-
-
-
-
 fig = ['1: Треугольник',
-        '2: Квадрат',
-        '3: Пятиугольник',
-        '4: Шестиугольник',
-        ]
+       '2: Квадрат',
+       '3: Пятиугольник',
+       '4: Шестиугольник',
+       ]
 
 point = sd.get_point(300, 300)
 
-
 print('Возможные фигуры:', '\n', '\n'.join(fig), '\n', 'Введите название фигуры')
-
 
 number = int(input())
 if number == 1:
     triangle(point=point, angle=0, length=200)
-elif number ==2:
+elif number == 2:
     square(point=point, angle=0, length=200)
-elif number ==3:
+elif number == 3:
     pentagon(point=point, angle=0, length=200)
-elif number ==4:
+elif number == 4:
     hexagon(point=point, angle=0, length=200)
 else:
     print('Вы ввели неверный номер')
