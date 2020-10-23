@@ -66,9 +66,12 @@ def hexagon(point, length, color, angle=0):
     sd.line(start_point=v1.end_point, end_point=end, color=color, width=3)
 
 
-colors = {'1': {'color_name': 'Красный', 'sd_name': sd.COLOR_RED}, '2': {'color_name': 'Оранжевый', 'sd_name': sd.COLOR_ORANGE},
-          '3': {'color_name': 'Желтый', 'sd_name': sd.COLOR_YELLOW}, '4': {'color_name': 'Зеленый', 'sd_name': sd.COLOR_GREEN},
-          '5': {'color_name': 'Циановый', 'sd_name': sd.COLOR_CYAN}, '6': {'color_name': 'Синий', 'sd_name': sd.COLOR_BLUE},
+colors = {'1': {'color_name': 'Красный', 'sd_name': sd.COLOR_RED},
+          '2': {'color_name': 'Оранжевый', 'sd_name': sd.COLOR_ORANGE},
+          '3': {'color_name': 'Желтый', 'sd_name': sd.COLOR_YELLOW},
+          '4': {'color_name': 'Зеленый', 'sd_name': sd.COLOR_GREEN},
+          '5': {'color_name': 'Циановый', 'sd_name': sd.COLOR_CYAN},
+          '6': {'color_name': 'Синий', 'sd_name': sd.COLOR_BLUE},
           '7': {'color_name': 'Фиолетовый', 'sd_name': sd.COLOR_PURPLE}}
 
 #  В этом случае удобнее создать словарь следующей структуры
@@ -79,7 +82,7 @@ colors = {'1': {'color_name': 'Красный', 'sd_name': sd.COLOR_RED}, '2': {
 #  А если среди ключей есть выбор пользователя - по этому ключу мы получим нужный вложенный словарь
 #  А там все ключи одинаковые, можем получить как название цвета, так и sd_цвет
 print('Возможные цвета:')
-for number,_ in colors.items():
+for number, _ in colors.items():
     print(number, ':', colors[number]['color_name'])
 
 print('Введите цвет фигур')
@@ -108,17 +111,5 @@ else:
             square(point=point_1, color=color, angle=0, length=200)
             pentagon(point=point_2, color=color, angle=0, length=100)
             hexagon(point=point_3, color=color, angle=0, length=100)
-
-
-
-
-
-
-
-
-
-
-
-
 
 sd.pause()

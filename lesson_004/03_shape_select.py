@@ -11,92 +11,75 @@ import simple_draw as sd
 # Результат решения см lesson_004/results/exercise_03_shape_select.jpg
 
 def triangle(point, length, angle=0):
-    v1 = sd.get_vector(start_point=point, angle=angle, length=length, width=3)
-    v1.draw()
+    step = 120
+    end = point
+    for cur_angle in range(0, 360 - step, step):
+        v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
+        v1.draw()
+        point = v1.end_point
 
-    v2 = sd.get_vector(start_point=v1.end_point, angle=angle + 120, length=length, width=3)
-    v2.draw()
-
-    v3 = sd.get_vector(start_point=v2.end_point, angle=angle + 240, length=length, width=3)
-    v3.draw()
+    sd.line(start_point=v1.end_point, end_point=end, width=3)
 
 
 def square(point, length, angle=0):
-    v1 = sd.get_vector(start_point=point, angle=angle, length=length, width=3)
-    v1.draw()
+    step = 90
+    end = point
+    for cur_angle in range(0, 360 - step, step):
+        v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
+        v1.draw()
+        point = v1.end_point
 
-    v2 = sd.get_vector(start_point=v1.end_point, angle=angle + 90, length=length, width=3)
-    v2.draw()
-
-    v3 = sd.get_vector(start_point=v2.end_point, angle=angle + 180, length=length, width=3)
-    v3.draw()
-
-    v4 = sd.get_vector(start_point=v3.end_point, angle=angle + 270, length=length, width=3)
-    v4.draw()
+    sd.line(start_point=v1.end_point, end_point=end, width=3)
 
 
 def pentagon(point, length, angle=0):
-    v1 = sd.get_vector(start_point=point, angle=angle, length=length, width=3)
-    v1.draw()
+    step = 72
+    end = point
+    for cur_angle in range(0, 360 - step, step):
+        v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
+        v1.draw()
+        point = v1.end_point
 
-    v2 = sd.get_vector(start_point=v1.end_point, angle=angle + 72, length=length, width=3)
-    v2.draw()
-
-    v3 = sd.get_vector(start_point=v2.end_point, angle=angle + 72 * 2, length=length, width=3)
-    v3.draw()
-
-    v4 = sd.get_vector(start_point=v3.end_point, angle=angle + 72 * 3, length=length, width=3)
-    v4.draw()
-
-    v5 = sd.get_vector(start_point=v4.end_point, angle=angle + 72 * 4, length=length, width=3)
-    v5.draw()
+    sd.line(start_point=v1.end_point, end_point=end, width=3)
 
 
 def hexagon(point, length, angle=0):
-    v1 = sd.get_vector(start_point=point, angle=angle, length=length, width=3)
-    v1.draw()
+    step = 60
+    end = point
+    for cur_angle in range(0, 360 - step, step):
+        v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
+        v1.draw()
+        point = v1.end_point
 
-    v2 = sd.get_vector(start_point=v1.end_point, angle=angle + 60, length=length, width=3)
-    v2.draw()
-
-    v3 = sd.get_vector(start_point=v2.end_point, angle=angle + 120, length=length, width=3)
-    v3.draw()
-
-    v4 = sd.get_vector(start_point=v3.end_point, angle=angle + 180, length=length, width=3)
-    v4.draw()
-
-    v5 = sd.get_vector(start_point=v4.end_point, angle=angle + 240, length=length, width=3)
-    v5.draw()
-
-    v6 = sd.get_vector(start_point=v5.end_point, angle=angle + 300, length=length, width=3)
-    v6.draw()
+    sd.line(start_point=v1.end_point, end_point=end, width=3)
 
 
-fig = ['1: Треугольник',
-       '2: Квадрат',
-       '3: Пятиугольник',
-       '4: Шестиугольник',
-       ]
-# TODO Нам надо реализовать выбор функции пользователем
-# TODO Для этого мы выбираем тот же путь, что в 02 с выбором цвета.
-# TODO Берем ту же структуру данных. Чтобы хранить функции в словаре - надо указать их без скобок, только имя
-# TODO Запустить её можно будет следующим образом:
-# TODO функция = словарь[юзер_выбор]['func']
-# TODO функция(параметры)
+figs = {'1': {'fig_name': 'Треугольник', 'func': triangle},'2': {'fig_name': 'Квардрат', 'func': square},
+              '3': {'fig_name': 'Пятиугольник', 'func': pentagon}, '4': {'fig_name': 'Шестиугольник', 'func': hexagon}}
+#  Нам надо реализовать выбор функции пользователем
+#  Для этого мы выбираем тот же путь, что в 02 с выбором цвета.
+#  Берем ту же структуру данных. Чтобы хранить функции в словаре - надо указать их без скобок, только имя
+#  Запустить её можно будет следующим образом:
+#  функция = словарь[юзер_выбор]['func']
+#  функция(параметры)
 point = sd.get_point(300, 300)
 
-print('Возможные фигуры:', '\n', '\n'.join(fig), '\n', 'Введите название фигуры')
+print('Возможные фигуры:')
+for number, _ in figs.items():
+    print(number, ':', figs[number]['fig_name'])
 
-number = int(input())
-if number == 1:
-    triangle(point=point, angle=0, length=200)
-elif number == 2:
-    square(point=point, angle=0, length=200)
-elif number == 3:
-    pentagon(point=point, angle=0, length=200)
-elif number == 4:
-    hexagon(point=point, angle=0, length=200)
+print('Введите название фигуры')
+user_input = input()
+if user_input in figs:
+    func = figs[user_input]['func']
+    func(point=point, angle=0, length=100)
+
 else:
-    print('Вы ввели неверный номер')
+    while user_input not in figs:
+        print('Вы ввели неверный номер')
+        user_input = input()
+        if user_input in figs:
+            func = figs[user_input]['func']
+            func(point=point, angle=0, length=100)
 
 sd.pause()
