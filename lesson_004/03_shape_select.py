@@ -18,7 +18,7 @@ def triangle(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def square(point, length, angle=0):
@@ -29,7 +29,7 @@ def square(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def pentagon(point, length, angle=0):
@@ -40,7 +40,7 @@ def pentagon(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def hexagon(point, length, angle=0):
@@ -51,11 +51,11 @@ def hexagon(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
-figs = {'1': {'fig_name': 'Треугольник', 'func': triangle},'2': {'fig_name': 'Квардрат', 'func': square},
-              '3': {'fig_name': 'Пятиугольник', 'func': pentagon}, '4': {'fig_name': 'Шестиугольник', 'func': hexagon}}
+figs = {'1': {'fig_name': 'Треугольник', 'func': triangle}, '2': {'fig_name': 'Квардрат', 'func': square},
+        '3': {'fig_name': 'Пятиугольник', 'func': pentagon}, '4': {'fig_name': 'Шестиугольник', 'func': hexagon}}
 #  Нам надо реализовать выбор функции пользователем
 #  Для этого мы выбираем тот же путь, что в 02 с выбором цвета.
 #  Берем ту же структуру данных. Чтобы хранить функции в словаре - надо указать их без скобок, только имя
@@ -70,16 +70,11 @@ for number, _ in figs.items():
 
 print('Введите название фигуры')
 user_input = input()
-if user_input in figs:  # TODO и тут нужно чуть уменьшить код, убрав дублирование
+while user_input not in figs:
+    print('Вы ввели неверный номер')
+    user_input = input()
+if user_input in figs:
     func = figs[user_input]['func']
     func(point=point, angle=0, length=100)
-
-else:
-    while user_input not in figs:
-        print('Вы ввели неверный номер')
-        user_input = input()
-        if user_input in figs:
-            func = figs[user_input]['func']
-            func(point=point, angle=0, length=100)
 
 sd.pause()

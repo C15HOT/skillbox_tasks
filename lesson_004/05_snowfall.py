@@ -16,27 +16,25 @@ N = 20
 # sd.sleep()
 # sd.random_number()
 # sd.user_want_exit()
-length=[]
-# TODO Не забывайте о стиле кода (в этом вам отчасти поможет code/reformat code - или просто ctrl + alt + L)
-c_y = list(range(500,700,10))  # TODO Нэйминг - не стоит экономить буквы, придумайте какое-то понятное
-# TODO и полезное название
-c_x= list(range(0,1200,60))
+length = []
+
+start_pull_of_y_coordinate = list(range(500, 700, 10))
+start_pull_of_x_coordinate = list(range(0, 1200, 60))
 for _ in range(N):
     length.append(sd.random_number(a=10, b=101))
 
 while True:
     sd.clear_screen()
-    for i, x in enumerate(c_x):  # TODO особенно это заметно тут, 'i' ещё ладно
-        # TODO но все эти c_x c_у - сбивают с толку
-        point=sd.get_point(x,c_y[i])
+    for i, x in enumerate(start_pull_of_x_coordinate):
+
+        point = sd.get_point(x, start_pull_of_y_coordinate[i])
 
         sd.snowflake(center=point, length=length[i])
-        c_y[i] -= 10
+        start_pull_of_y_coordinate[i] -= 10
 
-        if c_y[i] < 10:
-            break  # TODO подумайте, что ещё можно сделать с упавшими снежинками
-        x = x + 10
-        i += 1
+        if start_pull_of_y_coordinate[i] < 10:
+
+            break  # подумайте, что ещё можно сделать с упавшими снежинками - оставить лежать на земле, пока не представляю как
 
     sd.sleep(0.05)
     if sd.user_want_exit():

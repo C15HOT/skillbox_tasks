@@ -30,7 +30,7 @@ def triangle(point, length, color, angle=0):
         v1.draw(color=color)
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, color=color, width=3)
+    sd.line(start_point=point, end_point=end, color=color, width=3)
 
 
 def square(point, length, color, angle=0):
@@ -41,7 +41,7 @@ def square(point, length, color, angle=0):
         v1.draw(color=color)
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, color=color, width=3)
+    sd.line(start_point=point, end_point=end, color=color, width=3)
 
 
 def pentagon(point, length, color, angle=0):
@@ -52,7 +52,7 @@ def pentagon(point, length, color, angle=0):
         v1.draw(color=color)
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, color=color, width=3)
+    sd.line(start_point=point, end_point=end, color=color, width=3)
 
 
 def hexagon(point, length, color, angle=0):
@@ -63,7 +63,7 @@ def hexagon(point, length, color, angle=0):
         v1.draw(color=color)
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, color=color, width=3)
+    sd.line(start_point=point, end_point=end, color=color, width=3)
 
 
 colors = {'1': {'color_name': 'Красный', 'sd_name': sd.COLOR_RED},
@@ -95,21 +95,14 @@ user_input = input()
 #  1) Цикл, который распечатает номера и названия цветов из словаря выше
 #  2) ввод пользователя (без int, тк ключи в словаре у нас строки, а не числа)
 #  3) проверка(лучше в цикле) "если ввод среди ключей словаря" --> то выбранный_цвет = словарь[ввод]['sd_name']
-if user_input in colors:  # TODO дублирование кода получается
+while user_input not in colors:
+    print('Вы ввели неверный номер')
+    user_input = input()
+if user_input in colors:
     color = colors[user_input]['sd_name']
     triangle(point=point_0, color=color, angle=0, length=200)
     square(point=point_1, color=color, angle=0, length=200)
     pentagon(point=point_2, color=color, angle=0, length=100)
     hexagon(point=point_3, color=color, angle=0, length=100)
-else:
-    while user_input not in colors:  # TODO попробуйте сразу этот цикл запускать
-        print('Вы ввели неверный номер')
-        user_input = input()
-        if user_input in colors:  # TODO а после цикла -- это действие (не внутри цикла)
-            color = colors[user_input]['sd_name']
-            triangle(point=point_0, color=color, angle=0, length=200)
-            square(point=point_1, color=color, angle=0, length=200)
-            pentagon(point=point_2, color=color, angle=0, length=100)
-            hexagon(point=point_3, color=color, angle=0, length=100)
 
 sd.pause()

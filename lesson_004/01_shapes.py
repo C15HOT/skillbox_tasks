@@ -57,7 +57,7 @@ def triangle(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def square(point, length, angle=0):
@@ -68,7 +68,7 @@ def square(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def pentagon(point, length, angle=0):
@@ -79,7 +79,7 @@ def pentagon(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
+    sd.line(start_point=point, end_point=end, width=3)
 
 
 def hexagon(point, length, angle=0):
@@ -90,16 +90,14 @@ def hexagon(point, length, angle=0):
         v1.draw()
         point = v1.end_point
 
-    sd.line(start_point=v1.end_point, end_point=end, width=3)
-    # TODO чуть "безопаснее" будет использовать не v1.end_point а point
-    # TODO в целом ничего не изменится, но не будет даже возможности ошибки из-за того что v1 не будет создано
+    sd.line(start_point=point, end_point=end, width=3)
 
 
-triangle(point=point, length=100, angle=0)
-square(point=point, length=100, angle=0)
-pentagon(point=point, length=100, angle=0)
-hexagon(point=point, length=100, angle=0)
-# TODO можно приступать к части 2
+# triangle(point=point, length=100, angle=0)
+# square(point=point, length=100, angle=0)
+# pentagon(point=point, length=100, angle=0)
+# hexagon(point=point, length=100, angle=0)
+
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
 # Скажем, связывать точки не линиями, а дугами. Или двойными линиями. Или рисовать круги в угловых точках. Или...
@@ -110,7 +108,39 @@ hexagon(point=point, length=100, angle=0)
 # Надо сформировать функцию, параметризированную в местах где была "небольшая правка".
 # Это называется "Выделить общую часть алгоритма в отдельную функцию"
 # Потом надо изменить функции рисования конкретных фигур - вызывать общую функцию вместо "почти" одинакового кода.
-#
+
+def print_fig(point, length, step,angle=0):
+    end = point
+    for cur_angle in range(0, 360 - step, step):
+        v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
+        v1.draw()
+        point = v1.end_point
+
+    sd.line(start_point=point, end_point=end, width=3)
+def triangle_2(point,length, angle=0):
+    point=point
+    length=length
+    step=120
+    print_fig(point,length,step, angle)
+def square_2(point,length, angle=0):
+    point=point
+    length=length
+    step=90
+    print_fig(point,length,step, angle)
+def pentagon_2(point,length, angle=0):
+    point=point
+    length=length
+    step=72
+    print_fig(point,length,step, angle)
+def hexagon_2(point,length, angle=0):
+    point=point
+    length=length
+    step=60
+    print_fig(point,length,step, angle)
+triangle_2(point=point,length=100,angle=0)
+square_2(point=point,length=100,angle=0)
+pentagon_2(point=point,length=100,angle=0)
+hexagon_2(point=point,length=100,angle=0)
 # В итоге должно получиться:
 #   - одна общая функция со множеством параметров,
 #   - все функции отрисовки треугольника/квадрата/етс берут 3 параметра и внутри себя ВЫЗЫВАЮТ общую функцию.
