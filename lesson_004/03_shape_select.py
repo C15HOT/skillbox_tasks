@@ -70,7 +70,7 @@ for number, _ in figs.items():
 
 print('Введите название фигуры')
 user_input = input()
-if user_input in figs:
+if user_input in figs:  # TODO и тут нужно чуть уменьшить код, убрав дублирование
     func = figs[user_input]['func']
     func(point=point, angle=0, length=100)
 

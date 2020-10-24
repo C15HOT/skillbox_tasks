@@ -91,13 +91,15 @@ def hexagon(point, length, angle=0):
         point = v1.end_point
 
     sd.line(start_point=v1.end_point, end_point=end, width=3)
+    # TODO чуть "безопаснее" будет использовать не v1.end_point а point
+    # TODO в целом ничего не изменится, но не будет даже возможности ошибки из-за того что v1 не будет создано
 
 
 triangle(point=point, length=100, angle=0)
 square(point=point, length=100, angle=0)
 pentagon(point=point, length=100, angle=0)
 hexagon(point=point, length=100, angle=0)
-
+# TODO можно приступать к части 2
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
 # Скажем, связывать точки не линиями, а дугами. Или двойными линиями. Или рисовать круги в угловых точках. Или...

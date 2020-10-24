@@ -95,17 +95,17 @@ user_input = input()
 #  1) Цикл, который распечатает номера и названия цветов из словаря выше
 #  2) ввод пользователя (без int, тк ключи в словаре у нас строки, а не числа)
 #  3) проверка(лучше в цикле) "если ввод среди ключей словаря" --> то выбранный_цвет = словарь[ввод]['sd_name']
-if user_input in colors:
+if user_input in colors:  # TODO дублирование кода получается
     color = colors[user_input]['sd_name']
     triangle(point=point_0, color=color, angle=0, length=200)
     square(point=point_1, color=color, angle=0, length=200)
     pentagon(point=point_2, color=color, angle=0, length=100)
     hexagon(point=point_3, color=color, angle=0, length=100)
 else:
-    while user_input not in colors:
+    while user_input not in colors:  # TODO попробуйте сразу этот цикл запускать
         print('Вы ввели неверный номер')
         user_input = input()
-        if user_input in colors:
+        if user_input in colors:  # TODO а после цикла -- это действие (не внутри цикла)
             color = colors[user_input]['sd_name']
             triangle(point=point_0, color=color, angle=0, length=200)
             square(point=point_1, color=color, angle=0, length=200)
