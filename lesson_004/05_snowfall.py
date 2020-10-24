@@ -16,30 +16,30 @@ N = 20
 # sd.sleep()
 # sd.random_number()
 # sd.user_want_exit()
-length = []
-
-start_pull_of_y_coordinate = list(range(500, 700, 10))
-start_pull_of_x_coordinate = list(range(0, 1200, 60))
-for _ in range(N):
-    length.append(sd.random_number(a=10, b=101))
-
-while True:
-    sd.clear_screen()
-    for i, x in enumerate(start_pull_of_x_coordinate):
-
-        point = sd.get_point(x, start_pull_of_y_coordinate[i])
-
-        sd.snowflake(center=point, length=length[i])
-        start_pull_of_y_coordinate[i] -= 10
-
-        if start_pull_of_y_coordinate[i] < 10:
-
-            break  # подумайте, что ещё можно сделать с упавшими снежинками - оставить лежать на земле, пока не представляю как
-
-    sd.sleep(0.05)
-    if sd.user_want_exit():
-        break
-sd.pause()
+# length = []
+#
+# start_pull_of_y_coordinate = list(range(500, 700, 10))
+# start_pull_of_x_coordinate = list(range(0, 1200, 60))
+# for _ in range(N):
+#     length.append(sd.random_number(a=10, b=101))
+#
+# while True:
+#     sd.clear_screen()
+#     for i, x in enumerate(start_pull_of_x_coordinate):
+#
+#         point = sd.get_point(x, start_pull_of_y_coordinate[i])
+#
+#         sd.snowflake(center=point, length=length[i])
+#         start_pull_of_y_coordinate[i] -= 10
+#
+#         if start_pull_of_y_coordinate[i] < 10:
+#
+#             break  # подумайте, что ещё можно сделать с упавшими снежинками - оставить лежать на земле, пока не представляю как
+#
+#     sd.sleep(0.05)
+#     if sd.user_want_exit():
+#         break
+# sd.pause()
 
 # Примерный алгоритм отрисовки снежинок
 #   навсегда
@@ -80,7 +80,36 @@ sd.pause()
 #     немного поспать
 #     если пользователь хочет выйти
 #       прервать цикл
+length = []
 
+start_pull_of_y_coordinate = list(range(500, 700, 10))
+start_pull_of_x_coordinate = list(range(0, 1200, 60))
+
+y_pull=[]
+for _ in range(N):
+    length.append(sd.random_number(a=10, b=101))
+
+while True:
+
+    for i, x in enumerate(start_pull_of_x_coordinate):
+
+        point = sd.get_point(x, start_pull_of_y_coordinate[i])
+        sd.start_drawing() # без этих функций результат такой же, как с ними
+        sd.snowflake(center=point, length=length[i],color=sd.background_color)
+        start_pull_of_y_coordinate[i] -= 10
+        #y_pull.append(start_pull_of_y_coordinate[i]) - не совсем понятно для чего сохранять предыдущую координату
+        point=sd.get_point(x, start_pull_of_y_coordinate[i])
+        sd.snowflake(center=point, length=length[i])
+        sd.finish_drawing()
+        if start_pull_of_y_coordinate[i] < 10:
+
+            break
+# Еще не могу разобраться как сделать чтобы каждая снежинка долетала до низа, программа останавливаетяс при попадании
+#вниз первой снежинки, причем сама первая снежинка куда-то проваливается под экран, а остальные останавливаются
+    sd.sleep(0.05)
+    if sd.user_want_exit():
+        break
+sd.pause()
 
 # Усложненное задание (делать по желанию)
 # - сделать рандомные отклонения вправо/влево при каждом шаге
