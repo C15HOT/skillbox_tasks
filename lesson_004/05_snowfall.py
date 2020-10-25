@@ -86,44 +86,50 @@ start_pull_of_y_coordinate = list(range(500, 700, 10))
 start_pull_of_x_coordinate = list(range(30, 1230, 60))
 
 y_pull = []
+y_pull2 = []
 for _ in range(N):
-    length.append(sd.random_number(a=10, b=101))
+    length.append(sd.random_number(a=10, b=50))
+
 
 while True:
     sd.start_drawing()
     for i, x in enumerate(start_pull_of_x_coordinate):
+        sdvig = sd.random_number(a=-30, b=30)
 
-        point = sd.get_point(x, start_pull_of_y_coordinate[i])
-        # start и finish нужно до и после цикла расставлять
-        #  чтобы между этими операциями вызывались все функции рисования,
-        #  тогда это поможет оптимизировать код
+
+        point = sd.get_point(x,start_pull_of_y_coordinate[i])
 
         sd.snowflake(center=point, length=length[i], color=sd.background_color)
         start_pull_of_y_coordinate[i] -= 10
+        start_pull_of_x_coordinate[i] += sdvig
 
         point = sd.get_point(x, start_pull_of_y_coordinate[i])
 
+
         if start_pull_of_y_coordinate[i] < 50:
-            # TODO странная схема получается, она сломается, если снежинки будут падать в другом порядке
-            # TODO Простой вариант - завершить цикл (тогда и остальные снежинки остановятся)
-            # TODO Чуть послжонее - запустить снежинку снова в полёт
+            # странная схема получается, она сломается, если снежинки будут падать в другом порядке
+            #  Простой вариант - завершить цикл (тогда и остальные снежинки остановятся)
+            #  Чуть послжонее - запустить снежинку снова в полёт
             #  (увеличить текущую координату в списке, например +600)
-            # TODO Самый сложный - запомнить индекс в отдельный список. После завершения текущего цикла -
-            # TODO перевернуть список индексов (чтобы шли от большего к меньшему).
-            # TODO Запустить новый цикл (на одном уровне отступа с этим, т.е. внутри while, но не внутри for)
-            # TODO по списку индексов - и в нём уже удалять элементы из 3 списков
+            #  Самый сложный - запомнить индекс в отдельный список. После завершения текущего цикла -
+            #  перевернуть список индексов (чтобы шли от большего к меньшему).
+            #  Запустить новый цикл (на одном уровне отступа с этим, т.е. внутри while, но не внутри for)
+            # по списку индексов - и в нём уже удалять элементы из 3 списков
             #  по указанным индексам через .pop(index)
+
             y_pull.append(start_pull_of_y_coordinate[i])
+
             point2 = sd.get_point(x, y_pull[i])
-            sd.snowflake(center=point2, length=length[i])
+
+            sd.snowflake(center=point2,length=length[i])
+            start_pull_of_y_coordinate[i] += 600
+
+
             continue
+
         sd.snowflake(center=point, length=length[i])
-        #  проблема тут в этом условии
-        #  из-за него цикл останавливается и следующие снежинки уже не падают
-        # чем можно заменить break?
-    # Еще не могу разобраться как сделать чтобы каждая снежинка долетала до низа,
-    # программа останавливаетяс при попадании
-    # вниз первой снежинки, причем сама первая снежинка куда-то проваливается под экран, а остальные останавливаются
+
+
     sd.finish_drawing()
     sd.sleep(0.05)
     if sd.user_want_exit():
