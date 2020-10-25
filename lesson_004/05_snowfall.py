@@ -83,35 +83,41 @@ N = 20
 length = []
 
 start_pull_of_y_coordinate = list(range(500, 700, 10))
-start_pull_of_x_coordinate = list(range(0, 1200, 60))
+start_pull_of_x_coordinate = list(range(30, 1230, 60))
 
 y_pull = []
 for _ in range(N):
     length.append(sd.random_number(a=10, b=101))
 
-while True:
 
+while True:
+    sd.start_drawing()
     for i, x in enumerate(start_pull_of_x_coordinate):
 
         point = sd.get_point(x, start_pull_of_y_coordinate[i])
-        # TODO start и finish нужно до и после цикла расставлять
-        # TODO чтобы между этими операциями вызывались все функции рисования,
-        # TODO тогда это поможет оптимизировать код
-        sd.start_drawing()  # без этих функций результат такой же, как с ними
+        # start и finish нужно до и после цикла расставлять
+        #  чтобы между этими операциями вызывались все функции рисования,
+        #  тогда это поможет оптимизировать код
+
         sd.snowflake(center=point, length=length[i], color=sd.background_color)
         start_pull_of_y_coordinate[i] -= 10
-        # y_pull.append(start_pull_of_y_coordinate[i]) - не совсем понятно для чего сохранять предыдущую координату
+
         point = sd.get_point(x, start_pull_of_y_coordinate[i])
+
+
+        if start_pull_of_y_coordinate[i] < 50:
+            y_pull.append(start_pull_of_y_coordinate[i])
+            point2 = sd.get_point(x, y_pull[i])
+            sd.snowflake(center=point2,length=length[i])
+            continue
         sd.snowflake(center=point, length=length[i])
-        sd.finish_drawing()
-        if start_pull_of_y_coordinate[i] < 10:
-            break
-            # TODO проблема тут в этом условии
-            # TODO из-за него цикл останавливается и следующие снежинки уже не падают
-            # TODO чем можно заменить break?
+            #  проблема тут в этом условии
+            #  из-за него цикл останавливается и следующие снежинки уже не падают
+            # чем можно заменить break?
     # Еще не могу разобраться как сделать чтобы каждая снежинка долетала до низа,
     # программа останавливаетяс при попадании
     # вниз первой снежинки, причем сама первая снежинка куда-то проваливается под экран, а остальные останавливаются
+    sd.finish_drawing()
     sd.sleep(0.05)
     if sd.user_want_exit():
         break
