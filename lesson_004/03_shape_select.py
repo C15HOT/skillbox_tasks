@@ -78,3 +78,4 @@ if user_input in figs:
     func(point=point, angle=0, length=100)
 
 sd.pause()
+#зачёт!

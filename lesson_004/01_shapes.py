@@ -109,7 +109,7 @@ def hexagon(point, length, angle=0):
 # Это называется "Выделить общую часть алгоритма в отдельную функцию"
 # Потом надо изменить функции рисования конкретных фигур - вызывать общую функцию вместо "почти" одинакового кода.
 
-def print_fig(point, length, step,angle=0):
+def print_fig(point, length, step, angle=0):
     end = point
     for cur_angle in range(0, 360 - step, step):
         v1 = sd.get_vector(start_point=point, angle=angle + cur_angle, length=length, width=3)
@@ -117,30 +117,40 @@ def print_fig(point, length, step,angle=0):
         point = v1.end_point
 
     sd.line(start_point=point, end_point=end, width=3)
-def triangle_2(point,length, angle=0):
-    point=point
-    length=length
-    step=120
-    print_fig(point,length,step, angle)
-def square_2(point,length, angle=0):
-    point=point
-    length=length
-    step=90
-    print_fig(point,length,step, angle)
-def pentagon_2(point,length, angle=0):
-    point=point
-    length=length
-    step=72
-    print_fig(point,length,step, angle)
-def hexagon_2(point,length, angle=0):
-    point=point
-    length=length
-    step=60
-    print_fig(point,length,step, angle)
-triangle_2(point=point,length=100,angle=0)
-square_2(point=point,length=100,angle=0)
-pentagon_2(point=point,length=100,angle=0)
-hexagon_2(point=point,length=100,angle=0)
+
+
+def triangle_2(point, length, angle=0):
+    point = point
+    length = length
+    step = 120
+    print_fig(point, length, step, angle)
+
+
+def square_2(point, length, angle=0):
+    point = point
+    length = length
+    step = 90
+    print_fig(point, length, step, angle)
+
+
+def pentagon_2(point, length, angle=0):
+    point = point
+    length = length
+    step = 72
+    print_fig(point, length, step, angle)
+
+
+def hexagon_2(point, length, angle=0):
+    point = point
+    length = length
+    step = 60
+    print_fig(point, length, step, angle)
+
+
+triangle_2(point=point, length=100, angle=0)
+square_2(point=point, length=100, angle=0)
+pentagon_2(point=point, length=100, angle=0)
+hexagon_2(point=point, length=100, angle=0)
 # В итоге должно получиться:
 #   - одна общая функция со множеством параметров,
 #   - все функции отрисовки треугольника/квадрата/етс берут 3 параметра и внутри себя ВЫЗЫВАЮТ общую функцию.
@@ -155,3 +165,4 @@ hexagon_2(point=point,length=100,angle=0)
 
 
 sd.pause()
+#зачёт!

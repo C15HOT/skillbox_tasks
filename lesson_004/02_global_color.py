@@ -106,3 +106,4 @@ if user_input in colors:
     hexagon(point=point_3, color=color, angle=0, length=100)
 
 sd.pause()
+#зачёт!
