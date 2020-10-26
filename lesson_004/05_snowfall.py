@@ -82,7 +82,7 @@ N = 20
 #       прервать цикл
 length = []
 
-start_pull_of_y_coordinate = list(range(500, 700, 10))
+start_pull_of_y_coordinate = list(range(700, 500, -10))
 start_pull_of_x_coordinate = list(range(30, 1230, 60))
 
 y_pull = []
@@ -93,7 +93,7 @@ for _ in range(N):
 while True:
     sd.start_drawing()
     for i, x in enumerate(start_pull_of_x_coordinate):
-        sdvig = sd.random_number(a=-30, b=30)
+        sdvig = sd.random_number(a=-20, b=20)
 
         point = sd.get_point(x, start_pull_of_y_coordinate[i])
 
@@ -101,9 +101,9 @@ while True:
         start_pull_of_y_coordinate[i] -= 10
         start_pull_of_x_coordinate[i] += sdvig
 
-        # TODO т.к. вы добавили сдвиг по иксу - тут нужно использовать не x из цикла
-        # TODO а "start_pull_of_x_coordinate[i]"
-        point = sd.get_point(x, start_pull_of_y_coordinate[i])
+        #  т.к. вы добавили сдвиг по иксу - тут нужно использовать не x из цикла
+        #  а "start_pull_of_x_coordinate[i]"
+        point = sd.get_point(start_pull_of_x_coordinate[i], start_pull_of_y_coordinate[i])
 
         if start_pull_of_y_coordinate[i] < 50:
             # странная схема получается, она сломается, если снежинки будут падать в другом порядке
@@ -115,7 +115,7 @@ while True:
             #  Запустить новый цикл (на одном уровне отступа с этим, т.е. внутри while, но не внутри for)
             # по списку индексов - и в нём уже удалять элементы из 3 списков
             #  по указанным индексам через .pop(index)
-            # TODO Эти операции пока можно убрать и оставить только +600
+            # Эти операции пока можно убрать и оставить только +600
             # y_pull.append(start_pull_of_y_coordinate[i])
             #
             # point2 = sd.get_point(x, y_pull[i])
