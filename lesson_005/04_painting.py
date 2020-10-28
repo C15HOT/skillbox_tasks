@@ -17,11 +17,11 @@
 #  - справа в небе - радуга, слева - солнце (весна же!)
 # пример см. lesson_005/results/04_painting.jpg
 # Приправить своей фантазией по вкусу (коты? коровы? люди? трактор? что придумается)
-import simple_draw as sd
+
 from pictures import wall
 import simple_draw as sd
-
-sd.resolution=(1200,1000)
+#from pictures import tree
+sd.resolution=(1200,700)
 start_point_x=300
 start_point_y=50
 top_x=750
@@ -41,6 +41,9 @@ angle=0
 for angle in range(0,360,20):
     v1 = sd.get_vector(start_point=sun, angle=angle+angle, length=100, width=3)
     v1.draw()
+#tree_point=sd.get_point(700,0)
+#tree.draw_branches(start_point=tree,angle=0,length=100)
+
 # Усложненное задание (делать по желанию)
 # Анимировать картину.
 # Пусть слева идет снегопад, радуга переливается цветами, смайлик моргает, солнце крутит лучами, етс.
