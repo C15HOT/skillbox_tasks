@@ -8,3 +8,4 @@ import room_2
 
 print('В комнате room_1 живут: ', room_1.folks)
 print('В комнате room_2 живут: ', room_2.folks)
+# TODO Для более удобного распечатывания имён - используйте метод join
