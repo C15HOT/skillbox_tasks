@@ -22,10 +22,5 @@ def smile(x, y, color):
 
 
 
-x = random.randint(1, 500)
-y = random.randint(1, 500)
-color = sd.random_color()
-smile(x, y, color)
 
-sd.pause()
 #зачёт!
