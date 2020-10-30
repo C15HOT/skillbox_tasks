@@ -26,11 +26,17 @@ from lesson_005.pictures import wall
 import simple_draw as sd
 from lesson_005.pictures import tree
 from lesson_005.pictures.tree import tree_point
+# TODO нужно ли из wall импортировать сюда столько всего?
+# TODO попробуйте работать со всеми этими точками внутри модуля wall, а сюда импортировать только функцию
+# TODO чтобы нарисовать эту самую стену
 from lesson_005.pictures.wall import window_bottom, window_top,start_point_x,start_point_y,right_top,left_bottom,top_y,top_x
-
+# TODO В этом модуле лучше вместо добавления lesson_005
+# TODO пометить эту директорию как source_root (правой кнопкой на папке - mark directory as - source root)
 from lesson_005.pictures import rainbow
 from lesson_005.pictures import smile
 from lesson_005.pictures import snow
+# TODO Во всех файлах - поправьте стиль кода - используйте code - reformat code
+
 #  Тут должны остаться только вызовы функций рисования элементов картины,
 #  без лишних вспомогательных команд вроде создания точек и циклов
 
