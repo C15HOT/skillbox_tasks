@@ -14,14 +14,10 @@ import district.soviet_street.house1.room2
 import district.soviet_street.house2.room1
 import district.soviet_street.house2.room2
 #  попробуйте сперва сложить все списки, а затем использовать один join
-humans=district.central_street.house1.room1.folks+district.central_street.house1.room2.folks+\
-       district.central_street.house2.room1.folks+district.central_street.house2.room2.folks+ ['\n'] +\
-       # TODO можно добавить вот такие списки с \n чтобы переносить часть жителей на новую строку
-       district.soviet_street.house1.room1.folks+district.soviet_street.house1.room2.folks+\
-       district.soviet_street.house2.room1.folks+district.soviet_street.house2.room2.folks
-       # TODO При этом перенос кода на новую строку лучше делать не через "\" а через скобки
-       # TODO икс = (список_1 + список_2
-       # TODO       + список_3)
+humans=(district.central_street.house1.room1.folks+district.central_street.house1.room2.folks+['\n']+
+       district.central_street.house2.room1.folks+district.central_street.house2.room2.folks+ ['\n'] +
+       district.soviet_street.house1.room1.folks+district.soviet_street.house1.room2.folks+['\n']+
+       district.soviet_street.house2.room1.folks+district.soviet_street.house2.room2.folks)
 
 print('На районе живут: ', ','.join(humans))
 # Очень странно что pycharm видит только несколько модулей из общего списка, если не делать папку district источником

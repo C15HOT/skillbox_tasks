@@ -20,7 +20,4 @@ def smile(x, y, color):
     sd.line(start_point=point2, end_point=point3, color=color, width=1)
     sd.line(start_point=point3, end_point=point4, color=color, width=1)
 
-
-
-
-#зачёт!
+# зачёт!
