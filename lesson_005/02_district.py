@@ -13,11 +13,12 @@ import district.soviet_street.house1.room1
 import district.soviet_street.house1.room2
 import district.soviet_street.house2.room1
 import district.soviet_street.house2.room2
+
 #  попробуйте сперва сложить все списки, а затем использовать один join
-humans=(district.central_street.house1.room1.folks+district.central_street.house1.room2.folks+['\n']+
-       district.central_street.house2.room1.folks+district.central_street.house2.room2.folks+ ['\n'] +
-       district.soviet_street.house1.room1.folks+district.soviet_street.house1.room2.folks+['\n']+
-       district.soviet_street.house2.room1.folks+district.soviet_street.house2.room2.folks)
+humans = (district.central_street.house1.room1.folks + district.central_street.house1.room2.folks + ['\n'] +
+          district.central_street.house2.room1.folks + district.central_street.house2.room2.folks + ['\n'] +
+          district.soviet_street.house1.room1.folks + district.soviet_street.house1.room2.folks + ['\n'] +
+          district.soviet_street.house2.room1.folks + district.soviet_street.house2.room2.folks)
 
 print('На районе живут: ', ','.join(humans))
 # Очень странно что pycharm видит только несколько модулей из общего списка, если не делать папку district источником
@@ -27,3 +28,4 @@ print('На районе живут: ', ','.join(humans))
 #  значит к путям надо добавить district.central_street.house1.room1
 # В этом случае все выводится в одну строку
 # при добавлении district к пути все закрашивается серым все равно(
+#зачёт!

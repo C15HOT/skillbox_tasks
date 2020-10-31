@@ -29,8 +29,8 @@ from pictures.tree import tree_point
 #  нужно ли из wall импортировать сюда столько всего?
 #  попробуйте работать со всеми этими точками внутри модуля wall, а сюда импортировать только функцию
 #  чтобы нарисовать эту самую стену
-#from pictures.wall import window_bottom, window_top, start_point_x, start_point_y, right_top, left_bottom, \
-  #  top_y, top_x
+# from pictures.wall import window_bottom, window_top, start_point_x, start_point_y, right_top, left_bottom, \
+#  top_y, top_x
 # В этом модуле лучше вместо добавления lesson_005
 #  пометить эту директорию как source_root (правой кнопкой на папке - mark directory as - source root)
 from pictures import rainbow
@@ -43,9 +43,9 @@ from pictures import snow
 sd.resolution = (1200, 700)
 
 wall.wall()
-#sd.rectangle(left_bottom=left_bottom, right_top=right_top, color=sd.COLOR_DARK_ORANGE, width=0)
-#sd.rectangle(left_bottom=window_bottom, right_top=window_top, color=sd.background_color, width=0)
-#sd.rectangle(left_bottom=window_bottom, right_top=window_top, color=sd.COLOR_YELLOW, width=2)
+# sd.rectangle(left_bottom=left_bottom, right_top=right_top, color=sd.COLOR_DARK_ORANGE, width=0)
+# sd.rectangle(left_bottom=window_bottom, right_top=window_top, color=sd.background_color, width=0)
+# sd.rectangle(left_bottom=window_bottom, right_top=window_top, color=sd.COLOR_YELLOW, width=2)
 
 tree.draw_branches(start_point=tree_point, angle=90, length=80)
 
@@ -60,3 +60,4 @@ snow.snowfall()
 # Пусть слева идет снегопад, радуга переливается цветами, смайлик моргает, солнце крутит лучами, етс.
 # Задержку в анимировании все равно надо ставить, пусть даже 0.01 сек - так библиотека устойчивей работает.
 sd.pause()
+#зачёт!
