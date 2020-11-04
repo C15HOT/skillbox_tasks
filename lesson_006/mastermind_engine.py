@@ -29,6 +29,7 @@ def check(user_input):
     global bulls, cows, result
     bulls, cows = 0, 0
     result = {'Быки': bulls, 'Коровы': cows}
+    # TODO Попробуйте эту проверку реализовать в один цикл
     for user_number, user_char in enumerate(user_input):
         for copm_number, comp_char in enumerate(_number):
             if int(user_char) == comp_char:
