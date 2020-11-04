@@ -47,15 +47,22 @@
 from mastermind_engine import think_number, check, is_gameover, result
 
 think_number()
-i = 0  # TODO 'i' - пример плохого нэйминга
+step = 0
 
 while True:
     user_input = input()
-    # TODO ввод пользователя надо проверить на соответствие всем правилам
-    # TODO 4 цифры без первого нуля должно быть
-    check(user_input=user_input)
-    i += 1
+    if len(user_input) == 4 and user_input[0] != '0':
+
+        check(user_input=user_input)
+        step += 1
+    else:
+        print('Вы ввели некорректное число')
+
     if is_gameover():
-        print('Вы угадали число, количество ходов: ', i, '\n', 'Хотите сыграть еще раз?')
-        break
-    # TODO нужна возможность начинать игру заново
+        print('Вы угадали число, количество ходов: ', step, '\n', 'Хотите сыграть еще раз?','\n', 'Введите Да или Нет')
+        restart = input()
+        if restart == 'Нет':
+            break
+        else:
+            think_number()
+

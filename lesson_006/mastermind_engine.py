@@ -22,7 +22,7 @@ def think_number():
             while num in _number:
                 num = INITIAL_NUMBER[randint(0, 9)]
             _number.append(num)
-    # print(_number)
+    #print(_number)
 
 
 def check(user_input):
