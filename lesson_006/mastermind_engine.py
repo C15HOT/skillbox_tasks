@@ -22,18 +22,23 @@ def think_number():
             while num in _number:
                 num = INITIAL_NUMBER[randint(0, 9)]
             _number.append(num)
-    #print(_number)
+    print(_number)
 
 
 def check(user_input):
     global bulls, cows, result
     bulls, cows = 0, 0
     result = {'Быки': bulls, 'Коровы': cows}
-    # TODO Попробуйте эту проверку реализовать в один цикл
+    # for user_number, user_char in enumerate(user_input):
+    #     if int(user_char)== _number[int(user_char)]:
+    #         if user_number==_number.index(user_char):
+    #             result['Быки'] += 1
+    #             continue
+    #         result['Коровы'] += 1
     for user_number, user_char in enumerate(user_input):
-        for copm_number, comp_char in enumerate(_number):
+        for comp_number, comp_char in enumerate(_number):
             if int(user_char) == comp_char:
-                if user_number == copm_number:
+                if user_number == comp_number:
                     result['Быки'] += 1
                     continue
                 result['Коровы'] += 1
