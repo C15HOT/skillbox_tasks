@@ -20,10 +20,10 @@ make_snawflake()
 while True:
     draw_snowflake(color=sd.background_color)
     shift_snowflake()
-    draw_snowflake(color=sd.COLOR_WHITE)
-    if number_of_snowflake():
-        num = number_of_snowflake()
-        del_snowflake(num)
+    draw_snowflake()
+    num = number_of_snowflake()
+    if num!=None:
+        del_snowflake()
         make_snawflake()
     #  нарисовать_снежинки_цветом(color=sd.background_color)
     #  сдвинуть_снежинки()
