@@ -51,15 +51,17 @@ step = 0
 
 while True:
     user_input = input()
-    # TODO ещё нужно проверить нет ли дублей в загаданном числе (проверьте длину множества из введенных чисел)
-    # TODO и является ли это вообще числом (isdigit())
-    if len(user_input) == 4 and user_input[0] != '0':
 
-        check(user_input=user_input)
-        step += 1
+
+    if len(user_input) == 4 and user_input[0] != '0':
+        if user_input.isdigit() and len(user_input)==len(set(user_input)):
+
+            check(user_input=user_input)
+            step += 1
+        else:
+            print('Вы ввели некорректное число')
     else:
         print('Вы ввели некорректное число')
-
     if is_gameover():
         print('Вы угадали число, количество ходов: ', step, '\n', 'Хотите сыграть еще раз?','\n', 'Введите Да или Нет')
         restart = input()

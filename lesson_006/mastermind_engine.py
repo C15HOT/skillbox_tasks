@@ -14,16 +14,17 @@ result = {'Быки': bulls, 'Коровы': cows}
 def think_number():
     global _number
     _number = []
-    for i in range(MAX_NUMBER):
-        if i == 0:  # TODO от этой проверки можно вовсе избавиться, если добавить
-            _number.append(INITIAL_NUMBER[randint(1, 9)])  # TODO эту операцию до цикла
-        else:
+    _number.append(INITIAL_NUMBER[randint(1, 9)])
+    for i in range(MAX_NUMBER-1):
+
+        num = INITIAL_NUMBER[randint(0, 9)]
+        while num in _number:
             num = INITIAL_NUMBER[randint(0, 9)]
-            while num in _number:
-                num = INITIAL_NUMBER[randint(0, 9)]
-            _number.append(num)
-    # TODO ещё можно было бы упростить сам цикл - превратить его в while с условием (пока длина списка меньше 4)
-    # TODO и в нём тогда не нужно будет вызывать вложенный цикл
+        _number.append(num)
+    #  ещё можно было бы упростить сам цикл - превратить его в while с условием (пока длина списка меньше 4)
+    #  и в нём тогда не нужно будет вызывать вложенный цикл
+    # Вложенный цикл нужен для проверки условия неповторяемости знаков,
+    # пока не вижу как это сделать внутри одного цикла
     print(_number)
 
 
