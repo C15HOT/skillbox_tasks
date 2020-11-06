@@ -15,7 +15,7 @@ def think_number():
     global _number
     _number = []
     _number.append(INITIAL_NUMBER[randint(1, 9)])
-    for i in range(MAX_NUMBER-1):
+    for i in range(MAX_NUMBER - 1):
         num = INITIAL_NUMBER[randint(0, 9)]
         while num in _number:
             num = INITIAL_NUMBER[randint(0, 9)]
@@ -36,8 +36,8 @@ def check(user_input):
     bulls, cows = 0, 0
     result = {'Быки': bulls, 'Коровы': cows}
     for user_number, user_char in enumerate(user_input):
-    #  всё верно, только условия надо немного подправить
-        if int(user_char)== _number[user_number]: # - это уже условие, достаточное для быка
+        #  всё верно, только условия надо немного подправить
+        if int(user_char) == _number[user_number]:  # - это уже условие, достаточное для быка
             result['Быки'] += 1
             continue  # TODO continue пропускает код, который должен выполниться внутри цикла после if/else блока
         else:

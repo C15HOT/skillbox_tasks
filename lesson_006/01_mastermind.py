@@ -51,23 +51,21 @@ step = 0
 
 while True:
     user_input = input()
-    # TODO не забывайте поправлять стиль кода - code/reformat code
 
     if len(user_input) == 4 and user_input[0] != '0':
-        if user_input.isdigit() and len(user_input)==len(set(user_input)):
+        if user_input.isdigit() and len(user_input) == len(set(user_input)):
 
-            res=check(user_input=user_input)
-            print('Быки - {}, Коровы - {}'.format(res['Быки'],res['Коровы']))
+            res = check(user_input=user_input)
+            print('Быки - {}, Коровы - {}'.format(res['Быки'], res['Коровы']))
             step += 1
         else:
             print('Вы ввели некорректное число')
     else:
         print('Вы ввели некорректное число')
     if is_gameover():
-        print('Вы угадали число, количество ходов: ', step, '\n', 'Хотите сыграть еще раз?','\n', 'Введите Да или Нет')
+        print('Вы угадали число, количество ходов: ', step, '\n', 'Хотите сыграть еще раз?', '\n', 'Введите Да или Нет')
         restart = input()
         if restart == 'Нет':
             break
         else:
             think_number()
-
