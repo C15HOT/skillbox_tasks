@@ -16,7 +16,6 @@ def think_number():
     _number = []
     _number.append(INITIAL_NUMBER[randint(1, 9)])
     for i in range(MAX_NUMBER-1):
-
         num = INITIAL_NUMBER[randint(0, 9)]
         while num in _number:
             num = INITIAL_NUMBER[randint(0, 9)]
@@ -25,6 +24,10 @@ def think_number():
     #  и в нём тогда не нужно будет вызывать вложенный цикл
     # Вложенный цикл нужен для проверки условия неповторяемости знаков,
     # пока не вижу как это сделать внутри одного цикла
+    # TODO структура примерно такая:
+    # TODO while длина списка меньше нужной
+    # TODO     создаем случайное число от 0 до 9
+    # TODO         если его нет в списке -> добавляем в список
     print(_number)
 
 
@@ -35,12 +38,12 @@ def check(user_input):
     for user_number, user_char in enumerate(user_input):
     #  всё верно, только условия надо немного подправить
         if int(user_char)== _number[user_number]: # - это уже условие, достаточное для быка
-
             result['Быки'] += 1
-            continue
+            continue  # TODO continue пропускает код, который должен выполниться внутри цикла после if/else блока
         else:
-            if int(user_char) in _number:
+            if int(user_char) in _number:  # TODO else if можно заменить на elif
                 result['Коровы'] += 1
+        # TODO но тут кода нету, чтобы его пропускать, поэтому continue можно убрать
     # Т.е. для быка мы проверяем равно ли текущее число - другому числу с текущим индексом
     # Для коровы - есть ли это число вообще в другом наборе числе (if число in _number)
     # for user_number, user_char in enumerate(user_input):

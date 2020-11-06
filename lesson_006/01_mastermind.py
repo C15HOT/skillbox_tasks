@@ -51,7 +51,7 @@ step = 0
 
 while True:
     user_input = input()
-
+    # TODO не забывайте поправлять стиль кода - code/reformat code
 
     if len(user_input) == 4 and user_input[0] != '0':
         if user_input.isdigit() and len(user_input)==len(set(user_input)):
