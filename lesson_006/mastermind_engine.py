@@ -15,19 +15,23 @@ def think_number():
     global _number
     _number = []
     _number.append(INITIAL_NUMBER[randint(1, 9)])
-    for i in range(MAX_NUMBER - 1):
-        num = INITIAL_NUMBER[randint(0, 9)]
-        while num in _number:
-            num = INITIAL_NUMBER[randint(0, 9)]
-        _number.append(num)
+    # for i in range(MAX_NUMBER - 1):
+    #     num = INITIAL_NUMBER[randint(0, 9)]
+    #     while num in _number:
+    #         num = INITIAL_NUMBER[randint(0, 9)]
+    #     _number.append(num)
     #  ещё можно было бы упростить сам цикл - превратить его в while с условием (пока длина списка меньше 4)
     #  и в нём тогда не нужно будет вызывать вложенный цикл
     # Вложенный цикл нужен для проверки условия неповторяемости знаков,
     # пока не вижу как это сделать внутри одного цикла
-    # TODO структура примерно такая:
-    # TODO while длина списка меньше нужной
-    # TODO     создаем случайное число от 0 до 9
-    # TODO         если его нет в списке -> добавляем в список
+    #  структура примерно такая:
+    # while длина списка меньше нужной
+    #      создаем случайное число от 0 до 9
+    #          если его нет в списке -> добавляем в список
+    while len(_number) < MAX_NUMBER:
+        num = INITIAL_NUMBER[randint(0, 9)]
+        if num not in _number:
+            _number.append(num)
     print(_number)
 
 
@@ -39,11 +43,10 @@ def check(user_input):
         #  всё верно, только условия надо немного подправить
         if int(user_char) == _number[user_number]:  # - это уже условие, достаточное для быка
             result['Быки'] += 1
-            continue  # TODO continue пропускает код, который должен выполниться внутри цикла после if/else блока
-        else:
-            if int(user_char) in _number:  # TODO else if можно заменить на elif
-                result['Коровы'] += 1
-        # TODO но тут кода нету, чтобы его пропускать, поэтому continue можно убрать
+             # continue пропускает код, который должен выполниться внутри цикла после if/else блока
+        elif int(user_char) in _number:  # else if можно заменить на elif
+            result['Коровы'] += 1
+        # но тут кода нету, чтобы его пропускать, поэтому continue можно убрать
     # Т.е. для быка мы проверяем равно ли текущее число - другому числу с текущим индексом
     # Для коровы - есть ли это число вообще в другом наборе числе (if число in _number)
     # for user_number, user_char in enumerate(user_input):
