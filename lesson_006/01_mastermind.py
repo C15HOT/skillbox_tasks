@@ -51,6 +51,8 @@ step = 0
 
 while True:
     user_input = input()
+    # TODO ещё нужно проверить нет ли дублей в загаданном числе (проверьте длину множества из введенных чисел)
+    # TODO и является ли это вообще числом (isdigit())
     if len(user_input) == 4 and user_input[0] != '0':
 
         check(user_input=user_input)
