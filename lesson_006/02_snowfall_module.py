@@ -22,7 +22,8 @@ while True:
     shift_snowflake()
     draw_snowflake()
     num = number_of_snowflake()
-    if num != None:
+    if num != None:  # TODO с None/True/False стоит использовать is (или is not)
+        # TODO хотя тут можно будет вообще использовать if num:
         del_snowflake()
         make_snawflake(N=5)
     #  нарисовать_снежинки_цветом(color=sd.background_color)
