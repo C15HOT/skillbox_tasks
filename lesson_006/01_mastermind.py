@@ -56,7 +56,8 @@ while True:
     if len(user_input) == 4 and user_input[0] != '0':
         if user_input.isdigit() and len(user_input)==len(set(user_input)):
 
-            check(user_input=user_input)
+            res=check(user_input=user_input)
+            print('Быки - {}, Коровы - {}'.format(res['Быки'],res['Коровы']))
             step += 1
         else:
             print('Вы ввели некорректное число')

@@ -32,25 +32,27 @@ def check(user_input):
     global bulls, cows, result
     bulls, cows = 0, 0
     result = {'Быки': bulls, 'Коровы': cows}
-    # for user_number, user_char in enumerate(user_input):
-    # TODO всё верно, только условия надо немного подправить
-    #     if int(user_char)== _number[int(user_char)]:  - это уже условие, достаточное для быка
-    #         if user_number==_number.index(user_char):  - а это уже получается лишним
-    #             result['Быки'] += 1
-    #             continue
-    #         result['Коровы'] += 1
-    # TODO Т.е. для быка мы проверяем равно ли текущее число - другому числу с текущим индексом
-    # TODO Для коровы - есть ли это число вообще в другом наборе числе (if число in _number)
     for user_number, user_char in enumerate(user_input):
-        for comp_number, comp_char in enumerate(_number):
-            if int(user_char) == comp_char:
-                if user_number == comp_number:
-                    result['Быки'] += 1
-                    continue
+    #  всё верно, только условия надо немного подправить
+        if int(user_char)== _number[user_number]: # - это уже условие, достаточное для быка
+
+            result['Быки'] += 1
+            continue
+        else:
+            if int(user_char) in _number:
                 result['Коровы'] += 1
-    print(result)
-    # TODO результат не нужно печатать - его надо возвращать
-    # TODO а его форматирование и печать нужно прописать в том модуле
+    # Т.е. для быка мы проверяем равно ли текущее число - другому числу с текущим индексом
+    # Для коровы - есть ли это число вообще в другом наборе числе (if число in _number)
+    # for user_number, user_char in enumerate(user_input):
+    #     for comp_number, comp_char in enumerate(_number):
+    #         if int(user_char) == comp_char:
+    #             if user_number == comp_number:
+    #                 result['Быки'] += 1
+    #                 continue
+    #             result['Коровы'] += 1
+    return result
+    #  результат не нужно печатать - его надо возвращать
+    #  а его форматирование и печать нужно прописать в том модуле
 
 
 def is_gameover():
