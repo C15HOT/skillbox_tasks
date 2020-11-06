@@ -16,7 +16,7 @@ from snowfall import make_snawflake, draw_snowflake, del_snowflake, number_of_sn
 # обращаясь ТОЛЬКО к функциям модуля snowfall
 
 # создать_снежинки(N)
-make_snawflake()
+make_snawflake(N=5)
 while True:
     draw_snowflake(color=sd.background_color)
     shift_snowflake()
@@ -24,7 +24,7 @@ while True:
     num = number_of_snowflake()
     if num!=None:
         del_snowflake()
-        make_snawflake()
+        make_snawflake(N=5)
     #  нарисовать_снежинки_цветом(color=sd.background_color)
     #  сдвинуть_снежинки()
     #  нарисовать_снежинки_цветом(color)
