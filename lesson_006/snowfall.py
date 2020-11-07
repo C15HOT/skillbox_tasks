@@ -36,14 +36,14 @@ def shift_snowflake():
 def number_of_snowflake():
     # здесь нужен global с переменной del_list
     global del_list
-    del_list=[]
+    del_list = []
     # ещё del_list стоит обновлять в начале этой функции, чтобы старые индексы в нём не оставались
     for num, coord_y in enumerate(pure_points):
         if coord_y[1] < 50:
             del_list.append(num)
 
             # так он всё ещё внутри цикла. это определяется отступом
-    return del_list  #  обратите внимание, что возвращаете вы num - а что в нём хранится?
+    return del_list  # обратите внимание, что возвращаете вы num - а что в нём хранится?
     #  а что должно возвращаться?
     # ретурн здесь прервёт выполнение цикла и функции
     #  нужно вынести его из цикла
