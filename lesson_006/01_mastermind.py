@@ -69,3 +69,4 @@ while True:
             break
         else:
             think_number()
+#зачёт!
