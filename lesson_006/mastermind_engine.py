@@ -32,7 +32,7 @@ def think_number():
         num = INITIAL_NUMBER[randint(0, 9)]
         if num not in _number:
             _number.append(num)
-    print(_number)
+    #print(_number)
 
 
 def check(user_input):

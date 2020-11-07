@@ -34,7 +34,8 @@ def shift_snowflake():
 
 
 def number_of_snowflake():
-    # TODO здесь нужен global с переменной del_list
+    # здесь нужен global с переменной del_list
+    global del_list
     del_list=[]
     # ещё del_list стоит обновлять в начале этой функции, чтобы старые индексы в нём не оставались
     for num, coord_y in enumerate(pure_points):
@@ -54,6 +55,7 @@ def del_snowflake():
     del_list.reverse()
     for i in del_list:  # цикл по пустому списку просто не начнётся
         pure_points.pop(i)
-        # TODO удалять надо ещё и points
+        points.pop(i)
+        #  удалять надо ещё и points
     #  Полученные индексы сперва стоит развернуть - чтобы удалять снежинки, начиная с конца.
     #  Иначе сдвиг списка будет изменять индексы и мы удалим что-нибудь не то
