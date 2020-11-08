@@ -21,59 +21,62 @@
 
 class Water:
     def __init__(self):
-        self.name='Вода'
+        self.name = 'Вода'
 
     def __add__(self, other):
-        if getattr(other,'name') == 'Воздух':
+        if getattr(other, 'name') == 'Воздух':
             return 'Шторм'
-        if getattr(other,'name') == 'Огонь':
+        if getattr(other, 'name') == 'Огонь':
             return 'Пар'
-        if getattr(other,'name') == 'Земля':
+        if getattr(other, 'name') == 'Земля':
             return 'Грязь'
 
     def __str__(self):
         return self.name
+
 
 class Air:
     def __init__(self):
         self.name = 'Воздух'
 
     def __add__(self, other):
-        if getattr(other,'name') == 'Вода':
+        if getattr(other, 'name') == 'Вода':
             return 'Шторм'
-        if getattr(other,'name') == 'Огонь':
+        if getattr(other, 'name') == 'Огонь':
             return 'Молния'
-        if getattr(other,'name') == 'Земля':
+        if getattr(other, 'name') == 'Земля':
             return 'Пыль'
 
     def __str__(self):
         return self.name
+
 
 class Earth:
     def __init__(self):
         self.name = 'Земля'
 
     def __add__(self, other):
-        if getattr(other,'name') == 'Вода':
+        if getattr(other, 'name') == 'Вода':
             return 'Грязь'
-        if getattr(other,'name') == 'Воздух':
+        if getattr(other, 'name') == 'Воздух':
             return 'Пыль'
-        if getattr(other,'name') == 'Огонь':
+        if getattr(other, 'name') == 'Огонь':
             return 'Лава'
 
     def __str__(self):
         return self.name
+
 
 class Fire:
     def __init__(self):
         self.name = 'Огонь'
 
     def __add__(self, other):
-        if getattr(other,'name') == 'Вода':
+        if getattr(other, 'name') == 'Вода':
             return 'Пар'
-        if getattr(other,'name') == 'Воздух':
+        if getattr(other, 'name') == 'Воздух':
             return 'Молния'
-        if getattr(other,'name') == 'Земля':
+        if getattr(other, 'name') == 'Земля':
             return 'Лава'
 
     def __str__(self):
