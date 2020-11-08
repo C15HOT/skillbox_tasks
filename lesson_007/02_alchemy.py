@@ -24,8 +24,12 @@ class Water:
         self.name='Вода'
 
     def __add__(self, other):
-        if other == Air():
+        if getattr(other,'name') == 'Воздух':
             return 'Шторм'
+        if getattr(other,'name') == 'Огонь':
+            return 'Пар'
+        if getattr(other,'name') == 'Земля':
+            return 'Грязь'
 
     def __str__(self):
         return self.name
@@ -35,14 +39,53 @@ class Air:
         self.name = 'Воздух'
 
     def __add__(self, other):
-        if other == Water():
+        if getattr(other,'name') == 'Вода':
             return 'Шторм'
+        if getattr(other,'name') == 'Огонь':
+            return 'Молния'
+        if getattr(other,'name') == 'Земля':
+            return 'Пыль'
 
     def __str__(self):
         return self.name
 
-print(Water(), '+', Air(), '=', Water() + Air())
+class Earth:
+    def __init__(self):
+        self.name = 'Земля'
 
+    def __add__(self, other):
+        if getattr(other,'name') == 'Вода':
+            return 'Грязь'
+        if getattr(other,'name') == 'Воздух':
+            return 'Пыль'
+        if getattr(other,'name') == 'Огонь':
+            return 'Лава'
+
+    def __str__(self):
+        return self.name
+
+class Fire:
+    def __init__(self):
+        self.name = 'Огонь'
+
+    def __add__(self, other):
+        if getattr(other,'name') == 'Вода':
+            return 'Пар'
+        if getattr(other,'name') == 'Воздух':
+            return 'Молния'
+        if getattr(other,'name') == 'Земля':
+            return 'Лава'
+
+    def __str__(self):
+        return self.name
+
+
+print(Water(), '+', Air(), '=', Water() + Air())
+print(Water(), '+', Fire(), '=', Water() + Fire())
+print(Water(), '+', Earth(), '=', Water() + Earth())
+print(Air(), '+', Fire(), '=', Air() + Fire())
+print(Air(), '+', Earth(), '=', Air() + Earth())
+print(Fire(), '+', Earth(), '=', Fire() + Earth())
 # Усложненное задание (делать по желанию)
 # Добавить еще элемент в игру.
 # Придумать что будет при сложении существующих элементов с новым.
