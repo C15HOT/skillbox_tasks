@@ -19,7 +19,29 @@
 #   print(Water(), '+', Air(), '=', Water() + Air())
 #   print(Fire(), '+', Air(), '=', Fire() + Air())
 
-# TODO здесь ваш код
+class Water:
+    def __init__(self):
+        self.name='Вода'
+
+    def __add__(self, other):
+        if other == Air():
+            return 'Шторм'
+
+    def __str__(self):
+        return self.name
+
+class Air:
+    def __init__(self):
+        self.name = 'Воздух'
+
+    def __add__(self, other):
+        if other == Water():
+            return 'Шторм'
+
+    def __str__(self):
+        return self.name
+
+print(Water(), '+', Air(), '=', Water() + Air())
 
 # Усложненное задание (делать по желанию)
 # Добавить еще элемент в игру.
