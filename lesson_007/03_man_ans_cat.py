@@ -2,6 +2,8 @@
 
 from random import randint
 
+from termcolor import cprint
+
 
 # Доработать практическую часть урока lesson_007/python_snippets/08_practice.py
 
@@ -32,6 +34,7 @@ class Human:
         self.name = name
         self.fullness = 50
         self.house = None
+        self.cat = None
 
     def __str__(self):
         return 'Я - {}, сытость {}'.format(
@@ -48,7 +51,7 @@ class Human:
 
     def work(self):
         cprint('{} сходил на работу'.format(self.name), color='blue')
-        self.house.money += 50
+        self.house.money += 150
         self.fullness -= 10
 
     def watch_MTV(self):
@@ -60,6 +63,7 @@ class Human:
             cprint('{} сходил в магазин за едой'.format(self.name), color='magenta')
             self.house.money -= 50
             self.house.food += 50
+            self.house.bowl += 50
         else:
             cprint('{} деньги кончились!'.format(self.name), color='red')
 
@@ -68,6 +72,21 @@ class Human:
         self.fullness -= 10
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
+    def take_cat(self, cat):
+        self.cat = cat
+        self.cat.house = self.house
+        cprint('{} взял кота {}'.format(self.name, self.cat.name), color='cyan')
+
+    # def buy_food_for_cat(self):
+    #     self.house.money -= 50
+    #     self.house.bowl += 50
+    #     cprint('{} Купил еды коту'.format(self.name), color='cyan')
+    def clean_house(self):
+        self.house.dirt -= 100
+        self.fullness -= 20
+        if self.house.dirt < 0:
+            self.house.dirt = 0
+        cprint('{} убрался в доме'.format(self.name), color='cyan')
     def act(self):
         if self.fullness <= 0:
             cprint('{} умер...'.format(self.name), color='red')
@@ -79,6 +98,9 @@ class Human:
             self.shopping()
         elif self.house.money < 50:
             self.work()
+
+        elif self.house.dirt > 40:
+            self.clean_house()
         elif dice == 1:
             self.work()
         elif dice == 2:
@@ -87,16 +109,18 @@ class Human:
             self.watch_MTV()
 
 
+
 class House:
 
     def __init__(self):
         self.food = 50
         self.money = 0
         self.dirt = 0
+        self.bowl = 0
 
     def __str__(self):
-        return 'В доме еды осталось {}, денег осталось {}'.format(
-            self.food, self.money,
+        return 'В доме еды осталось {}, денег осталось {}, еды для кота осталось {}, грязи дома {}'.format(
+            self.food, self.money, self.bowl, self.dirt
         )
 
 
@@ -105,6 +129,58 @@ class Cat:
         self.name = name
         self.fullness = 50
         self.house = None
+
+    def __str__(self):
+        return 'Я - {}, сытость {}'.format(
+            self.name, self.fullness,
+        )
+
+    def sleep(self):
+        cprint('{} спит'.format(self.name), color='green')
+        self.fullness -= 10
+
+    def eat(self):
+        if self.house.bowl >= 10:
+            cprint('{} поел'.format(self.name), color='yellow')
+            self.fullness += 20
+            self.house.bowl -= 10
+        else:
+            cprint('{} нет еды для кота'.format(self.name), color='red')
+
+    def cut_wallpaper(self):
+        cprint('{} дерет обои'.format(self.name), color='red')
+        self.fullness -= 10
+        self.house.dirt += 5
+
+    def act(self):
+        if self.fullness <= 0:
+            cprint('{} умер...'.format(self.name), color='red')
+            return
+        dice = randint(1, 6)
+        if self.fullness < 20:
+            self.eat()
+        elif dice == 1:
+            self.sleep()
+        else:
+            self.cut_wallpaper()
+
+
+man = Human(name='Дима')
+cat = Cat(name='Мурзик')
+
+my_sweet_home = House()
+
+man.go_to_the_house(house=my_sweet_home)
+man.take_cat(cat=cat)
+for day in range(1, 366):
+    print('================ день {} =================='.format(day))
+    man.act()
+    cat.act()
+    print('--- в конце дня ---')
+
+    print(man)
+    print(cat)
+    print(my_sweet_home)
 # Усложненное задание (делать по желанию)
 # Создать несколько (2-3) котов и подселить их в дом к человеку.
 # Им всем вместе так же надо прожить 365 дней.
