@@ -24,8 +24,12 @@ class Water:
         self.name = 'Вода'
 
     def __add__(self, other):
+        # TODO Такая проверка - антипаттерн,
+        # TODO В таких случаях стоит использовать проверку isinstance(other, Class)
         if getattr(other, 'name') == 'Воздух':
             return 'Шторм'
+            # TODO эти операции должны возвращать объект нужного класса (Storm() в данно случае)
+        # TODO (эти классы надо добавить, в них ничего дополнительного прописывать не нужно)
         if getattr(other, 'name') == 'Огонь':
             return 'Пар'
         if getattr(other, 'name') == 'Земля':

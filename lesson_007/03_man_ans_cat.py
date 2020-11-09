@@ -73,7 +73,8 @@ class Human:
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
     def take_cat(self, cat):
-        self.cat = cat
+        self.cat = cat  # TODO чтобы была возможность заводить больше 1 кошки
+        # TODO стоит добавить атрибут-список и в него добавлять кошку
         self.cat.house = self.house
         cprint('{} взял кота {}'.format(self.name, self.cat.name), color='cyan')
 
@@ -87,6 +88,7 @@ class Human:
         if self.house.dirt < 0:
             self.house.dirt = 0
         cprint('{} убрался в доме'.format(self.name), color='cyan')
+
     def act(self):
         if self.fullness <= 0:
             cprint('{} умер...'.format(self.name), color='red')
@@ -107,7 +109,6 @@ class Human:
             self.eat()
         else:
             self.watch_MTV()
-
 
 
 class House:
