@@ -35,6 +35,7 @@ class Human:
         self.fullness = 50
         self.house = None
         self.cat = None
+        self.cats =[]
 
     def __str__(self):
         return 'Я - {}, сытость {}'.format(
@@ -73,15 +74,16 @@ class Human:
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
     def take_cat(self, cat):
-        self.cat = cat  # TODO чтобы была возможность заводить больше 1 кошки
-        # TODO стоит добавить атрибут-список и в него добавлять кошку
+        self.cat = cat  #  чтобы была возможность заводить больше 1 кошки
+        #  стоит добавить атрибут-список и в него добавлять кошку
+        self.cats.append(cat)
         self.cat.house = self.house
         cprint('{} взял кота {}'.format(self.name, self.cat.name), color='cyan')
 
-    # def buy_food_for_cat(self):
-    #     self.house.money -= 50
-    #     self.house.bowl += 50
-    #     cprint('{} Купил еды коту'.format(self.name), color='cyan')
+    def buy_food_for_cat(self):
+        self.house.money -= 50
+        self.house.bowl += 50
+        cprint('{} Купил еды коту'.format(self.name), color='cyan')
     def clean_house(self):
         self.house.dirt -= 100
         self.fullness -= 20
@@ -94,13 +96,14 @@ class Human:
             cprint('{} умер...'.format(self.name), color='red')
             return
         dice = randint(1, 6)
-        if self.fullness < 20:
+        if self.fullness < 40:
             self.eat()
-        elif self.house.food < 10:
+        elif self.house.food < 20:
             self.shopping()
         elif self.house.money < 50:
             self.work()
-
+        elif self.house.bowl < 30:
+            self.buy_food_for_cat()
         elif self.house.dirt > 40:
             self.clean_house()
         elif dice == 1:

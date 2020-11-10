@@ -16,11 +16,12 @@ class Snowflake:
         self.y = 500
         self.length = 50
         self.step = 10
+        self.point = None
 
     def clear_previous_picture(self):
         self.point = sd.get_point(self.x, self.y)
-        # TODO все атрибуты, которые используются в объекте - должны быть сперва инициализированы
-        # TODO в init
+        # все атрибуты, которые используются в объекте - должны быть сперва инициализированы
+        #  в init
         sd.snowflake(center=self.point, length=self.length, color=sd.background_color)
 
     def move(self):
@@ -31,11 +32,12 @@ class Snowflake:
         sd.snowflake(center=self.point, length=self.length, color=sd.COLOR_WHITE)
 
     def can_fall(self):
-        if self.y > 50:
-            # TODO В данном случае if/else блок лишний, можно оставить просто return с условием
-            # TODO Т.к. само по себе условие равно либо True, либо False
-            # TODO пример return a > b
-            return True
+        return self.y > 50
+        # if self.y > 50:
+        #     #  В данном случае if/else блок лишний, можно оставить просто return с условием
+        #     #  Т.к. само по себе условие равно либо True, либо False
+        #     #  пример return a > b
+        #     return True
 
     # def get_fallen_flakes(self):
     #     global count
@@ -54,25 +56,25 @@ def get_flakes(count):
     flakes = []
     for i in range(count):
         flake = Snowflake()
-        flake.x *= i  # TODO чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
+        flake.x *=randint(0,7) #  чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
         flakes.append(flake)
     return flakes
 
 
-def get_fallen_flakes():
+def get_fallen_flakes(flake):
     global count
     # Еще раз вопрос по поводу глобальной переменной. Если здесь count не объявлять, то выдаст ошибку
     # что переменная используется до объявления,
     # хотя ниже по коду перед циклом count =0, получается функция не работает с ней
-    # TODO операция += говорит пайтону о том, что переменная должна быть локальной, если явно не задана её глобальность
-    # TODO отсюда и необходимость global
-    # TODO но на самом деле от глобальных переменных стоит уходить
-    # TODO и применять их только в редких случаях.
-    # TODO (они создают зависимость между функцией и внешней переменной,
-    # TODO чем меньше таких зависимостей - тем лучше)
-    # TODO при этом эта функция должна независимо проходить по всей снежинкам и выдавать список упавших
-    # TODO как в 06 было
-    if flake.y < 50:  # TODO только тут можно использовать метод can_fall вместо явного сравнения
+    # операция += говорит пайтону о том, что переменная должна быть локальной, если явно не задана её глобальность
+    #  отсюда и необходимость global
+    #  но на самом деле от глобальных переменных стоит уходить
+    #  и применять их только в редких случаях.
+    #  (они создают зависимость между функцией и внешней переменной,
+    #  чем меньше таких зависимостей - тем лучше)
+    #  при этом эта функция должна независимо проходить по всей снежинкам и выдавать список упавших
+    #  как в 06 было
+    if not flake.can_fall():  #  только тут можно использовать метод can_fall вместо явного сравнения
         count += 1
         return count
 
@@ -81,7 +83,7 @@ def append_flakes(count):
 
     for i in range(count):
         flake = Snowflake()
-        flake.x *=i
+        flake.x *= randint(0,7)
 
 
         flakes.append(flake)
@@ -112,7 +114,7 @@ while True:
         flake.clear_previous_picture()
         flake.move()
         flake.draw()
-        fallen_flakes = get_fallen_flakes()  # подчитать сколько снежинок уже упало
+        fallen_flakes = get_fallen_flakes(flake=flake)  # подчитать сколько снежинок уже упало
     if fallen_flakes:
         flakes=[]
         append_flakes(count=fallen_flakes)
