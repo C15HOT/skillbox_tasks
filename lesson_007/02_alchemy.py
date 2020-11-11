@@ -18,22 +18,52 @@
 # Примеры преобразований:
 #   print(Water(), '+', Air(), '=', Water() + Air())
 #   print(Fire(), '+', Air(), '=', Fire() + Air())
+class Storm:
+    def __init__(self):
+        self.name = 'Шторм'
+
+
+class Steam:
+    def __init__(self):
+        self.name = 'Пар'
+
+
+class Dirt:
+    def __init__(self):
+        self.name = 'Грязь'
+
+
+class Lightning:
+    def __init__(self):
+        self.name = 'Молния'
+
+
+class Dust:
+    def __init__(self):
+        self.name = 'Пыль'
+
+
+class Lava:
+    def __init__(self):
+        self.name = 'Лава'
+
 
 class Water:
     def __init__(self):
         self.name = 'Вода'
 
     def __add__(self, other):
-        # TODO Такая проверка - антипаттерн,
-        # TODO В таких случаях стоит использовать проверку isinstance(other, Class)
-        if getattr(other, 'name') == 'Воздух':
-            return 'Шторм'
-            # TODO эти операции должны возвращать объект нужного класса (Storm() в данно случае)
-        # TODO (эти классы надо добавить, в них ничего дополнительного прописывать не нужно)
-        if getattr(other, 'name') == 'Огонь':
-            return 'Пар'
-        if getattr(other, 'name') == 'Земля':
-            return 'Грязь'
+        # Такая проверка - антипаттерн,
+        #  В таких случаях стоит использовать проверку isinstance(other, Class)
+        if isinstance(other, Air):
+            obj = Storm()
+            return obj.name
+        elif isinstance(other, Fire):
+            obj = Steam()
+            return obj.name
+        elif isinstance(other, Earth):
+            obj = Dirt()
+            return obj.name
 
     def __str__(self):
         return self.name
@@ -44,12 +74,15 @@ class Air:
         self.name = 'Воздух'
 
     def __add__(self, other):
-        if getattr(other, 'name') == 'Вода':
-            return 'Шторм'
-        if getattr(other, 'name') == 'Огонь':
-            return 'Молния'
-        if getattr(other, 'name') == 'Земля':
-            return 'Пыль'
+        if isinstance(other, Water):
+            obj = Storm()
+            return obj.name
+        elif isinstance(other, Fire):
+            obj = Lightning()
+            return obj.name
+        elif isinstance(other, Earth):
+            obj = Dust()
+            return obj.name
 
     def __str__(self):
         return self.name
@@ -60,12 +93,16 @@ class Earth:
         self.name = 'Земля'
 
     def __add__(self, other):
-        if getattr(other, 'name') == 'Вода':
-            return 'Грязь'
-        if getattr(other, 'name') == 'Воздух':
-            return 'Пыль'
-        if getattr(other, 'name') == 'Огонь':
-            return 'Лава'
+        if isinstance(other, Air):
+            return Dust()
+
+        elif isinstance(other, Fire):
+            obj = Lava()
+            return obj.name
+
+        elif isinstance(other, Water):
+            obj = Dirt()
+            return obj.name
 
     def __str__(self):
         return self.name
@@ -76,12 +113,15 @@ class Fire:
         self.name = 'Огонь'
 
     def __add__(self, other):
-        if getattr(other, 'name') == 'Вода':
-            return 'Пар'
-        if getattr(other, 'name') == 'Воздух':
-            return 'Молния'
-        if getattr(other, 'name') == 'Земля':
-            return 'Лава'
+        if isinstance(other, Air):
+            obj = Lightning()
+            return obj.name
+        elif isinstance(other, Water):
+            obj = Steam()
+            return obj.name
+        elif isinstance(other, Earth):
+            obj = Lava()
+            return obj.name
 
     def __str__(self):
         return self.name
