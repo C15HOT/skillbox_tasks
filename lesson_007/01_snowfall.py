@@ -12,9 +12,9 @@ import simple_draw as sd
 
 class Snowflake:
     def __init__(self):
-        self.x = 100
+        self.x = randint(100, 500)
         self.y = 500
-        self.length = 50
+        self.length = 25
         self.step = 10
         self.point = None
 
@@ -56,17 +56,20 @@ def get_flakes(count):
     flakes = []
     for i in range(count):
         flake = Snowflake()
-        # TODO создаение случайного значения можео реализовать внутри класса
-        # TODO в методе init у snowflake
-        flake.x *= randint(0, 7)  # чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
+        #  создаение случайного значения можео реализовать внутри класса
+        #  в методе init у snowflake
+        # flake.x *= randint(0, 7)  # чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
         flakes.append(flake)
     return flakes
 
 
-def get_fallen_flakes(flake):
-    # TODO Эта функция должна проходить по списку снежинок и возвращать либо индексы упавших
-    # TODO либо список самих снежинок
-    global count  # TODO глобальные переменные стоит убрать
+number_fallen_flakes = []
+
+
+def get_fallen_flakes():
+    # Эта функция должна проходить по списку снежинок и возвращать либо индексы упавших
+    #  либо список самих снежинок
+    # global count   глобальные переменные стоит убрать
     # Еще раз вопрос по поводу глобальной переменной. Если здесь count не объявлять, то выдаст ошибку
     # что переменная используется до объявления,
     # хотя ниже по коду перед циклом count =0, получается функция не работает с ней
@@ -78,19 +81,25 @@ def get_fallen_flakes(flake):
     #  чем меньше таких зависимостей - тем лучше)
     #  при этом эта функция должна независимо проходить по всей снежинкам и выдавать список упавших
     #  как в 06 было
-    if not flake.can_fall():  # только тут можно использовать метод can_fall вместо явного сравнения
-        count += 1
-        return count
+    # if not flake.can_fall():  # только тут можно использовать метод can_fall вместо явного сравнения
+    #     count += 1
+    #     return count
+    number_fallen_flakes = []
+    for number, flake in enumerate(flakes):
+        if not flake.can_fall():
+            number_fallen_flakes.append(number)
+    return number_fallen_flakes
 
 
-def append_flakes(count):
-    for i in range(count):
+def append_flakes(number_fallen_flakes):
+    for i in number_fallen_flakes:
         flake = Snowflake()
-        flake.x *= randint(0, 7)
+        # flake.x *= randint(0, 7)
+        flakes.pop(i)
+        flakes.insert(i, flake)
 
-        flakes.append(flake)
 
-# TODO ещё нужна функция, которая удалит лишние снежинки из списка
+# ещё нужна функция, которая удалит лишние снежинки из списка - #TODO добавил в append_flakes
 # flake = Snowflake()
 #
 # while True:
@@ -107,18 +116,17 @@ def append_flakes(count):
 N = 5
 flakes = get_flakes(count=N)  # создать список снежинок
 
-count = 0
 while True:
 
     for flake in flakes:
         flake.clear_previous_picture()
         flake.move()
         flake.draw()
-        fallen_flakes = get_fallen_flakes(flake=flake)  # подчитать сколько снежинок уже упало
+    fallen_flakes = get_fallen_flakes()  # подчитать сколько снежинок уже упало
     if fallen_flakes:
-        flakes = []
-        append_flakes(count=fallen_flakes)
-        count = 0
+        # flakes = []
+        append_flakes(number_fallen_flakes=fallen_flakes)
+
         # добавить еще сверху
     sd.sleep(0.1)
     if sd.user_want_exit():
