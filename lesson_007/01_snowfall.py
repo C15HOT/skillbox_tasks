@@ -56,13 +56,17 @@ def get_flakes(count):
     flakes = []
     for i in range(count):
         flake = Snowflake()
-        flake.x *=randint(0,7) #  чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
+        # TODO создаение случайного значения можео реализовать внутри класса
+        # TODO в методе init у snowflake
+        flake.x *= randint(0, 7)  # чтобы не добавлять подобные "костыли" - можно задавать снежинкам случайные значения
         flakes.append(flake)
     return flakes
 
 
 def get_fallen_flakes(flake):
-    global count
+    # TODO Эта функция должна проходить по списку снежинок и возвращать либо индексы упавших
+    # TODO либо список самих снежинок
+    global count  # TODO глобальные переменные стоит убрать
     # Еще раз вопрос по поводу глобальной переменной. Если здесь count не объявлять, то выдаст ошибку
     # что переменная используется до объявления,
     # хотя ниже по коду перед циклом count =0, получается функция не работает с ней
@@ -74,22 +78,19 @@ def get_fallen_flakes(flake):
     #  чем меньше таких зависимостей - тем лучше)
     #  при этом эта функция должна независимо проходить по всей снежинкам и выдавать список упавших
     #  как в 06 было
-    if not flake.can_fall():  #  только тут можно использовать метод can_fall вместо явного сравнения
+    if not flake.can_fall():  # только тут можно использовать метод can_fall вместо явного сравнения
         count += 1
         return count
 
 
 def append_flakes(count):
-
     for i in range(count):
         flake = Snowflake()
-        flake.x *= randint(0,7)
-
+        flake.x *= randint(0, 7)
 
         flakes.append(flake)
 
-
-
+# TODO ещё нужна функция, которая удалит лишние снежинки из списка
 # flake = Snowflake()
 #
 # while True:
@@ -106,7 +107,6 @@ def append_flakes(count):
 N = 5
 flakes = get_flakes(count=N)  # создать список снежинок
 
-
 count = 0
 while True:
 
@@ -116,7 +116,7 @@ while True:
         flake.draw()
         fallen_flakes = get_fallen_flakes(flake=flake)  # подчитать сколько снежинок уже упало
     if fallen_flakes:
-        flakes=[]
+        flakes = []
         append_flakes(count=fallen_flakes)
         count = 0
         # добавить еще сверху

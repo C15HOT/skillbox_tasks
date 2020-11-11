@@ -35,7 +35,7 @@ class Human:
         self.fullness = 50
         self.house = None
         self.cat = None
-        self.cats =[]
+        self.cats = []
 
     def __str__(self):
         return 'Я - {}, сытость {}'.format(
@@ -74,7 +74,8 @@ class Human:
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
     def take_cat(self, cat):
-        self.cat = cat  #  чтобы была возможность заводить больше 1 кошки
+        self.cat = cat
+        #  чтобы была возможность заводить больше 1 кошки
         #  стоит добавить атрибут-список и в него добавлять кошку
         self.cats.append(cat)
         self.cat.house = self.house
@@ -84,6 +85,7 @@ class Human:
         self.house.money -= 50
         self.house.bowl += 50
         cprint('{} Купил еды коту'.format(self.name), color='cyan')
+
     def clean_house(self):
         self.house.dirt -= 100
         self.fullness -= 20
@@ -190,3 +192,4 @@ for day in range(1, 366):
 # Им всем вместе так же надо прожить 365 дней.
 
 # (Можно определить критическое количество котов, которое может прокормить человек...)
+#зачёт!
