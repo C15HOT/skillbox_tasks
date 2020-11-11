@@ -99,7 +99,7 @@ def append_flakes(number_fallen_flakes):
         flakes.insert(i, flake)
 
 
-# ещё нужна функция, которая удалит лишние снежинки из списка - #TODO добавил в append_flakes
+# ещё нужна функция, которая удалит лишние снежинки из списка - # TODO добавил в append_flakes
 # flake = Snowflake()
 #
 # while True:
@@ -133,3 +133,4 @@ while True:
         break
 
 sd.pause()
+#зачёт!
