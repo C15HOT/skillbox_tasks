@@ -55,6 +55,7 @@ class House:
     def __str__(self):
         return 'В доме денег - {}, еды - {}, грязи - {}'.format(self.money, self.food, self.dirt)
 
+
 class Human:
 
     def __init__(self, name):
@@ -74,8 +75,18 @@ class Human:
 
     def go_to_the_house(self, house):
         self.house = house
-
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
+
+    # TODO Помимо целых действий вроде eat
+    # TODO Можно выделять схожие части методов и выносить их в родительский класс
+    # TODO Например можно взять общие проверки и действия из act
+    # TODO Записать их в act родительского класса, добавив к ним возврат
+    # TODO либо True, либо False
+    # TODO True - если человек жив и способен выполнить какое-нибудь действие
+    # TODO False - если человек мертв или уже выполнил одно из действий
+    # TODO В act наследников тогда нужно будет использовать вызов метода через super()
+    # TODO и проверить то, что вернёт этот вызов (if super().func())
+    # TODO Если возвращается True - продолжать выбор действия, если False - завершать функцию
 
 
 class Husband(Human):
@@ -113,17 +124,18 @@ class Husband(Human):
         self.house.money += 150
         House.total_money += 150
         cprint('{} сходил на работу, денег - {}, сытость - {}'.format(self.name,
-                                                                     self.house.money, self.fullness), color='cyan')
+                                                                      self.house.money, self.fullness), color='cyan')
 
     def gaming(self):
         self.fullness -= 10
         self.happiness += 20
         cprint('{} играет в танки, счастье - {}, сытость - {}'.format(self.name,
-                                                                     self.happiness, self.fullness), color='cyan')
+                                                                      self.happiness, self.fullness), color='cyan')
 
 
 class Wife(Human):
     total_coat = 0
+
     # def __init__(self):
     #     pass
 
@@ -149,7 +161,6 @@ class Wife(Human):
         elif dice == 2:
             if self.house.money > 350:
                 self.buy_fur_coat()
-
         else:
             self.eat()
 
