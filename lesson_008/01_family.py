@@ -3,6 +3,7 @@
 from termcolor import cprint
 from random import randint
 
+
 ######################################################## Часть первая
 #
 # Создать модель жизни небольшой семьи.
@@ -43,69 +44,161 @@ from random import randint
 
 
 class House:
+    total_food = 0
+    total_money = 0
 
     def __init__(self):
-        pass
+        self.money = 100
+        self.food = 50
+        self.dirt = 0
+
+    def __str__(self):
+        return 'В доме денег - {}, еды - {}, грязи - {}'.format(self.money, self.food, self.dirt)
+
+class Human:
+
+    def __init__(self, name):
+        self.fullness = 30
+        self.happiness = 100
+        self.house = None
+        self.name = name
+
+    def __str__(self):
+        return 'Я {}, сытость - {}, счастье - {}'.format(self.name, self.fullness, self.happiness)
+
+    def eat(self):
+        self.fullness += 30
+        self.house.food -= 30
+        House.total_food += 30
+        cprint('{} поел, еды осталось {}'.format(self.name, self.house.food), color='cyan')
+
+    def go_to_the_house(self, house):
+        self.house = house
+
+        cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
 
-class Husband:
+class Husband(Human):
 
-    def __init__(self):
-        pass
+    # def __init__(self, name):
+    #     self.name = name
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
+        if self.fullness <= 0:
+            cprint('{} умер от голода'.format(self.name), color='red')
+            return
+        if self.happiness <= 10:
+            cprint('{} умер от депрессии'.format(self.name), color='red')
+            return
+        if self.house.money < 50:
+            self.work()
+        dice = randint(1, 6)
+        if self.fullness < 20:
+            self.eat()
+        elif dice == 1:
+            self.work()
+        elif dice == 2:
+            self.gaming()
+        else:
+            self.eat()
 
-    def eat(self):
-        pass
+    # def eat(self):
+    #     pass
 
     def work(self):
-        pass
+        self.fullness -= 10
+        self.house.money += 150
+        House.total_money += 150
+        cprint('{} сходил на работу, денег - {}, сытость - {}'.format(self.name,
+                                                                     self.house.money, self.fullness), color='cyan')
 
     def gaming(self):
-        pass
+        self.fullness -= 10
+        self.happiness += 20
+        cprint('{} играет в танки, счастье - {}, сытость - {}'.format(self.name,
+                                                                     self.happiness, self.fullness), color='cyan')
 
 
-class Wife:
-
-    def __init__(self):
-        pass
+class Wife(Human):
+    total_coat = 0
+    # def __init__(self):
+    #     pass
 
     def __str__(self):
         return super().__str__()
 
     def act(self):
-        pass
+        if self.fullness <= 0:
+            cprint('{} умерла от голода'.format(self.name), color='red')
+            return
+        if self.happiness <= 10:
+            cprint('{} умерла от депрессии'.format(self.name), color='red')
+            return
+        if self.house.food < 10:
+            self.shopping()
+        dice = randint(1, 6)
+        if self.fullness < 20:
+            self.eat()
+        elif self.house.food < 20:
+            self.shopping()
+        elif dice == 1:
+            self.clean_house()
+        elif dice == 2:
+            if self.house.money > 350:
+                self.buy_fur_coat()
 
-    def eat(self):
-        pass
+        else:
+            self.eat()
+
+    # def eat(self):
+    #     pass
 
     def shopping(self):
-        pass
+        self.fullness -= 10
+        self.house.food += 60
+        self.house.money -= 60
+        cprint('{} купила еды, денег осталось - {}, еды в доме - {}'.format(self.name, self.house.money,
+                                                                            self.house.food), color='cyan')
 
     def buy_fur_coat(self):
-        pass
+        self.fullness -= 10
+        self.happiness += 60
+        self.house.money -= 350
+        Wife.total_coat += 1
+        cprint('{} купила шубу, денег осталось - {}, счастье - {}'.format(self.name, self.house.money,
+                                                                          self.happiness), color='cyan')
 
     def clean_house(self):
-        pass
+        self.fullness -= 10
+        self.house.dirt -= 100
+        if self.house.dirt < 0:
+            self.house.dirt = 0
+        cprint('{} убралась в доме, сытость - {}, грязи - {}'.format(self.name, self.fullness,
+                                                                     self.house.dirt), color='cyan')
 
 
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
-
+serge.go_to_the_house(house=home)
+masha.go_to_the_house(house=home)
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
+    if home.dirt > 90:
+        serge.happiness -= 10
+        masha.happiness -= 10
     serge.act()
     masha.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(home, color='cyan')
-
-# TODO после реализации первой части - отдать на проверку учителю
+cprint('Всего съедено еды {}'.format(House.total_food), color='yellow')
+cprint('Всего заработано денег {}'.format(House.total_money), color='yellow')
+cprint('Всего кулено шуб {}'.format(Wife.total_coat), color='yellow')
+# после реализации первой части - отдать на проверку учителю
 
 ######################################################## Часть вторая
 #
@@ -132,22 +225,22 @@ for day in range(365):
 # Если кот дерет обои, то грязи становится больше на 5 пунктов
 
 
-class Cat:
-
-    def __init__(self):
-        pass
-
-    def act(self):
-        pass
-
-    def eat(self):
-        pass
-
-    def sleep(self):
-        pass
-
-    def soil(self):
-        pass
+# class Cat:
+#
+#     def __init__(self):
+#         pass
+#
+#     def act(self):
+#         pass
+#
+#     def eat(self):
+#         pass
+#
+#     def sleep(self):
+#         pass
+#
+#     def soil(self):
+#         pass
 
 
 ######################################################## Часть вторая бис
@@ -161,22 +254,22 @@ class Cat:
 # отличия от взрослых - кушает максимум 10 единиц еды,
 # степень счастья  - не меняется, всегда ==100 ;)
 
-class Child:
-
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        return super().__str__()
-
-    def act(self):
-        pass
-
-    def eat(self):
-        pass
-
-    def sleep(self):
-        pass
+# class Child:
+#
+#     def __init__(self):
+#         pass
+#
+#     def __str__(self):
+#         return super().__str__()
+#
+#     def act(self):
+#         pass
+#
+#     def eat(self):
+#         pass
+#
+#     def sleep(self):
+#         pass
 
 
 # TODO после реализации второй части - отдать на проверку учителем две ветки
@@ -189,22 +282,22 @@ class Child:
 # отправить на проверку учителем.
 
 
-home = House()
-serge = Husband(name='Сережа')
-masha = Wife(name='Маша')
-kolya = Child(name='Коля')
-murzik = Cat(name='Мурзик')
-
-for day in range(365):
-    cprint('================== День {} =================='.format(day), color='red')
-    serge.act()
-    masha.act()
-    kolya.act()
-    murzik.act()
-    cprint(serge, color='cyan')
-    cprint(masha, color='cyan')
-    cprint(kolya, color='cyan')
-    cprint(murzik, color='cyan')
+# home = House()
+# serge = Husband(name='Сережа')
+# masha = Wife(name='Маша')
+# kolya = Child(name='Коля')
+# murzik = Cat(name='Мурзик')
+#
+# for day in range(365):
+#     cprint('================== День {} =================='.format(day), color='red')
+#     serge.act()
+#     masha.act()
+#     kolya.act()
+#     murzik.act()
+#     cprint(serge, color='cyan')
+#     cprint(masha, color='cyan')
+#     cprint(kolya, color='cyan')
+#     cprint(murzik, color='cyan')
 
 
 # Усложненное задание (делать по желанию)
