@@ -77,16 +77,26 @@ class Human:
         self.house = house
         cprint('{} Вьехал в дом'.format(self.name), color='cyan')
 
-    # TODO Помимо целых действий вроде eat
-    # TODO Можно выделять схожие части методов и выносить их в родительский класс
-    # TODO Например можно взять общие проверки и действия из act
-    # TODO Записать их в act родительского класса, добавив к ним возврат
-    # TODO либо True, либо False
-    # TODO True - если человек жив и способен выполнить какое-нибудь действие
-    # TODO False - если человек мертв или уже выполнил одно из действий
-    # TODO В act наследников тогда нужно будет использовать вызов метода через super()
-    # TODO и проверить то, что вернёт этот вызов (if super().func())
-    # TODO Если возвращается True - продолжать выбор действия, если False - завершать функцию
+    def act(self):
+        if self.fullness <= 0:
+            cprint('{} умер от голода'.format(self.name), color='red')
+            return False
+        if self.happiness <= 10:
+            cprint('{} умер от депрессии'.format(self.name), color='red')
+            return False
+        else:
+            return True
+
+    #  Помимо целых действий вроде eat
+    #  Можно выделять схожие части методов и выносить их в родительский класс
+    #  Например можно взять общие проверки и действия из act
+    # Записать их в act родительского класса, добавив к ним возврат
+    #  либо True, либо False
+    #  True - если человек жив и способен выполнить какое-нибудь действие
+    #  False - если человек мертв или уже выполнил одно из действий
+    #  В act наследников тогда нужно будет использовать вызов метода через super()
+    #  и проверить то, что вернёт этот вызов (if super().func())
+    #Если возвращается True - продолжать выбор действия, если False - завершать функцию
 
 
 class Husband(Human):
@@ -98,23 +108,25 @@ class Husband(Human):
         return super().__str__()
 
     def act(self):
-        if self.fullness <= 0:
-            cprint('{} умер от голода'.format(self.name), color='red')
-            return
-        if self.happiness <= 10:
-            cprint('{} умер от депрессии'.format(self.name), color='red')
-            return
-        if self.house.money < 50:
-            self.work()
-        dice = randint(1, 6)
-        if self.fullness < 20:
-            self.eat()
-        elif dice == 1:
-            self.work()
-        elif dice == 2:
-            self.gaming()
-        else:
-            self.eat()
+        # if self.fullness <= 0:
+        #     cprint('{} умер от голода'.format(self.name), color='red')
+        #     return
+        # if self.happiness <= 10:
+        #     cprint('{} умер от депрессии'.format(self.name), color='red')
+        #     return
+        if super().act():
+
+            if self.house.money < 50:
+                self.work()
+            dice = randint(1, 6)
+            if self.fullness < 20:
+                self.eat()
+            elif dice == 1:
+                self.work()
+            elif dice == 2:
+                self.gaming()
+            else:
+                self.eat()
 
     # def eat(self):
     #     pass
@@ -143,26 +155,28 @@ class Wife(Human):
         return super().__str__()
 
     def act(self):
-        if self.fullness <= 0:
-            cprint('{} умерла от голода'.format(self.name), color='red')
-            return
-        if self.happiness <= 10:
-            cprint('{} умерла от депрессии'.format(self.name), color='red')
-            return
-        if self.house.food < 10:
-            self.shopping()
-        dice = randint(1, 6)
-        if self.fullness < 20:
-            self.eat()
-        elif self.house.food < 20:
-            self.shopping()
-        elif dice == 1:
-            self.clean_house()
-        elif dice == 2:
-            if self.house.money > 350:
-                self.buy_fur_coat()
-        else:
-            self.eat()
+        # if self.fullness <= 0:
+        #     cprint('{} умерла от голода'.format(self.name), color='red')
+        #     return
+        # if self.happiness <= 10:
+        #     cprint('{} умерла от депрессии'.format(self.name), color='red')
+        #     return
+        if super().act():
+
+            if self.house.food < 10:
+                self.shopping()
+            dice = randint(1, 6)
+            if self.fullness < 20:
+                self.eat()
+            elif self.house.food < 20:
+                self.shopping()
+            elif dice == 1:
+                self.clean_house()
+            elif dice == 2:
+                if self.house.money > 350:
+                    self.buy_fur_coat()
+            else:
+                self.eat()
 
     # def eat(self):
     #     pass
