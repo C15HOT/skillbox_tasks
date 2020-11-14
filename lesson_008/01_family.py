@@ -212,6 +212,7 @@ serge.go_to_the_house(house=home)
 masha.go_to_the_house(house=home)
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
+    # TODO логику с уменьшением счастья лучше тоже убрать в дейсвтие к человеку
     if home.dirt > 90:
         serge.happiness -= 10
         masha.happiness -= 10
