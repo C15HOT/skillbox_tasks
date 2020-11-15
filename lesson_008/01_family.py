@@ -165,7 +165,7 @@ class Wife(Human):
         #     return
         if super().act():
 
-            if self.house.food < 10:
+            if self.house.food < 30:
                 self.shopping()
             dice = randint(1, 6)
             if self.fullness < 20:
