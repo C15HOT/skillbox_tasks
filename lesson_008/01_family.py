@@ -207,9 +207,39 @@ class Wife(Human):
                                                                      self.house.dirt), color='cyan')
 
 
+class Child(Human):
+
+    def __init__(self,name):
+        super().__init__(name=name)
+        self.fullness = 100
+
+    def __str__(self):
+        return super().__str__()
+
+    def act(self):
+        if super().act():
+            if self.fullness < 20:
+                self.eat()
+            else:
+                self.sleep()
+
+
+    def eat(self):
+        self.fullness += 10
+        self.house.food -= 10
+        House.total_food += 10
+        cprint('{} поел, еды осталось {}'.format(self.name, self.house.food), color='cyan')
+
+    def sleep(self):
+        cprint('{} спит'.format(self.name), color='green')
+        self.fullness -= 10
+
+
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
+son = Child(name='Андрюша')
+son.go_to_the_house(house=home)
 serge.go_to_the_house(house=home)
 masha.go_to_the_house(house=home)
 for day in range(365):
@@ -220,8 +250,10 @@ for day in range(365):
     #     masha.happiness -= 10
     serge.act()
     masha.act()
+    son.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
+    cprint(son, color='cyan')
     cprint(home, color='cyan')
 cprint('Всего съедено еды {}'.format(House.total_food), color='yellow')
 cprint('Всего заработано денег {}'.format(House.total_money), color='yellow')
