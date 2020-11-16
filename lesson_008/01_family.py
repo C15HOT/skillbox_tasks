@@ -230,7 +230,7 @@ class Child(Human):
 
     def __init__(self,name):
         super().__init__(name=name)
-        self.fullness = 100
+        self.happiness = 100
 
     def __str__(self):
         return super().__str__()
