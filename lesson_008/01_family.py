@@ -46,14 +46,17 @@ from random import randint
 class House:
     total_food = 0
     total_money = 0
+    total_bowl = 0
 
     def __init__(self):
         self.money = 100
         self.food = 50
         self.dirt = 0
+        self.bowl = 30
 
     def __str__(self):
-        return 'В доме денег - {}, еды - {}, грязи - {}'.format(self.money, self.food, self.dirt)
+        return 'В доме денег - {}, еды - {}, грязи - {}, еды для кота - {}'.format(self.money, self.food, self.dirt,
+                                                                                   self.bowl)
 
 
 class Human:
@@ -63,6 +66,7 @@ class Human:
         self.happiness = 100
         self.house = None
         self.name = name
+        self.cats = []
 
     def __str__(self):
         return 'Я {}, сытость - {}, счастье - {}'.format(self.name, self.fullness, self.happiness)
@@ -89,6 +93,19 @@ class Human:
                 self.happiness -= 10
             return True
 
+    def take_cat(self, cat):
+        self.cat = cat
+        #  чтобы была возможность заводить больше 1 кошки
+        #  стоит добавить атрибут-список и в него добавлять кошку
+        self.cats.append(cat)
+        self.cat.house = self.house
+        cprint('{} взял кота {}'.format(self.name, self.cat.name), color='cyan')
+
+    def buy_food_for_cat(self):
+        self.house.money -= 50
+        self.house.bowl += 50
+
+        cprint('{} Купил еды коту'.format(self.name), color='cyan')
     #  Помимо целых действий вроде eat
     #  Можно выделять схожие части методов и выносить их в родительский класс
     #  Например можно взять общие проверки и действия из act
@@ -120,6 +137,8 @@ class Husband(Human):
 
             if self.house.money < 50:
                 self.work()
+            if self.house.bowl < 50:
+                self.buy_food_for_cat()
             dice = randint(1, 6)
             if self.fullness < 20:
                 self.eat()
@@ -235,13 +254,58 @@ class Child(Human):
         self.fullness -= 10
 
 
+class Cat:
+
+    def __init__(self, name):
+        self.name = name
+        self.fullness = 30
+        self.house = None
+
+    def __str__(self):
+        return 'Я - {}, сытость {}'.format(
+            self.name, self.fullness,
+        )
+
+    def act(self):
+        if self.fullness <= 0:
+            cprint('{} умер...'.format(self.name), color='red')
+            return
+        dice = randint(1, 6)
+        if self.fullness < 20:
+            self.eat()
+        elif dice == 1:
+            self.sleep()
+        else:
+            self.soil()
+
+    def eat(self):
+        if self.house.bowl >= 10:
+            self.fullness += 20
+            self.house.bowl -= 10
+            House.total_bowl += 10
+            cprint('{} поел'.format(self.name), color='yellow')
+        else:
+            cprint('{} нет еды для кота'.format(self.name), color='red')
+
+    def sleep(self):
+        cprint('{} спит'.format(self.name), color='green')
+        self.fullness -= 10
+
+    def soil(self):
+        cprint('{} дерет обои'.format(self.name), color='red')
+        self.fullness -= 10
+        self.house.dirt += 5
+
+
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
+cat = Cat(name='Мурзик')
 son = Child(name='Андрюша')
 son.go_to_the_house(house=home)
 serge.go_to_the_house(house=home)
 masha.go_to_the_house(house=home)
+serge.take_cat(cat=cat)
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
     # логику с уменьшением счастья лучше тоже убрать в дейсвтие к человеку
@@ -251,13 +315,17 @@ for day in range(365):
     serge.act()
     masha.act()
     son.act()
+    cat.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
+    cprint(cat, color='cyan')
     cprint(son, color='cyan')
     cprint(home, color='cyan')
 cprint('Всего съедено еды {}'.format(House.total_food), color='yellow')
 cprint('Всего заработано денег {}'.format(House.total_money), color='yellow')
 cprint('Всего кулено шуб {}'.format(Wife.total_coat), color='yellow')
+cprint('Всего съедено еды для кота {}'.format(House.total_bowl), color='yellow')
+
 # после реализации первой части - отдать на проверку учителю
 
 ######################################################## Часть вторая
