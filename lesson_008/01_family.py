@@ -449,3 +449,4 @@ cprint('Всего съедено еды для кота {}'.format(House.total_
 #       for salary in range(50, 401, 50):
 #           max_cats = life.experiment(salary)
 #           print(f'При зарплате {salary} максимально можно прокормить {max_cats} котов')
+#зачёт!
