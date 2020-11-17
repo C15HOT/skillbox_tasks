@@ -40,7 +40,34 @@ import shutil
 #   см https://refactoring.guru/ru/design-patterns/template-method
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
-# TODO здесь ваш код
+import zipfile
+import os
+import os.path
+import time
+class Sorter:
+    folder=[]
+    pathes=[]
+    def __init__(self, input_path_name, output_path_name):
+        self.input_path_name = input_path_name
+        self.output_path_name = output_path_name
+
+    def take_dirs(self):
+        for i in os.walk(self.input_path_name):
+            Sorter.folder.append(i)
+        for address, dirs, files in Sorter.folder:
+            for file in files:
+                Sorter.pathes.append(address + '\\' + file)
+
+    def sort_and_make_dir(self):
+        pass
+
+path = os.getcwd()
+# path = os.path.normpath('/lesson_009/')
+sord = Sorter(input_path_name=path,output_path_name=path)
+dir=sord.take_dirs()
+print(Sorter.pathes)
+
+
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.

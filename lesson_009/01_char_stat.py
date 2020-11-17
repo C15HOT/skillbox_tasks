@@ -26,7 +26,7 @@
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
 import zipfile
-from pprint import pprint
+
 class CharStat:
 
     def __init__(self, file_name):

@@ -30,12 +30,11 @@ class Parser:
         self.stat = {}
 
     def collect(self):
-        with open(file=self.filename,mode='r', encoding='utf8') as file:
+        with open(file=self.filename, mode='r', encoding='utf8') as file:
             for line in file:
                 self.line_stat(line)
 
-
-    def line_stat(self,line):
+    def line_stat(self, line):
         if 'NOK' in line:
             key = line[0:17]
             if key in self.stat:
@@ -46,8 +45,8 @@ class Parser:
     def give_stat(self):
         with open(file='stat.txt', mode='w+', encoding='utf8') as file:
             for key, item in self.stat.items():
-
                 file.write(f'{key}]  {item}''\n')
+
 
 logs = Parser(filename='events.txt')
 logs.collect()
