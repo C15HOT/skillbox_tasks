@@ -41,6 +41,7 @@
 import os
 import os.path
 import time
+import shutil
 
 
 class Sorter:
@@ -72,12 +73,19 @@ class Sorter:
 
     def make_dir(self):
         for date in Sorter.dates:
-            # TODO соединять пути лучше через os.path.join()
-            out_dir = os.path.normpath(self.output_path_name + '\\' + 'sorted_icons' + '\\' +
-                                       str(date[0]) + '\\' + str(date[1]))
-            if not os.path.exists(out_dir):  # TODO если использовать параметр exist_ok=True, то эта проверка не нужна
-                os.makedirs(our_dir)
 
+            output_dir = os.path.join(self.output_path_name,'sorted_icons',str(date[0]),str(date[1]))
+            if not os.path.exists(output_dir):  # TODO если использовать параметр exist_ok=True, то эта проверка не нужна
+                os.makedirs(output_dir)
+
+    def copy_files(self):
+
+        for file in Sorter.pathes:
+            for dir in os.walk(os.path.join(self.output_path_name, 'sorted_icons')):
+            file_time = time.gmtime(os.path.getmtime(file))
+
+
+                print(dir)
     # TODO и не забывайте про общий метод, который запустит всё нужное
 
 
@@ -89,6 +97,7 @@ print(Sorter.pathes)
 sort.get_time()
 print(Sorter.dates)
 sort.make_dir()
+sort.copy_files()
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
