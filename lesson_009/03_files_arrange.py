@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-import time
-import shutil
 
 # Нужно написать скрипт для упорядочивания фотографий (вообще любых файлов)
 # Скрипт должен разложить файлы из одной папки по годам и месяцам в другую.
@@ -40,13 +37,17 @@ import shutil
 #   см https://refactoring.guru/ru/design-patterns/template-method
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
-import zipfile
+
 import os
 import os.path
 import time
+
+
 class Sorter:
-    folder=[]
-    pathes=[]
+    folder = []
+    pathes = []
+    dates = []
+
     def __init__(self, input_path_name, output_path_name):
         self.input_path_name = input_path_name
         self.output_path_name = output_path_name
@@ -58,16 +59,27 @@ class Sorter:
             for file in files:
                 Sorter.pathes.append(address + '\\' + file)
 
-    def sort_and_make_dir(self):
-        pass
+    def get_time(self):
+        for file in Sorter.pathes:
+            file_time = time.gmtime(os.path.getmtime(file))
+            Sorter.dates.append([file_time.tm_year, file_time.tm_mon])
 
-path = os.getcwd()
-# path = os.path.normpath('/lesson_009/')
-sord = Sorter(input_path_name=path,output_path_name=path)
-dir=sord.take_dirs()
+    def make_dir(self):
+        for date in Sorter.dates:
+            out_dir = os.path.normpath(self.output_path_name + '\\' + 'sorted_icons' + '\\' +
+                                       str(date[0]) + '\\' + str(date[1]))
+            if not os.path.exists(out_dir):
+                os.makedirs(our_dir)
+
+
+our_dir = os.getcwd()
+path = os.path.normpath(our_dir + '\\' + 'icons')
+sort = Sorter(input_path_name=path, output_path_name=our_dir)
+dir = sort.take_dirs()
 print(Sorter.pathes)
-
-
+sort.get_time()
+print(Sorter.dates)
+sort.make_dir()
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
