@@ -24,10 +24,16 @@
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
 class Parser:
+    keys_year = []
+    keys_mon = []
+    keys_hour = []
 
     def __init__(self, filename):
         self.filename = filename
         self.stat = {}
+        self.year_dict = {}
+        self.mon_dict = {}
+        self.hour_dict = {}
 
     def collect(self):
         with open(file=self.filename, mode='r', encoding='utf8') as file:
@@ -47,12 +53,52 @@ class Parser:
             for key, item in self.stat.items():
                 file.write(f'{key}]  {item}''\n')
 
-    # TODO и тут нужен "общий" метод
-    # TODO и можно приступать ко второй части
+    def sorter(self):
+        for key in self.stat.items():
+            Parser.keys_year.append(str(key)[3:7])
+            Parser.keys_mon.append(str(key)[8:10])
+            Parser.keys_hour.append(str(key)[14:16])
+
+        Parser.keys_year = set(Parser.keys_year)
+        Parser.keys_mon = set(Parser.keys_mon)
+        Parser.keys_hour = set(Parser.keys_hour)
+        Parser.keys_year = sorted(list(Parser.keys_year))
+        Parser.keys_mon = sorted(list(Parser.keys_mon))
+        Parser.keys_hour = sorted(list(Parser.keys_hour))
+        print(Parser.keys_year, Parser.keys_mon, Parser.keys_hour)
+
+    def group(self, metod):
+        with open(file='stat.txt', mode='w+', encoding='utf8') as file:
+            if metod == 'hour':
+                for date in Parser.keys_hour:
+                    for key, item in self.stat.items():
+
+                        if str(key[12:14]) == date:
+
+                            file.write(f'{key}]  {item}''\n')
+
+            elif metod == 'mon':
+                for date in Parser.keys_mon:
+                    for key, item in self.stat.items():
+
+                        if str(key[6:8]) == date:
+                            file.write(f'{key}]  {item}''\n')
+            else:
+                for date in Parser.keys_year:
+                    for key, item in self.stat.items():
+
+                        if str(key[1:5]) == date:
+                            file.write(f'{key}]  {item}''\n')
+
+    def run(self, metod):
+        self.collect()
+        # self.give_stat()
+        self.sorter()
+        self.group(metod=metod)
+
 
 logs = Parser(filename='events.txt')
-logs.collect()
-logs.give_stat()
+logs.run(metod='hour')
 
 # После зачета первого этапа нужно сделать группировку событий
 #  - по часам
