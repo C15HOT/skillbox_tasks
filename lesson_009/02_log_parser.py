@@ -47,6 +47,8 @@ class Parser:
             for key, item in self.stat.items():
                 file.write(f'{key}]  {item}''\n')
 
+    # TODO и тут нужен "общий" метод
+    # TODO и можно приступать ко второй части
 
 logs = Parser(filename='events.txt')
 logs.collect()

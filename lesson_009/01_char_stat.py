@@ -47,7 +47,7 @@ class CharStat:
             for line in file:
                 self.line_stat(line=line)
 
-        for i in self.stat.values():
+        for i in self.stat.values():  # TODO 'i' - пример плохого нэйминга
             self.total += i
 
     def line_stat(self,line):
@@ -59,6 +59,8 @@ class CharStat:
                 else:
                     self.stat[char] = 1
 
+    # TODO выделите сортировку в отдельный метод и её переопределяйте, чтобы не дублировать код
+
     def print_stat(self):
         print('+{txt:-^20}+'.format(txt='+'))
         print('|{txt:^9}|{txt2:^10}|'.format(txt='Буква', txt2='Частота'))
@@ -69,6 +71,9 @@ class CharStat:
         print('|{txt:^9}|{txt2:^10}|'.format(txt='Итого', txt2=self.total))
         print('+{txt:-^20}+'.format(txt='+'))
 
+    # TODO Тут нужно ещё один метод создать, общий(обычно его называют как-нибудь вроде run), который будет объединять
+    # TODO Нужные шаги и запускать их в правильном порядке
+    # TODO открытие файла - сбор данных - сортировка - печать
 
 vim = CharStat(file_name='python_snippets/voyna-i-mir.txt.zip')
 vim.collect()

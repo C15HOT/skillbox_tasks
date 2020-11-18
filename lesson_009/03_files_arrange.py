@@ -53,7 +53,12 @@ class Sorter:
         self.output_path_name = output_path_name
 
     def take_dirs(self):
+        # TODO попробуйте оставить один цикл по файлам,
+        # TODO а внутри вызывать метод, который будет выполнять основную работу
+        # TODO тогда и промежуточные списки не будут нужны вообще
         for i in os.walk(self.input_path_name):
+            # TODO не стоит обращаться к атрибутам класса - используйте атрибуты объекта
+            # TODO (чтобы классы могли работать независимо)
             Sorter.folder.append(i)
         for address, dirs, files in Sorter.folder:
             for file in files:
@@ -64,12 +69,16 @@ class Sorter:
             file_time = time.gmtime(os.path.getmtime(file))
             Sorter.dates.append([file_time.tm_year, file_time.tm_mon])
 
+
     def make_dir(self):
         for date in Sorter.dates:
+            # TODO соединять пути лучше через os.path.join()
             out_dir = os.path.normpath(self.output_path_name + '\\' + 'sorted_icons' + '\\' +
                                        str(date[0]) + '\\' + str(date[1]))
-            if not os.path.exists(out_dir):
+            if not os.path.exists(out_dir):  # TODO если использовать параметр exist_ok=True, то эта проверка не нужна
                 os.makedirs(our_dir)
+
+    # TODO и не забывайте про общий метод, который запустит всё нужное
 
 
 our_dir = os.getcwd()
