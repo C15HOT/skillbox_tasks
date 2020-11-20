@@ -42,7 +42,15 @@ class Parser:
 
     def line_stat(self, line):
         if 'NOK' in line:
-            key = line[0:17]
+            key = line[0:17]  # TODO по сути единственное, что надо было изменить это число 17
+            # TODO вернитесь к прошлой реализации первой части
+            # TODO задайте число 17 при помощи атрибута
+            # TODO затем, создайте наследников от этого класса
+            # TODO и в каждом наследнике измените этот атрибут
+            # TODO чтобы срез шёл от начала до нужной части строки (до часа, до месяца, до года)
+            # TODO чтобы группировка шла не по [2018-05-14 19:39
+            # TODO а например по [2018-05
+            # TODO (кстати лучше не с 0 начинать а с 1, чтобы "[" убрать
             if key in self.stat:
                 self.stat[key] += 1
             else:
@@ -54,6 +62,7 @@ class Parser:
                 file.write(f'{key}]  {item}''\n')
 
     def sorter(self):
+        # TODO создаете очень много лишних действий
         for key in self.stat.items():
             Parser.keys_year.append(str(key)[3:7])
             Parser.keys_mon.append(str(key)[8:10])
@@ -68,6 +77,7 @@ class Parser:
         print(Parser.keys_year, Parser.keys_mon, Parser.keys_hour)
 
     def group(self, metod):
+        # TODO и в этом методе много дублирования
         with open(file='stat.txt', mode='w+', encoding='utf8') as file:
             if metod == 'hour':
                 for date in Parser.keys_hour:

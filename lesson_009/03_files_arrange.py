@@ -48,7 +48,8 @@ class Sorter:
     folder = []
     pathes = []
     dates = []
-    finish_folder=[]
+    finish_folder = []
+
     def __init__(self, input_path_name, output_path_name):
         self.input_path_name = input_path_name
         self.output_path_name = output_path_name
@@ -70,27 +71,28 @@ class Sorter:
             file_time = time.gmtime(os.path.getmtime(file))
             Sorter.dates.append([file_time.tm_year, file_time.tm_mon])
 
-
     def make_dir(self):
-
+        # TODO этот метод у вас работает очень долго
+        # TODO и вы делаете очень много лишних итераций
+        # TODO по сути у вас должен быть один цикл всего
+        # TODO по всем файлам папки icons
+        # TODO нужно за одну итерацию формировать путь из даты файла
+        # TODO и копировать его
         for date in Sorter.dates:
 
-            output_dir = os.path.join(self.output_path_name,'sorted_icons',str(date[0]),str(date[1]))
+            output_dir = os.path.join(self.output_path_name, 'sorted_icons', str(date[0]), str(date[1]))
 
-            os.makedirs(output_dir,exist_ok=True)
+            os.makedirs(output_dir, exist_ok=True)
             for file in Sorter.pathes:
                 file_time = time.gmtime(os.path.getmtime(file))
                 if file_time.tm_year == date[0]:
                     if file_time.tm_mon == date[1]:
-                        shutil.copy2(file,output_dir)
+                        shutil.copy2(file, output_dir)
 
     def run(self):
         self.take_dirs()
         self.get_time()
         self.make_dir()
-
-
-
 
 
 our_dir = os.getcwd()
@@ -99,7 +101,6 @@ path = os.path.normpath(our_dir + '\\' + 'icons')
 sort = Sorter(input_path_name=path, output_path_name=our_dir)
 # dir = sort.take_dirs()
 sort.run()
-
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.

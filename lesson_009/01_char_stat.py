@@ -27,13 +27,14 @@
 
 import zipfile
 
+
 class CharStat:
 
     def __init__(self, file_name):
         self.file_name = file_name
         self.stat = {}
         self.total = 0
-        self.new_dict={}
+        self.new_dict = {}
 
     def unzip(self):
         zfile = zipfile.ZipFile(self.file_name, 'r')
@@ -51,7 +52,7 @@ class CharStat:
         for char in self.stat.values():
             self.total += char
 
-    def line_stat(self,line):
+    def line_stat(self, line):
         for char in line:
             if char.isalpha():
 
@@ -60,7 +61,7 @@ class CharStat:
                 else:
                     self.stat[char] = 1
 
-    def sorter(self,metod_sort):
+    def sorter(self, metod_sort):
         if metod_sort == 'алфавит вверх':
 
             for key in sorted(self.stat):
@@ -69,7 +70,7 @@ class CharStat:
             for key in sorted(self.stat, reverse=True):
                 self.new_dict[key] = self.stat[key]
         else:
-            for key, item in sorted(self.stat.items(), key=lambda para : para[1]):
+            for key, item in sorted(self.stat.items(), key=lambda para: para[1]):
                 self.new_dict[key] = self.stat[key]
 
     # #  выделите сортировку в отдельный метод и её переопределяйте, чтобы не дублировать код
@@ -84,13 +85,14 @@ class CharStat:
         print('|{txt:^9}|{txt2:^10}|'.format(txt='Итого', txt2=self.total))
         print('+{txt:-^20}+'.format(txt='+'))
 
-    def run(self,metod):
+    def run(self, metod):
         self.collect()
         self.sorter(metod_sort=metod)
         self.print_stat()
     #  Тут нужно ещё один метод создать, общий(обычно его называют как-нибудь вроде run), который будет объединять
     #  Нужные шаги и запускать их в правильном порядке
     #  открытие файла - сбор данных - сортировка - печать
+
 
 vim = CharStat(file_name='python_snippets/voyna-i-mir.txt.zip')
 vim.run(metod='алфавит вниз')
@@ -101,3 +103,4 @@ vim.run(metod='алфавит вниз')
 #  - по частоте по возрастанию
 #  - по алфавиту по возрастанию
 #  - по алфавиту по убыванию
+#зачёт!
