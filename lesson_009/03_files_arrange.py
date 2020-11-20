@@ -48,7 +48,7 @@ class Sorter:
     folder = []
     pathes = []
     dates = []
-
+    finish_folder=[]
     def __init__(self, input_path_name, output_path_name):
         self.input_path_name = input_path_name
         self.output_path_name = output_path_name
@@ -72,32 +72,34 @@ class Sorter:
 
 
     def make_dir(self):
+
         for date in Sorter.dates:
 
             output_dir = os.path.join(self.output_path_name,'sorted_icons',str(date[0]),str(date[1]))
-            if not os.path.exists(output_dir):  # TODO если использовать параметр exist_ok=True, то эта проверка не нужна
-                os.makedirs(output_dir)
 
-    def copy_files(self):
+            os.makedirs(output_dir,exist_ok=True)
+            for file in Sorter.pathes:
+                file_time = time.gmtime(os.path.getmtime(file))
+                if file_time.tm_year == date[0]:
+                    if file_time.tm_mon == date[1]:
+                        shutil.copy2(file,output_dir)
 
-        for file in Sorter.pathes:
-            for dir in os.walk(os.path.join(self.output_path_name, 'sorted_icons')):
-            file_time = time.gmtime(os.path.getmtime(file))
+    def run(self):
+        self.take_dirs()
+        self.get_time()
+        self.make_dir()
 
 
-                print(dir)
-    # TODO и не забывайте про общий метод, который запустит всё нужное
+
 
 
 our_dir = os.getcwd()
 path = os.path.normpath(our_dir + '\\' + 'icons')
+
 sort = Sorter(input_path_name=path, output_path_name=our_dir)
-dir = sort.take_dirs()
-print(Sorter.pathes)
-sort.get_time()
-print(Sorter.dates)
-sort.make_dir()
-sort.copy_files()
+# dir = sort.take_dirs()
+sort.run()
+
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
