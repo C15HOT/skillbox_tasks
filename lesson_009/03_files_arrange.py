@@ -45,49 +45,44 @@ import shutil
 
 
 class Sorter:
-    folder = []
-    pathes = []
-    dates = []
-    finish_folder = []
+
 
     def __init__(self, input_path_name, output_path_name):
         self.input_path_name = input_path_name
         self.output_path_name = output_path_name
+        self.pathes = []
+        self.dates = []
+        self.finish_folder = []
 
     def take_dirs(self):
-        # TODO попробуйте оставить один цикл по файлам,
-        # TODO а внутри вызывать метод, который будет выполнять основную работу
-        # TODO тогда и промежуточные списки не будут нужны вообще
-        for i in os.walk(self.input_path_name):
-            # TODO не стоит обращаться к атрибутам класса - используйте атрибуты объекта
-            # TODO (чтобы классы могли работать независимо)
-            Sorter.folder.append(i)
-        for address, dirs, files in Sorter.folder:
+        #  попробуйте оставить один цикл по файлам,
+        #  а внутри вызывать метод, который будет выполнять основную работу
+        # тогда и промежуточные списки не будут нужны вообще
+        for dir, _, files in os.walk(self.input_path_name):
+            #  не стоит обращаться к атрибутам класса - используйте атрибуты объекта
+            #  (чтобы классы могли работать независимо)
             for file in files:
-                Sorter.pathes.append(address + '\\' + file)
+                self.pathes.append(dir + '\\' + file)
 
     def get_time(self):
-        for file in Sorter.pathes:
+        for file in self.pathes:
             file_time = time.gmtime(os.path.getmtime(file))
-            Sorter.dates.append([file_time.tm_year, file_time.tm_mon])
+            self.dates.append([file_time.tm_year, file_time.tm_mon])
 
     def make_dir(self):
-        # TODO этот метод у вас работает очень долго
-        # TODO и вы делаете очень много лишних итераций
-        # TODO по сути у вас должен быть один цикл всего
-        # TODO по всем файлам папки icons
-        # TODO нужно за одну итерацию формировать путь из даты файла
-        # TODO и копировать его
-        for date in Sorter.dates:
+        #  этот метод у вас работает очень долго
+        #  и вы делаете очень много лишних итераций
+        #  по сути у вас должен быть один цикл всего
+        # по всем файлам папки icons
+        #  нужно за одну итерацию формировать путь из даты файла
+        #  и копировать его
 
-            output_dir = os.path.join(self.output_path_name, 'sorted_icons', str(date[0]), str(date[1]))
-
+        for file in self.pathes:
+            file_time = time.gmtime(os.path.getmtime(file))
+            output_dir = os.path.join(self.output_path_name, 'sorted_icons', str(file_time.tm_year),
+                                      str(file_time.tm_mon))
             os.makedirs(output_dir, exist_ok=True)
-            for file in Sorter.pathes:
-                file_time = time.gmtime(os.path.getmtime(file))
-                if file_time.tm_year == date[0]:
-                    if file_time.tm_mon == date[1]:
-                        shutil.copy2(file, output_dir)
+            shutil.copy2(file, output_dir)
 
     def run(self):
         self.take_dirs()
