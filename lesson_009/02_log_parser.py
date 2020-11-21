@@ -78,7 +78,6 @@ class Parser:
 
     def group(self, metod):
 
-
         if metod == 'hour':
             self.change_border(left=11, right=13)
             iterable_stat = self.sorter(metod=metod)
