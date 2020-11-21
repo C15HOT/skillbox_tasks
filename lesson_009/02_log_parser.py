@@ -24,9 +24,6 @@
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
 class Parser:
-    keys_year = []
-    keys_mon = []
-    keys_hour = []
 
     def __init__(self, filename):
         self.filename = filename
@@ -34,23 +31,23 @@ class Parser:
         self.year_dict = {}
         self.mon_dict = {}
         self.hour_dict = {}
+        self.keys_year = []
+        self.keys_mon = []
+        self.keys_hour = []
 
     def collect(self):
         with open(file=self.filename, mode='r', encoding='utf8') as file:
             for line in file:
                 self.line_stat(line)
 
+    def change_border(self, left, right):
+        self.right_border = right
+        self.left_border = left
+
     def line_stat(self, line):
+        self.change_border(left=1, right=17)
         if 'NOK' in line:
-            key = line[0:17]  # TODO по сути единственное, что надо было изменить это число 17
-            # TODO вернитесь к прошлой реализации первой части
-            # TODO задайте число 17 при помощи атрибута
-            # TODO затем, создайте наследников от этого класса
-            # TODO и в каждом наследнике измените этот атрибут
-            # TODO чтобы срез шёл от начала до нужной части строки (до часа, до месяца, до года)
-            # TODO чтобы группировка шла не по [2018-05-14 19:39
-            # TODO а например по [2018-05
-            # TODO (кстати лучше не с 0 начинать а с 1, чтобы "[" убрать
+            key = line[self.left_border:self.right_border]
             if key in self.stat:
                 self.stat[key] += 1
             else:
@@ -59,51 +56,54 @@ class Parser:
     def give_stat(self):
         with open(file='stat.txt', mode='w+', encoding='utf8') as file:
             for key, item in self.stat.items():
-                file.write(f'{key}]  {item}''\n')
+                file.write(f'{key}  {item}''\n')
 
-    def sorter(self):
-        # TODO создаете очень много лишних действий
-        for key in self.stat.items():
-            Parser.keys_year.append(str(key)[3:7])
-            Parser.keys_mon.append(str(key)[8:10])
-            Parser.keys_hour.append(str(key)[14:16])
+    def sorter(self, metod):
 
-        Parser.keys_year = set(Parser.keys_year)
-        Parser.keys_mon = set(Parser.keys_mon)
-        Parser.keys_hour = set(Parser.keys_hour)
-        Parser.keys_year = sorted(list(Parser.keys_year))
-        Parser.keys_mon = sorted(list(Parser.keys_mon))
-        Parser.keys_hour = sorted(list(Parser.keys_hour))
-        print(Parser.keys_year, Parser.keys_mon, Parser.keys_hour)
+        if metod == 'hour':
+
+            any_list = self.keys_hour
+        elif metod == 'mon':
+
+            any_list = self.keys_mon
+        else:
+
+            any_list = self.keys_year
+
+        for key, item in self.stat.items():
+            any_list.append(str(key[self.left_border:self.right_border]))
+        any_list = set(any_list)
+        any_list = sorted(list(any_list))
+        return any_list
 
     def group(self, metod):
-        # TODO и в этом методе много дублирования
+
+
+        if metod == 'hour':
+            self.change_border(left=11, right=13)
+            iterable_stat = self.sorter(metod=metod)
+
+            # iterable_stat = self.keys_hour
+        elif metod == 'mon':
+            self.change_border(left=5, right=7)
+            self.sorter(metod=metod)
+
+            iterable_stat = self.sorter(metod=metod)
+        else:
+            self.change_border(left=0, right=4)
+            self.sorter(metod=metod)
+            iterable_stat = self.sorter(metod=metod)
+
         with open(file='stat.txt', mode='w+', encoding='utf8') as file:
-            if metod == 'hour':
-                for date in Parser.keys_hour:
-                    for key, item in self.stat.items():
-
-                        if str(key[12:14]) == date:
-
-                            file.write(f'{key}]  {item}''\n')
-
-            elif metod == 'mon':
-                for date in Parser.keys_mon:
-                    for key, item in self.stat.items():
-
-                        if str(key[6:8]) == date:
-                            file.write(f'{key}]  {item}''\n')
-            else:
-                for date in Parser.keys_year:
-                    for key, item in self.stat.items():
-
-                        if str(key[1:5]) == date:
-                            file.write(f'{key}]  {item}''\n')
+            for date in iterable_stat:
+                for key, item in self.stat.items():
+                    if str(key[self.left_border:self.right_border]) == date:
+                        file.write(f'{key}  {item}''\n')
 
     def run(self, metod):
         self.collect()
         # self.give_stat()
-        self.sorter()
+        # self.sorter(metod=metod)
         self.group(metod=metod)
 
 
