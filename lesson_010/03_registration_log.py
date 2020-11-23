@@ -32,10 +32,19 @@ class NotEmailError(ValueError):
 
 def analysis(line):
     name, email, age = line.split(' ')
-
+    # TODO Такое разделение, да и использование Int на age сами по себе вызывают ошибки
+    # TODO Мы же хотим управлять этим процессом, вызывая их явно
+    # TODO Поэтому попробуйте ошибки ловить условиями и вызывать raise-ом
+    # TODO Такая практика нужна, чтобы научиться отделять наши ошибки (ожидаемые) от чужих
+    # TODO (неожиданных)
     if not name.isalpha():
         raise NotNameError('Некорректное имя')
     if not ('@' or '.') in email:
+        # TODO такое условие не сработает
+        # TODO важно понимать порядок действий, с которым пайтон выполняет его
+        # TODO 1) ('@' or '.') -- результатом этого сравнения будет "@"
+        # TODO 2) результат 1 он подставит в проверку - "@" in email
+        # TODO 3) и к результату 2 он добавит not
         raise NotEmailError('Некорректный @mail')
     if (int(age) > 99 or int(age)) < 10:
         raise ValueError('Некорретный возраст')
@@ -48,8 +57,9 @@ with open('registrations.txt', 'r', encoding='utf8') as ff:
                 try:
                     analysis(line=line)
                     good.write(f'{line}''\n')
-                except ValueError as exc:
-                    if 'unpack' in exc.args[0]:
+                except ValueError as exc:  # TODO а почему ловите только ValueError?
+                    if 'unpack' in exc.args[0]:  # TODO стоит ли тут доп проверку выполнять
+                        # TODO если вызывается ValueError с разными сообщениями?
                         bad.write(f'Не хватает данных {exc} в строке {line}''\n')
                     else:
                         bad.write(f'{exc} в строке {line}''\n')
