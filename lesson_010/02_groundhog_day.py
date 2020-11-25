@@ -16,7 +16,7 @@
 # кармы до уровня ENLIGHTENMENT_CARMA_LEVEL. Исключения обработать и записать в лог.
 # При создании собственных исключений максимально использовать функциональность
 # базовых встроенных исключений.
-
+import random
 from random import randint
 
 ENLIGHTENMENT_CARMA_LEVEL = 777
@@ -47,29 +47,24 @@ class SuicideError(Exception):
     pass
 
 
+my_exceptions = [IamGodError('Я бог'), DrunkError('Я напился'), CarCrashError('Я разбился на машине'),
+                 GluttonyError('Я объелся'), DepressionError('Я в депрессии'), SuicideError('Я самоубился')]
+
+
 def one_day():
     number = randint(1, 13)
-    # TODO Нам нужно симулировать вероятность 1 к 13. Т.е. приступать к выбору исключения
-    # TODO надо тогда, когда мы поймаем одно из чисел от 1 до 13, например 1
-    # TODO сейчас же вероятность выше :)
-    # TODO можно добавить ещё одно случайное число, уже в нужном нам диапазоне
-    # TODO а можно использовать random.choice для выбора случайного исключения из набора
-    # TODO (например из списка, в котором можно хранить эти исключения)
-    if number <= 7:
+    #  Нам нужно симулировать вероятность 1 к 13. Т.е. приступать к выбору исключения
+    #  надо тогда, когда мы поймаем одно из чисел от 1 до 13, например 1
+    #  сейчас же вероятность выше :)
+    #  можно добавить ещё одно случайное число, уже в нужном нам диапазоне
+    #  а можно использовать random.choice для выбора случайного исключения из набора
+    #  (например из списка, в котором можно хранить эти исключения)
+    if number == 1:
+        raise random.choice(my_exceptions)
+    elif number > 1:
+        #  кстати исключения можно собрать в список или словарь и вызывать их оттуда по индексу/ключу
         return number
-    elif number == 8:
-        # TODO кстати исключения можно собрать в список или словарь и вызывать их оттуда по индексу/ключу
-        raise IamGodError('Я бог')
-    elif number == 9:
-        raise DrunkError('Я напился')
-    elif number == 10:
-        raise CarCrashError('Я разбился на машине')
-    elif number == 11:
-        raise GluttonyError('Я объелся')
-    elif number == 12:
-        raise DepressionError('Я в депрессии')
-    elif number == 13:
-        raise SuicideError('Я самоубился')
+
 
 
 with open(file='log.txt', mode='w+', encoding='utf8') as file:
