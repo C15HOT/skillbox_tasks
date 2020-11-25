@@ -66,7 +66,6 @@ def one_day():
         return number
 
 
-
 with open(file='log.txt', mode='w+', encoding='utf8') as file:
     while total < ENLIGHTENMENT_CARMA_LEVEL:
 
@@ -77,3 +76,4 @@ with open(file='log.txt', mode='w+', encoding='utf8') as file:
             file.write(f'{exc}''\n')
     print(total)
 # https://goo.gl/JnsDqu
+#зачёт!

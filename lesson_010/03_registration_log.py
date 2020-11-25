@@ -40,7 +40,6 @@ def analysis(line):
     #  Поэтому попробуйте ошибки ловить условиями и вызывать raise-ом
     #  Такая практика нужна, чтобы научиться отделять наши ошибки (ожидаемые) от чужих
     #  (неожиданных)
-
     if not name.isalpha():
         raise NotNameError('Некорректное имя')
     if '@' not in email or '.' not in email:
@@ -49,6 +48,7 @@ def analysis(line):
         raise ValueError('Некорретный возраст')
     if (int(age) > 99 or int(age)) < 10:
         raise ValueError('Некорретный возраст')
+
 
 with open('registrations.txt', 'r', encoding='utf8') as ff:
     with open('registrations_good.txt', 'w+', encoding='utf8') as good:
@@ -62,3 +62,4 @@ with open('registrations.txt', 'r', encoding='utf8') as ff:
                     bad.write(f'{exc} в строке {line}''\n')
                 except Exception as exc:
                     bad.write(f'Непредвиденная ошибка {exc}  в строке {line}''\n')
+#зачёт!
