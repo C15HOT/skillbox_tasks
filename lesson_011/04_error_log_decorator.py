@@ -14,8 +14,12 @@ def log_errors(file_name):
             with open(file=file_name, mode='a', encoding='utf8') as file:
                 try:
                     result = func(*args,**kwargs)
+                    # TODO результат выполнения функции надо возвращать return-ом
                 except Exception as exc:
                     file.write(f'{exc}''\n')
+                    # TODO записать надо больше данных <имя функции> <параметры вызова> <тип ошибки> <текст ошибки>
+                    # TODO после обработки надо выкинуть это же исключение дальше
+                    # TODO сделать raise или raise exc
 
         return surrogate
     return file

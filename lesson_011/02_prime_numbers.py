@@ -22,6 +22,7 @@ def get_prime_numbers(n):
 
 
 class PrimeNumbers:
+    # TODO не забывайте про стиль кода
     def __init__(self,n):
         self.prime_numbers = []
         self.n=n
@@ -37,7 +38,8 @@ class PrimeNumbers:
 
         if self.i > self.n:
             raise StopIteration()
-        for number in range(2, self.i + 1):
+        for number in range(2, self.i + 1):  # TODO не стоит каждый раз начинать с 2,
+            # попробуйте начинать с прошлого простого
             for prime in self.prime_numbers:
                 if number % prime == 0:
                     break
@@ -48,7 +50,7 @@ class PrimeNumbers:
 
 prime_number_iterator = PrimeNumbers(n=10000)
 for number in prime_number_iterator:
-    if number is not None:
+    if number is not None:  # TODO каждый вызов итератора должен возвращать число, None быть не должно
         print(number)
 
 
