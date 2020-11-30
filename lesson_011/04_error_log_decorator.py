@@ -8,18 +8,27 @@
 # Лог файл открывать каждый раз при ошибке в режиме 'a'
 
 
-def log_errors(func):
-    pass
-    # TODO здесь ваш код
+def log_errors(file_name):
+    def file(func):
+        def surrogate(*args,**kwargs):
+            with open(file=file_name, mode='a', encoding='utf8') as file:
+                try:
+                    result = func(*args,**kwargs)
+                except Exception as exc:
+                    file.write(f'{exc}''\n')
+
+        return surrogate
+    return file
+
 
 
 # Проверить работу на следующих функциях
-@log_errors
+@log_errors(file_name='123.txt')
 def perky(param):
     return param / 0
 
 
-@log_errors
+@log_errors(file_name='asdas.txt')
 def check_line(line):
     name, email, age = line.split(' ')
     if not name.isalpha():
