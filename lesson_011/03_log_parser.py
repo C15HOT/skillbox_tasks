@@ -14,4 +14,23 @@
 #
 # [2018-05-17 01:57] 1234
 
-# TODO здесь ваш код
+
+def line_stat():
+    stat={}
+    with open(file='events.txt', mode='r', encoding='utf8') as file:
+        for line in file:
+
+            if 'NOK' in line:
+                key = line[11:17]
+                if key in stat:
+                    stat[key] += 1
+
+                else:
+                    stat[key] = 1
+                yield line[1:17], stat[key]
+
+
+
+logs = line_stat()
+for keys, count in logs:
+    print(f'{keys} {count}')
