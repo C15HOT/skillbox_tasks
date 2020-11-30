@@ -10,29 +10,31 @@
 
 def log_errors(file_name):
     def file(func):
-        def surrogate(*args,**kwargs):
+        def surrogate(*args, **kwargs):
             with open(file=file_name, mode='a', encoding='utf8') as file:
                 try:
-                    result = func(*args,**kwargs)
-                    # TODO результат выполнения функции надо возвращать return-ом
+                    result = func(*args, **kwargs)
+                    return result
+                    #  результат выполнения функции надо возвращать return-ом
                 except Exception as exc:
-                    file.write(f'{exc}''\n')
-                    # TODO записать надо больше данных <имя функции> <параметры вызова> <тип ошибки> <текст ошибки>
-                    # TODO после обработки надо выкинуть это же исключение дальше
-                    # TODO сделать raise или raise exc
+                    file.write(f'{func},{args},{kwargs},{exc.__class__.__name__},{exc}''\n')
+                    #  записать надо больше данных <имя функции> <параметры вызова> <тип ошибки> <текст ошибки>
+                    #  после обработки надо выкинуть это же исключение дальше
+                    #  сделать raise или raise exc
+                    raise exc
 
         return surrogate
+
     return file
 
 
-
 # Проверить работу на следующих функциях
-@log_errors(file_name='123.txt')
+@log_errors(file_name='function_errors.txt')
 def perky(param):
     return param / 0
 
 
-@log_errors(file_name='asdas.txt')
+@log_errors(file_name='function_errors.txt')
 def check_line(line):
     name, email, age = line.split(' ')
     if not name.isalpha():
@@ -57,7 +59,6 @@ for line in lines:
     except Exception as exc:
         print(f'Invalid format: {exc}')
 perky(param=42)
-
 
 # Усложненное задание (делать по желанию).
 # Написать декоратор с параметром - именем файла

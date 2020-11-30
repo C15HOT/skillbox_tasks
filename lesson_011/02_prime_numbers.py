@@ -22,12 +22,12 @@ def get_prime_numbers(n):
 
 
 class PrimeNumbers:
-    # TODO не забывайте про стиль кода
+
     def __init__(self,n):
         self.prime_numbers = []
         self.n=n
         self.i = 0
-
+        self.start_number = 2
     def __iter__(self):
         self.i = 2
         self.prime_numbers = []
@@ -38,20 +38,22 @@ class PrimeNumbers:
 
         if self.i > self.n:
             raise StopIteration()
-        for number in range(2, self.i + 1):  # TODO не стоит каждый раз начинать с 2,
+
+
+        for number in range(self.i, self.i + 1):  #  не стоит каждый раз начинать с 2,
             # попробуйте начинать с прошлого простого
             for prime in self.prime_numbers:
                 if number % prime == 0:
                     break
             else:
                 self.prime_numbers.append(number)
-                return number
+        return self.prime_numbers[-1]
 
 
-prime_number_iterator = PrimeNumbers(n=10000)
+prime_number_iterator = PrimeNumbers(n=100)
 for number in prime_number_iterator:
-    if number is not None:  # TODO каждый вызов итератора должен возвращать число, None быть не должно
-        print(number)
+
+    print(number)
 
 
 # TODO после подтверждения части 1 преподователем, можно делать

@@ -21,20 +21,21 @@ def line_stat():
         for line in file:
 
             if 'NOK' in line:
-                key = line[11:17]
+                key = line[1:17]
                 if key in stat:
                     stat[key] += 1
 
                 else:
                     stat[key] = 1
-                yield line[1:17], stat[key]
+                yield key, stat[key]
+
 
 
 
 logs = line_stat()
 for keys, count in logs:
     print(f'{keys} {count}')
-# TODO файл завершается так:
+#  файл завершается так:
 # [2018-05-17 11:32:27.873687] OK
 # [2018-05-17 11:32:29.873687] OK
 # [2018-05-17 11:33:11.873687] NOK
@@ -42,7 +43,7 @@ for keys, count in logs:
 # [2018-05-17 11:34:16.873687] OK
 # [2018-05-17 11:34:50.873687] NOK
 # [2018-05-17 11:35:34.873687] OK
-# TODO у вас ответ в конце такой
+#  у вас ответ в конце такой
 # 2018-05-17 11:33 4
 # 2018-05-17 11:34 3
-# TODO откуда лишние значения появляются?
+#  откуда лишние значения появляются?
