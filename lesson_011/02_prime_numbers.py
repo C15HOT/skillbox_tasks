@@ -42,12 +42,16 @@ class PrimeNumbers:
 
         # TODO не забывайте про стиль кода
         for number in range(self.i, self.i + 1):  #  не стоит каждый раз начинать с 2,
+            # TODO граница должна быть от прошлого простого до self.n включительно
             # попробуйте начинать с прошлого простого
             for prime in self.prime_numbers:
                 if number % prime == 0:
                     break
             else:
                 self.prime_numbers.append(number)
+                # TODO возвращать нужно элемент вот здесь после добавления в список
+                # TODO + стоит записать что self.i равен этому числу
+                # TODO чтобы в следующий раз начать с него
         return self.prime_numbers[-1]
 
 
@@ -57,7 +61,6 @@ for number in prime_number_iterator:
     print(number)
 
 
-# TODO можно приступать ко второй части
 # после подтверждения части 1 преподователем, можно делать
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
