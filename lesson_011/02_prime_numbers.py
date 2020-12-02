@@ -34,22 +34,26 @@ class PrimeNumbers:
         return self
 
     def __next__(self):
-        self.i += 1
+        self.i += 1  # TODO это можно убрать
 
 
 
-
-        for number in range(self.i, self.n):  #  не стоит каждый раз начинать с 2,
+        # TODO нужно поправить стиль кода
+        for number in range(self.i, self.n):  # не стоит каждый раз начинать с 2,
             # попробуйте начинать с прошлого простого
+            # TODO проверку со stopiteration стоит реализовать тут
+            # TODO хотя по сути её вовсе можно вынести из цикла
+            # TODO т.к. цикл будет работать от i до n
+            # TODO т.е. условие self.i == self.n: не сработает
             for prime in self.prime_numbers:
-                if self.i % prime == 0:
-                    self.i += 1
+                if self.i % prime == 0:  # TODO проверяйте тут number
+                    self.i += 1  # TODO если вы используете цикл for, то self.i вручную увеличивать не нужно
                     if self.i == self.n:
                         raise StopIteration()
                     break
             else:
                 self.prime_numbers.append(self.i)
-
+                # TODO а вот здесь заменяйте self.i = number
                 return number
 
 
