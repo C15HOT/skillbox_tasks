@@ -59,10 +59,12 @@ class PrimeNumbers:
 
                 #  а вот здесь заменяйте self.i = number
                 return number
-        raise StopIteration()  #  понимаете почему это работает?
+        raise StopIteration()  # понимаете почему это работает?
 
 
-# prime_number_iterator = PrimeNumbers(n=10000)
+prime_number_iterator = PrimeNumbers(n=10000)
+
+
 # for number in prime_number_iterator:
 #     print(number)
 
@@ -84,11 +86,8 @@ def prime_numbers_generator(n):
             prime_numbers.append(number)
 
 
-
-
-for number in prime_numbers_generator(n=10000):
-    print(number)
-
+for number_g, number_i in zip(prime_numbers_generator(n=10000), prime_number_iterator):
+    print(number_g, number_i, number_g == number_i)
 
 # Часть 3
 # Написать несколько функций-фильтров, которые выдает True, если число:
