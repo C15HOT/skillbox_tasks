@@ -29,39 +29,37 @@ class PrimeNumbers:
         self.i = 0
         self.start_number = 2
     def __iter__(self):
-        self.i = 2
+        self.i = 1
         self.prime_numbers = []
         return self
 
     def __next__(self):
         self.i += 1
 
-        if self.i > self.n:
-            raise StopIteration()
 
 
-        # TODO не забывайте про стиль кода
-        for number in range(self.i, self.i + 1):  #  не стоит каждый раз начинать с 2,
-            # TODO граница должна быть от прошлого простого до self.n включительно
+
+        for number in range(self.i, self.n):  #  не стоит каждый раз начинать с 2,
             # попробуйте начинать с прошлого простого
             for prime in self.prime_numbers:
-                if number % prime == 0:
+                if self.i % prime == 0:
+                    self.i += 1
+                    if self.i == self.n:
+                        raise StopIteration()
                     break
             else:
-                self.prime_numbers.append(number)
-                # TODO возвращать нужно элемент вот здесь после добавления в список
-                # TODO + стоит записать что self.i равен этому числу
-                # TODO чтобы в следующий раз начать с него
-        return self.prime_numbers[-1]
+                self.prime_numbers.append(self.i)
+
+                return number
 
 
-prime_number_iterator = PrimeNumbers(n=100)
+prime_number_iterator = PrimeNumbers(n=10000)
 for number in prime_number_iterator:
 
     print(number)
 
 
-# после подтверждения части 1 преподователем, можно делать
+# TODO после подтверждения части 1 преподователем, можно делать
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
 # Распечатать все простые числа до 10000 в столбик
