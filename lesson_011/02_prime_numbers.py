@@ -54,7 +54,7 @@ class PrimeNumbers:
 
                     break
             else:
-                self.prime_numbers.append(self.i)
+                self.prime_numbers.append(self.i)  # TODO тут нужно добавлять number, а не self.i
                 self.i = number
 
                 #  а вот здесь заменяйте self.i = number
