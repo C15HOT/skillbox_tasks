@@ -30,10 +30,10 @@ def line_stat():
                     stat[key] += 1
                 else:
                     stat[key] = 1
-                    if key != last_min:  # TODO будет ли код работать без этой проверки?
-                        if last_min is not None:
-                            yield last_min, stat[last_min]
-                last_min = key  # TODO можно ли это действие поместить внутрь else?
+                      #  будет ли код работать без этой проверки?
+                    if last_min is not None:
+                        yield last_min, stat[last_min]
+                    last_min = key  # можно ли это действие поместить внутрь else?
         yield last_min, stat[last_min]
         # а нужна она чтобы в момент нахождения новой минуты - возвращать значения по старой
 

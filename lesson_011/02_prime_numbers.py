@@ -14,6 +14,7 @@ def get_prime_numbers(n):
             prime_numbers.append(number)
     return prime_numbers
 
+
 # Часть 1
 # На основе алгоритма get_prime_numbers создать класс итерируемых обьектов,
 # который выдает последовательность простых чисел до n
@@ -23,45 +24,46 @@ def get_prime_numbers(n):
 
 class PrimeNumbers:
 
-    def __init__(self,n):
+    def __init__(self, n):
         self.prime_numbers = []
-        self.n=n
+        self.n = n
         self.i = 0
         self.start_number = 2
+
     def __iter__(self):
-        self.i = 1
+        self.i = 2
         self.prime_numbers = []
         return self
 
     def __next__(self):
-        self.i += 1  # TODO это можно убрать
+        # self.i += 1  #  это можно убрать
+        if self.i > self.n:
+            raise StopIteration()
+        #  нужно поправить стиль кода
+        for number in range(self.i, self.n):
 
-
-
-        # TODO нужно поправить стиль кода
-        for number in range(self.i, self.n):  # не стоит каждый раз начинать с 2,
+            # не стоит каждый раз начинать с 2,
             # попробуйте начинать с прошлого простого
-            # TODO проверку со stopiteration стоит реализовать тут
-            # TODO хотя по сути её вовсе можно вынести из цикла
-            # TODO т.к. цикл будет работать от i до n
-            # TODO т.е. условие self.i == self.n: не сработает
+            # проверку со stopiteration стоит реализовать тут
+            #  хотя по сути её вовсе можно вынести из цикла
+            #  т.к. цикл будет работать от i до n
+            #  т.е. условие self.i == self.n: не сработает
             for prime in self.prime_numbers:
-                if self.i % prime == 0:  # TODO проверяйте тут number
-                    self.i += 1  # TODO если вы используете цикл for, то self.i вручную увеличивать не нужно
-                    if self.i == self.n:
-                        raise StopIteration()
+                if number % prime == 0:  # проверяйте тут number
+                    #  если вы используете цикл for, то self.i вручную увеличивать не нужно
+
                     break
             else:
                 self.prime_numbers.append(self.i)
-                # TODO а вот здесь заменяйте self.i = number
+                self.i = number
+
+                #  а вот здесь заменяйте self.i = number
                 return number
 
 
 prime_number_iterator = PrimeNumbers(n=10000)
 for number in prime_number_iterator:
-
     print(number)
-
 
 # TODO после подтверждения части 1 преподователем, можно делать
 # Часть 2
