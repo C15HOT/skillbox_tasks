@@ -37,8 +37,8 @@ class PrimeNumbers:
 
     def __next__(self):
         # self.i += 1  #  это можно убрать
-        if self.i > self.n:
-            raise StopIteration()
+        # if self.i > self.n:
+        #     raise StopIteration()
         #  нужно поправить стиль кода
         for number in range(self.i, self.n):
 
@@ -59,13 +59,15 @@ class PrimeNumbers:
 
                 #  а вот здесь заменяйте self.i = number
                 return number
+        raise StopIteration()  # TODO понимаете почему это работает?
 
 
 prime_number_iterator = PrimeNumbers(n=10000)
 for number in prime_number_iterator:
     print(number)
 
-# TODO после подтверждения части 1 преподователем, можно делать
+# TODO если да - можете приступать ко второй части, если нет - напишите в лмс
+# после подтверждения части 1 преподователем, можно делать
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
 # Распечатать все простые числа до 10000 в столбик

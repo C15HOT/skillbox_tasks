@@ -30,7 +30,7 @@ def line_stat():
                     stat[key] += 1
                 else:
                     stat[key] = 1
-                      #  будет ли код работать без этой проверки?
+                    #  будет ли код работать без этой проверки?
                     if last_min is not None:
                         yield last_min, stat[last_min]
                     last_min = key  # можно ли это действие поместить внутрь else?
@@ -66,3 +66,4 @@ for keys, count in logs:
 # 2018-05-17 11:33 4
 # 2018-05-17 11:34 3
 #  откуда лишние значения появляются?
+#зачёт!
