@@ -76,14 +76,14 @@ prime_number_iterator = PrimeNumbers(n=10000)
 # Распечатать все простые числа до 10000 в столбик
 
 
-def prime_numbers_generator(n):
+def prime_numbers_generator(n, filter):
     prime_numbers = []
     for number in range(2, n + 1):
         for prime in prime_numbers:
             if number % prime == 0:
                 break
         else:
-            yield number
+            yield number, filter(number)
             prime_numbers.append(number)
 
 
@@ -95,68 +95,72 @@ def happy_filter(x):
     number_count = len(str(x))
     left_sum = 0
     right_sum = 0
-    # TODO Левую и правую части можно найти проще, если использовать отрицательный срез
-    # TODO х = 12345
-    # TODO середина = 5//2 = 2
-    # TODO x[:2] = 12
-    # TODO x[-2:] = 45
-    # TODO х = 1245
-    # TODO середина = 4//2 = 2
-    # TODO x[:2] = 12
-    # TODO x[-2:] = 45
+
     if len(str(x)) >= 3:
-        if number_count % 2 != 0:
-            str_x = str(x)
-            center = number_count // 2
-            for i in range(center):
-                left_sum += int(str_x[i])
-            for i in range(center + 1, number_count):
-                right_sum += int(str_x[i])
-            if left_sum == right_sum:
-                return True
-            else:
-                return False
+        str_x = str(x)
+        center = number_count // 2
+        if sum(map(int, str_x[:center])) == sum(map(int, str_x[-center:])):
+            return True
         else:
             return False
     else:
         return False
+
+
+    # if len(str(x)) >= 3:
+    #     if number_count % 2 != 0:
+    #         str_x = str(x)
+    #         center = number_count // 2
+    #         for i in range(center):
+    #             left_sum += int(str_x[i])
+    #         for i in range(center + 1, number_count):
+    #             right_sum += int(str_x[i])
+    #         if left_sum == right_sum:
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         return False
+    # else:
+    #     return False
 
 
 def palindrom(x):
-    # TODO Палиндром можно получить в одну строку (ретурн строка == перевернутая строка)
+    # Палиндром можно получить в одну строку (ретурн строка == перевернутая строка)
     number_count = len(str(x))
     if len(str(x)) >= 3:
-        if number_count % 2 != 0:
-            str_x = str(x)
-            center = number_count // 2
-            if str_x[0:center] == str_x[center + 1:number_count]:
-                return True
-            else:
-                return False
-        else:
-            return False
+        str_x = str(x)
+        center = number_count // 2
+        return str_x[:center] == str_x[-center:]
     else:
         return False
+
 
 
 def simple_number_Viverich(x):
-    # TODO возвращать в подобных случаях можно саму операцию проверки (вернее её результат, пример: return a>b)
-    if (2 ** (x - 1) - 1) % (x ** 2) == 0:
-        return True
-    else:
-        return False
+    # возвращать в подобных случаях можно саму операцию проверки (вернее её результат, пример: return a>b)
+    return (2 ** (x - 1) - 1) % (x ** 2) == 0
 
 
-# TODO Попробуйте взять код генератора и добавить туда параметр, который будет принимать функцию (или функции)
-# TODO и фильтровать с их помощью то, что возвращается из генератора.
-for number in prime_numbers_generator(10000):
-    print(number, (happy_filter(number)))
 
-for number in prime_numbers_generator(10000):
-    print(number, (palindrom(number)))
+#  Попробуйте взять код генератора и добавить туда параметр, который будет принимать функцию (или функции)
+#  и фильтровать с их помощью то, что возвращается из генератора.
+# for number in prime_numbers_generator(10000):
+#     print(number, (happy_filter(number)))
 
-for number in prime_numbers_generator(10000):
-    print(number, (simple_number_Viverich(number)))
+# for number in prime_numbers_generator(10000):
+#     print(number, (palindrom(number)))
+
+# for number in prime_numbers_generator(10000):
+#     print(number, (simple_number_Viverich(number)))
+
+for number in prime_numbers_generator(10000, filter=happy_filter):
+    print(number)
+for number in prime_numbers_generator(10000, filter=palindrom):
+    print(number)
+for number in prime_numbers_generator(10000, filter=simple_number_Viverich):
+    print(number)
+
 # Часть 3
 # Написать несколько функций-фильтров, которые выдает True, если число:
 # 1) "счастливое" в обыденном пониманиии - сумма первых цифр равна сумме последних
