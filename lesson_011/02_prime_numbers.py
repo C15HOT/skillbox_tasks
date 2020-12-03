@@ -54,7 +54,7 @@ class PrimeNumbers:
 
                     break
             else:
-                self.prime_numbers.append(number)  #  тут нужно добавлять number, а не self.i
+                self.prime_numbers.append(number)  # тут нужно добавлять number, а не self.i
                 self.i = number
 
                 #  а вот здесь заменяйте self.i = number
@@ -63,6 +63,7 @@ class PrimeNumbers:
 
 
 prime_number_iterator = PrimeNumbers(n=10000)
+
 
 #
 # for number in prime_number_iterator:
@@ -85,6 +86,7 @@ def prime_numbers_generator(n):
             yield number
             prime_numbers.append(number)
 
+
 #
 # for number_g, number_i in zip(prime_numbers_generator(n=10000), prime_number_iterator):
 #     print(number_g, number_i, number_g == number_i)
@@ -93,6 +95,15 @@ def happy_filter(x):
     number_count = len(str(x))
     left_sum = 0
     right_sum = 0
+    # TODO Левую и правую части можно найти проще, если использовать отрицательный срез
+    # TODO х = 12345
+    # TODO середина = 5//2 = 2
+    # TODO x[:2] = 12
+    # TODO x[-2:] = 45
+    # TODO х = 1245
+    # TODO середина = 4//2 = 2
+    # TODO x[:2] = 12
+    # TODO x[-2:] = 45
     if len(str(x)) >= 3:
         if number_count % 2 != 0:
             str_x = str(x)
@@ -112,12 +123,13 @@ def happy_filter(x):
 
 
 def palindrom(x):
+    # TODO Палиндром можно получить в одну строку (ретурн строка == перевернутая строка)
     number_count = len(str(x))
     if len(str(x)) >= 3:
         if number_count % 2 != 0:
             str_x = str(x)
             center = number_count // 2
-            if str_x[0:center]==str_x[center+1:number_count]:
+            if str_x[0:center] == str_x[center + 1:number_count]:
                 return True
             else:
                 return False
@@ -126,13 +138,17 @@ def palindrom(x):
     else:
         return False
 
+
 def simple_number_Viverich(x):
-    if (2**(x-1)-1) % (x**2) == 0:
+    # TODO возвращать в подобных случаях можно саму операцию проверки (вернее её результат, пример: return a>b)
+    if (2 ** (x - 1) - 1) % (x ** 2) == 0:
         return True
     else:
         return False
 
 
+# TODO Попробуйте взять код генератора и добавить туда параметр, который будет принимать функцию (или функции)
+# TODO и фильтровать с их помощью то, что возвращается из генератора.
 for number in prime_numbers_generator(10000):
     print(number, (happy_filter(number)))
 
