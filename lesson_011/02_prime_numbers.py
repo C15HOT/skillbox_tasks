@@ -84,6 +84,8 @@ def prime_numbers_generator(n, filter):
                 break
         else:
             yield number, filter(number)
+            # if filter(number):  обычно фильтры нужны именно такие, чтобы возвращались только верные числа
+            #     yield number
             prime_numbers.append(number)
 
 
@@ -105,7 +107,6 @@ def happy_filter(x):
             return False
     else:
         return False
-
 
     # if len(str(x)) >= 3:
     #     if number_count % 2 != 0:
@@ -136,11 +137,9 @@ def palindrom(x):
         return False
 
 
-
 def simple_number_Viverich(x):
     # возвращать в подобных случаях можно саму операцию проверки (вернее её результат, пример: return a>b)
     return (2 ** (x - 1) - 1) % (x ** 2) == 0
-
 
 
 #  Попробуйте взять код генератора и добавить туда параметр, который будет принимать функцию (или функции)
@@ -176,3 +175,4 @@ for number in prime_numbers_generator(10000, filter=simple_number_Viverich):
 # простых счастливых палиндромных чисел и так далее. Придумать не менее 2х способов.
 #
 # Подсказка: возможно, нужно будет добавить параметр в итератор/генератор.
+#зачёт!
