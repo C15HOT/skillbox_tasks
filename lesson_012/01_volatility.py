@@ -72,5 +72,62 @@
 #
 #     def run(self):
 #         <обработка данных>
+import os
+from collections import defaultdict
+from itertools import islice
+from pprint import pprint
 
-# TODO написать код в однопоточном/однопроцессорном стиле
+
+class Parser:
+
+    def __init__(self, dir):
+        self.dir = dir
+        self.stat = defaultdict(int)
+        self.pathes = []
+        self.max_result = defaultdict(int)
+        self.min_result = defaultdict(int)
+        self.null = []
+
+    def take_dirs(self):
+
+        for dir, _, files in os.walk(self.dir):
+            for file in files:
+                self.pathes.append(dir + '\\' + file)
+
+    def collect(self):
+        prices = []
+        for file in self.pathes:
+            with open(file=file, mode='r', encoding='utf8') as file:
+                for line in islice(file, 1, None):
+                    secid, tradetime, price, quantity = line.split(',')
+                    tiker_id = secid
+                    prices.append(float(price))
+                half_sum = ((max(prices) + min(prices)) / 2)
+                volatility = ((max(prices) - min(prices)) / half_sum) * 100
+                self.stat[tiker_id] = volatility
+
+    def get_stat(self):
+        count = 0
+
+        for key, item in sorted(self.stat.items(), key=lambda para: para[1], reverse=True)[:3]:
+            self.max_result[key] = self.stat[key]
+        for key, item in sorted(self.stat.items(), key=lambda para: para[1], )[:3]:
+            self.min_result[key] = self.stat[key]
+        for key, value in self.stat.items():
+            if value == 0:
+                self.null.append(key)
+        print('Максимальная волатильность: ''\n')
+        pprint(self.max_result)
+        print('Минимальная волатильность: ''\n')
+        pprint(self.min_result)
+        print('Нулевая волатильность: ''\n')
+        print(self.null)
+
+    def run(self):
+        self.take_dirs()
+        self.collect()
+        self.get_stat()
+
+
+parser = Parser('trades')
+parser.run()
