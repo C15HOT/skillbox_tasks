@@ -72,72 +72,58 @@
 #
 #     def run(self):
 #         <обработка данных>
-import os
+
 from collections import defaultdict
 from itertools import islice
-from pprint import pprint
 
+from sorter import take_dirs, get_stat
+
+
+    #  Класс надо заточить под обработку одного файла, а вне класса пройтись по директории
+    #  И для каждого файла создать по объекту для расчётов
+    #  Потом пройти по всем объектам и собрать результаты вместе.
+    #  Эти все сложности помогут легче выполнить два следующих задания)
+
+    #  Ещё было бы удобно выделить сортировку и печать в отдельную функцию
+    #  И ещё одну функцию-генератор создать, которая на вход будет получать путь к директории
+    #  А на выход будет выдавать путь к файлу из директории
+    #  Эти две функции можно будет вынести в отдельный модуль и импортировать в каждое из заданий этого модуля
 
 class Parser:
-    # TODO Класс надо заточить под обработку одного файла, а вне класса пройтись по директории
-    # TODO И для каждого файла создать по объекту для расчётов
-    # TODO Потом пройти по всем объектам и собрать результаты вместе.
-    # TODO Эти все сложности помогут легче выполнить два следующих задания)
 
-    # TODO Ещё было бы удобно выделить сортировку и печать в отдельную функцию
-    # TODO И ещё одну функцию-генератор создать, которая на вход будет получать путь к директории
-    # TODO А на выход будет выдавать путь к файлу из директории
-    # TODO Эти две функции можно будет вынести в отдельный модуль и импортировать в каждое из заданий этого модуля
-    def __init__(self, dir):
-        self.dir = dir
-        self.stat = defaultdict(int)
-        self.pathes = []
-        self.max_result = defaultdict(int)
-        self.min_result = defaultdict(int)
-        self.null = []
+    def __init__(self, file):
+        self.file = file
 
-    def take_dirs(self):
-
-        for dir, _, files in os.walk(self.dir):
-            for file in files:
-                self.pathes.append(dir + '\\' + file)
 
     def collect(self):
         prices = []
-        for file in self.pathes:
-            with open(file=file, mode='r', encoding='utf8') as file:
-                for line in islice(file, 1, None):
-                    secid, tradetime, price, quantity = line.split(',')
-                    tiker_id = secid
-                    prices.append(float(price))
-                half_sum = ((max(prices) + min(prices)) / 2)
-                volatility = ((max(prices) - min(prices)) / half_sum) * 100
-                self.stat[tiker_id] = volatility
+        with open(file=self.file, mode='r', encoding='utf8') as file:
+            for line in islice(file, 1, None):
+                secid, tradetime, price, quantity = line.split(',')
+                tiker_id = secid
+                prices.append(float(price))
+            half_sum = ((max(prices) + min(prices)) / 2)
+            volatility = ((max(prices) - min(prices)) / half_sum) * 100
+            return tiker_id, volatility
 
-    def get_stat(self):
-        count = 0
 
-        for key, item in sorted(self.stat.items(), key=lambda para: para[1], reverse=True)[:3]:
-            self.max_result[key] = self.stat[key]
-        for key, item in sorted(self.stat.items(), key=lambda para: para[1], )[:3]:
-            self.min_result[key] = self.stat[key]
-        for key, value in self.stat.items():
-            if value == 0:
-                self.null.append(key)
-        print('Максимальная волатильность: ''\n')
-        pprint(self.max_result)
-        print('Минимальная волатильность: ''\n')
-        pprint(self.min_result)
-        print('Нулевая волатильность: ''\n')
-        print(self.null)
 
-    def run(self):
-        self.take_dirs()
-        self.collect()
-        self.get_stat()
 
-# TODO Старайтесь рабочий код оборачивать в if __name__ == '__main__'
-# TODO С процессами на виндоус это вообще необходимая деталь, а так это просто хороший тон
-# TODO чтобы код запускался только если модуль запускается явно
-parser = Parser('trades')
-parser.run()
+
+#  Старайтесь рабочий код оборачивать в if __name__ == '__main__'
+#  С процессами на виндоус это вообще необходимая деталь, а так это просто хороший тон
+#  чтобы код запускался только если модуль запускается явно
+
+def main():
+    stat = defaultdict(int)
+    files_dir = take_dirs('trades')
+    files = [Parser(file=file) for file in files_dir]
+    for file in files:
+        key, value = file.collect()
+        stat[key] = value
+    get_stat(stat=stat)
+
+if __name__ == '__main__':
+    main()
+
+
