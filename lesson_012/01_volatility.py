@@ -78,7 +78,7 @@ from itertools import islice
 
 from sorter import take_dirs, get_stat
 
-
+from lesson_012.python_snippets.utils import time_track
 #  Класс надо заточить под обработку одного файла, а вне класса пройтись по директории
 #  И для каждого файла создать по объекту для расчётов
 #  Потом пройти по всем объектам и собрать результаты вместе.
@@ -103,13 +103,13 @@ class Parser:
                 prices.append(float(price))
             half_sum = ((max(prices) + min(prices)) / 2)
             volatility = ((max(prices) - min(prices)) / half_sum) * 100
-            return tiker_id, volatility
+            return tiker_id, round(volatility, 3)
 
 
 #  Старайтесь рабочий код оборачивать в if __name__ == '__main__'
 #  С процессами на виндоус это вообще необходимая деталь, а так это просто хороший тон
 #  чтобы код запускался только если модуль запускается явно
-
+@time_track
 def main():
     stat = defaultdict(int)
     files_dir = take_dirs('trades')
