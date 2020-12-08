@@ -29,17 +29,18 @@ class Parser(threading.Thread):
     def __init__(self, file, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.file = file
+        self.tiker_id = None
+        self.volatility = None
 
-    def collect(self):
+    def run(self):
         prices = []
         with open(file=self.file, mode='r', encoding='utf8') as file:
             for line in islice(file, 1, None):
                 secid, tradetime, price, quantity = line.split(',')
-                tiker_id = secid
+                self.tiker_id = secid
                 prices.append(float(price))
             half_sum = ((max(prices) + min(prices)) / 2)
-            volatility = ((max(prices) - min(prices)) / half_sum) * 100
-            return tiker_id, round(volatility, 3)
+            self.volatility = ((max(prices) - min(prices)) / half_sum) * 100
 
 
 @time_track
@@ -48,15 +49,15 @@ def main():
     files_dir = take_dirs('trades')
     files = [Parser(file=file) for file in files_dir]
     for file in files:
-        file.start()  # TODO start будет искать метод run, чтобы его запустить в отдельном потоке
-        # TODO и нужно этот метод реализовать как раз, чтобы логика этого объекта включалась через него
+        file.start()  # start будет искать метод run, чтобы его запустить в отдельном потоке
+        #  и нужно этот метод реализовать как раз, чтобы логика этого объекта включалась через него
 
-        # TODO собирать данные нужно после join - после завершения работы потока
-        key, value = file.collect()
-        stat[key] = value
+        #  собирать данные нужно после join - после завершения работы потока
+    for file in files:
         file.join()
-    # TODO при этом сперва нужен цикл, который запустит все объекты
-    # TODO а затем цикл который все объекты завершит и соберет данные из них.
+        stat[file.tiker_id] = file.volatility
+        # при этом сперва нужен цикл, который запустит все объекты
+    #  а затем цикл который все объекты завершит и соберет данные из них.
     get_stat(stat=stat)
 
 
