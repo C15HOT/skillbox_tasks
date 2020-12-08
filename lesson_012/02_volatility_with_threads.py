@@ -48,10 +48,15 @@ def main():
     files_dir = take_dirs('trades')
     files = [Parser(file=file) for file in files_dir]
     for file in files:
-        file.start()
+        file.start()  # TODO start будет искать метод run, чтобы его запустить в отдельном потоке
+        # TODO и нужно этот метод реализовать как раз, чтобы логика этого объекта включалась через него
+
+        # TODO собирать данные нужно после join - после завершения работы потока
         key, value = file.collect()
         stat[key] = value
         file.join()
+    # TODO при этом сперва нужен цикл, который запустит все объекты
+    # TODO а затем цикл который все объекты завершит и соберет данные из них.
     get_stat(stat=stat)
 
 
