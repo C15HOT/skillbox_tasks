@@ -49,6 +49,7 @@ class PageSizer(multiprocessing.Process):
             while not collector.empty():
                 data = collector.get()
                 self.total_bytes += data['total_bytes']
+
         self.collector.put(dict(url=self.url, total_bytes=self.total_bytes))
 
     def _get_html(self, url):
