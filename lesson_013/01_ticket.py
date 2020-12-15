@@ -43,15 +43,22 @@ class TicketFiller:
         draw.text((45, to_y), to_message, font=font, fill=ImageColor.colormap['black'])
         draw.text((280, date_y), date_message, font=font, fill=ImageColor.colormap['black'])
 
-        if self.save_to is not None:
-            image.save(self.save_to)
+        # if self.save_to is not None:
+        #     image.save(self.save_to)
+        #
+        # else:
+        #     our_dir = os.getcwd()
+        #     output_dir = os.path.join(our_dir, 'tickets')
+        #     os.makedirs(output_dir, exist_ok=True)
+        #     self.save_to = os.path.normpath(output_dir + '\\' + 'ticket.png')
+        #     image.save(self.save_to)
 
-        else:
+        if self.save_to is None:
             our_dir = os.getcwd()
             output_dir = os.path.join(our_dir, 'tickets')
             os.makedirs(output_dir, exist_ok=True)
             self.save_to = os.path.normpath(output_dir + '\\' + 'ticket.png')
-            image.save(self.save_to)
+        image.save(self.save_to)
 
         print(f'Ticket saved to {self.save_to}')
 
@@ -84,3 +91,4 @@ if __name__ == '__main__':
 #   --date - обязательный, когда летим.
 #   --save_to - необязательный, путь для сохранения заполненнего билета.
 # и заполнять билет.
+#зачёт!
