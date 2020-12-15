@@ -43,11 +43,15 @@ class TicketFiller:
         draw.text((45, to_y), to_message, font=font, fill=ImageColor.colormap['black'])
         draw.text((280, date_y), date_message, font=font, fill=ImageColor.colormap['black'])
 
-        our_dir = os.getcwd()
-        path = os.path.normpath(our_dir + '\\' + 'tickets' + '\\' + 'ticket.jpg')
+        if self.save_to is not None:
+            image.save(self.save_to)
 
-        self.save_to = self.save_to if self.save_to else os.makedirs(path, exist_ok=True)
-        image.save(self.save_to)
+        else:
+            our_dir = os.getcwd()
+            output_dir = os.path.join(our_dir, 'tickets')
+            os.makedirs(output_dir, exist_ok=True)
+            self.save_to = os.path.normpath(output_dir + '\\' + 'ticket.png')
+            image.save(self.save_to)
 
         print(f'Ticket saved to {self.save_to}')
 
