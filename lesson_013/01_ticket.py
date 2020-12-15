@@ -42,23 +42,25 @@ class TicketFiller:
         draw.text((45, from_y), from_message, font=font, fill=ImageColor.colormap['black'])
         draw.text((45, to_y), to_message, font=font, fill=ImageColor.colormap['black'])
         draw.text((280, date_y), date_message, font=font, fill=ImageColor.colormap['black'])
-        self.save_to = self.save_to if self.save_to else 'ticket.png'
+
+        our_dir = os.getcwd()
+        path = os.path.normpath(our_dir + '\\' + 'tickets' + '\\' + 'ticket.jpg')
+
+        self.save_to = self.save_to if self.save_to else os.makedirs(path, exist_ok=True)
         image.save(self.save_to)
-        # TODO сохранять изображения лучше всего в отдельную папку
-        # TODO + эту папку сперва стоит проверить на существование
-        # TODO и создать, если её нет
+
         print(f'Ticket saved to {self.save_to}')
 
 
 class Parser:
     def parser_func(self):
         parser = argparse.ArgumentParser()
-        # TODO есть ли разница между записью 'fio' и '--fio'?
-        parser.add_argument('fio', type=str)
-        parser.add_argument('from_', type=str)
-        parser.add_argument('to', type=str)
-        parser.add_argument('date', type=str)
-        parser.add_argument('save_to', default=None, type=str, nargs='?')
+        #  есть ли разница между записью 'fio' и '--fio'?
+        parser.add_argument('--fio', type=str)
+        parser.add_argument('--from_', type=str)
+        parser.add_argument('--to', type=str)
+        parser.add_argument('--date', type=str)
+        parser.add_argument('--save_to', default=None, type=str, nargs='?')
         args = parser.parse_args()
         return args
 
