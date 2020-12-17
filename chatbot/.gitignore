@@ -1,0 +1,4 @@
+.idea
+settings.py
+*.log
+__pycache__

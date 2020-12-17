@@ -4,7 +4,7 @@
 
 # User-specific stuff:
 .idea/
-
+settings.py
 
 ### Python template
 # Byte-compiled / optimized / DLL files
