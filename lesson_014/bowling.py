@@ -56,6 +56,7 @@ class SecondThrow(State):
         elif result.isdigit():
             self.game.score += int(result) + self.game.firstthrow_score
             self.game.frames += 1
+        # TODO а тут могут быть неверные данные? X например?
         self.game.firstthrow_score = 0
         self.game.state = self.game.firstthrow
 
@@ -71,4 +72,7 @@ def get_score(game, game_result):
 
 if __name__ == '__main__':
     game = Game()
-    get_score(game, 'X4/34-4')
+    get_score(game, '3532X332/3/62--XXX')  # TODO тут 11 фреймов и код работает
+    get_score(game, '5500X332/3/62--XXX')  # TODO сумма очков за один фрейм не должна превышать 9
+    # TODO 0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
+    get_score(game, '3532X332/3/62--62X')  # TODO тут 10 и код не работает, почему?
