@@ -16,7 +16,7 @@ class Game:
         self.state = self.firstthrow
         self.frames = 0
         self.firstthrow_score = 0  # запоминание результата первого броска
-
+        self.frame_result = 0
     def throw(self, result):
         self.state.throw(result)
 
@@ -30,14 +30,18 @@ class FirstThrow(State):
         if result == 'X':
             self.game.score += 20
             self.game.frames += 1
+        elif result =='0':
+            raise ValueError(f'Неверно введены данные - {result}')
         else:
             if result.isdigit():
                 self.game.firstthrow_score += int(result)
+                self.game.frame_result += int(result)
                 self.game.state = self.game.secondthrow
             elif result == '-':
                 self.game.state = self.game.secondthrow
+
             else:
-                raise ValueError('Неверно введены данные')
+                raise ValueError(f'Неверно введены данные - {result}')
 
 
 class SecondThrow(State):
@@ -49,16 +53,24 @@ class SecondThrow(State):
         if result == '/':
             self.game.score += 15
             self.game.frames += 1
+        elif result =='0':
+            raise ValueError(f'Неверно введены данные - {result}')
         elif result == '-':
             if self.game.firstthrow_score != 0:
                 self.game.score += self.game.firstthrow_score
-                self.game.frames += 1
+            self.game.frames += 1
         elif result.isdigit():
             self.game.score += int(result) + self.game.firstthrow_score
             self.game.frames += 1
-        # TODO а тут могут быть неверные данные? X например?
+            self.game.frame_result += int(result)
+        elif result == 'X':
+            raise ValueError(f'Неверно введены данные во втором броске - {result}')
+        #  а тут могут быть неверные данные? X например?
         self.game.firstthrow_score = 0
         self.game.state = self.game.firstthrow
+        if self.game.frame_result > 10:
+            raise ValueError(f'Неверно введены данные - счет во фрейме {self.game.frame_result}')
+        self.game.frame_result = 0
 
 
 def get_score(game, game_result):
@@ -66,13 +78,16 @@ def get_score(game, game_result):
         game.throw(result)
     if game.frames == 10:
         print(f'Количество очков для результатов {game_result} - {game.score}')
+
     else:
         raise ValueError('Количество фреймов должно быть равно 10')
 
 
+
 if __name__ == '__main__':
     game = Game()
-    get_score(game, '3532X332/3/62--XXX')  # TODO тут 11 фреймов и код работает
-    get_score(game, '5500X332/3/62--XXX')  # TODO сумма очков за один фрейм не должна превышать 9
-    # TODO 0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
-    get_score(game, '3532X332/3/62--62X')  # TODO тут 10 и код не работает, почему?
+    # get_score(game, '3532X332/3/62--XXX')  #  тут 11 фреймов и код работает
+    # get_score(game, '5500X332/3/62--XX')  #  сумма очков за один фрейм не должна превышать 9
+    #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
+    # get_score(game, '532X332/3/62--62X')  #  тут 10 и код не работает, почему?
+    get_score(game, '5511X332/3/62--XX')
