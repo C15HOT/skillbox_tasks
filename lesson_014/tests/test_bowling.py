@@ -9,24 +9,24 @@ class ChildTest(unittest.TestCase):
         self.game1 = Game()
         self.game2 = Game()
         self.game3 = Game()
-        self.game4 = Game()
+
         self.get_score = get_score
 
     def test_equal(self):
-        results = ['3532X332/3/62--XX',
-                   '5511X332/3/62--XX',
-                    ]
-        self.get_score(self.game1, results[0])
+        result = '3532X332/3/62--XX'
+        self.get_score(self.game1, result)
         self.assertEqual(self.game1.score, 117)
-        self.get_score(self.game2, results[1])
-        self.assertEqual(self.game2.score, 116)
 
     def test_exception(self):
-        results = ['532332/3/62--62X', '3532X332/3/62--XXX']
+        result = '532332/3/62--62X'
         with self.assertRaises(ValueError):
-            self.get_score(self.game4, results[0])
+            self.get_score(self.game2, result)
+
+
+    def test_double_five(self):
+        result = '5511X332/3/62--XX'
         with self.assertRaises(ValueError):
-            self.get_score(self.game4, results[1])
+            self.get_score(self.game3, result)
 
 if __name__ == '__main__':
     unittest.main()
