@@ -17,6 +17,7 @@ class Game:
         self.frames = 0
         self.firstthrow_score = 0  # запоминание результата первого броска
         self.frame_result = 0
+
     def throw(self, result):
         self.state.throw(result)
 
@@ -30,7 +31,7 @@ class FirstThrow(State):
         if result == 'X':
             self.game.score += 20
             self.game.frames += 1
-        elif result =='0':
+        elif result == '0':
             raise ValueError(f'Неверно введены данные - {result}')
         else:
             if result.isdigit():
@@ -53,7 +54,7 @@ class SecondThrow(State):
         if result == '/':
             self.game.score += 15
             self.game.frames += 1
-        elif result =='0':
+        elif result == '0':
             raise ValueError(f'Неверно введены данные - {result}')
         elif result == '-':
             if self.game.firstthrow_score != 0:
@@ -83,7 +84,6 @@ def get_score(game, game_result):
         raise ValueError('Количество фреймов должно быть равно 10')
 
 
-
 if __name__ == '__main__':
     game = Game()
     # get_score(game, '3532X332/3/62--XXX')  #  тут 11 фреймов и код работает
@@ -91,3 +91,8 @@ if __name__ == '__main__':
     #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
     # get_score(game, '532X332/3/62--62X')  #  тут 10 и код не работает, почему?
     get_score(game, '5511X332/3/62--XX')
+    # TODO сумма очков за один фрейм не должна превышать 9
+    #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
+    # TODO 55 - фрейм с ошибкой, должен быть 5/ если все 10 кеглей сбиты
+    # TODO если в строке 55 - значит сформирована строка неправильно и мы должны будем об этом сообщить
+    # TODO тому, кто строку вводит
