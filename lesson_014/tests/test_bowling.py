@@ -22,11 +22,11 @@ class ChildTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.get_score(self.game2, result)
 
-
     def test_double_five(self):
         result = '5511X332/3/62--XX'
         with self.assertRaises(ValueError):
             self.get_score(self.game3, result)
+
 
 if __name__ == '__main__':
     unittest.main()
