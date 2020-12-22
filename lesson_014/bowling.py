@@ -83,7 +83,7 @@ def get_score(game, game_result):
     for result in game_result:
         game.throw(result)
     if game.frames == 10:
-        print(f'Количество очков для результатов {game_result} - {game.score}')
+        return game.score
 
     else:
         raise ValueError('Количество фреймов должно быть равно 10')
