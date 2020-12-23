@@ -14,11 +14,17 @@ def result_hanler(input, output):
                     continue
                 if line.startswith('winner'):
                     winner = find_winner(scores)
-                    for index in range(len(names)):
-                        ff.write('{txt:} {txt2:^15} {txt3:^5}''\n'.format(txt=names[index], txt2=results[index],
-                                                                    txt3=scores[index]))
-                        # print(names[index], results[index], scores[index])
-                    ff.write(f'winner is {names[winner]}\n''\n')
+                    if winner is not None:
+                        for index in range(len(names)):
+                            ff.write('{txt:} {txt2:^15} {txt3:^5}''\n'.format(txt=names[index], txt2=results[index],
+                                                                              txt3=scores[index]))
+                            # print(names[index], results[index], scores[index])
+                        ff.write(f'winner is {names[winner]}\n''\n')
+                    else:
+                        for index in range(len(names)):
+                            ff.write('{txt:} {txt2:^15} {txt3:^5}''\n'.format(txt=names[index], txt2=results[index],
+                                                                              txt3=scores[index]))
+                        ff.write(f'winner is not defined \n''\n')
                     continue
                 if line.isspace():
                     names = []
@@ -34,9 +40,9 @@ def result_hanler(input, output):
                     results.append(result[:-1])
                     scores.append(score)
                 except ValueError as exc:
-                   scores.append(f'Недопустимая комбинация фрейма {exc}')
-                   names.append(name)
-                   results.append(result[:-1])
+                    scores.append(f'Недопустимая комбинация фрейма {exc}')
+                    names.append(name)
+                    results.append(result[:-1])
 
 
 def find_winner(scores):
@@ -45,11 +51,13 @@ def find_winner(scores):
         if isinstance(item, int):
             int_scores.append(int(item))
     # int_scores = [int(item) for item in scores]
-
-    max_result = max(int_scores)
-    index = scores.index(max_result)
-    # index = int_scores.index(max_result)
-    return index
+    try:
+        max_result = max(int_scores)
+        index = scores.index(max_result)
+        # index = int_scores.index(max_result)
+        return index
+    except:
+        return None
 
 
 if __name__ == '__main__':

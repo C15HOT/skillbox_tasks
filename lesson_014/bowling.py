@@ -17,7 +17,6 @@ class Game:
         self.frames = 0
         self.firstthrow_score = 0  # запоминание результата первого броска
         self.frame_result = 0
-        self.double_five_check = False
 
     def throw(self, result):
         self.state.throw(result)
@@ -36,10 +35,9 @@ class FirstThrow(State):
             raise ValueError(f'Неверно введены данные - {result}')
         else:
             if result.isdigit():
-                if result == '5':
-                    self.game.double_five_check = True
+
                 self.game.firstthrow_score += int(result)
-                self.game.frame_result += int(result)
+                # self.game.frame_result += int(result)
                 self.game.state = self.game.secondthrow
             elif result == '-':
                 self.game.state = self.game.secondthrow
@@ -54,21 +52,26 @@ class SecondThrow(State):
         self.game = game
 
     def throw(self, result):
+        sum = 0
         if result == '/':
             self.game.score += 15
             self.game.frames += 1
         elif result == '0':
             raise ValueError(f'Неверно введены данные - {result}')
-        elif result == '5' and self.game.double_five_check == True:
-            raise ValueError(f'Неверно введены данные - {result}, ожидалось /')
+
         elif result == '-':
             if self.game.firstthrow_score != 0:
                 self.game.score += self.game.firstthrow_score
             self.game.frames += 1
         elif result.isdigit():
-            self.game.score += int(result) + self.game.firstthrow_score
-            self.game.frames += 1
-            self.game.frame_result += int(result)
+            sum = self.game.firstthrow_score + int(result)
+            if sum >= 10:
+                raise ValueError(f'Неверно введены данные, ожидалось spare, получили результат {sum}')
+            else:
+                self.game.score += sum
+
+                self.game.frames += 1
+                self.game.frame_result += int(result)
         elif result == 'X':
             raise ValueError(f'Неверно введены данные во втором броске - {result}')
         #  а тут могут быть неверные данные? X например?
