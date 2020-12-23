@@ -34,13 +34,21 @@ def result_hanler(input, output):
                     results.append(result[:-1])
                     scores.append(score)
                 except ValueError as exc:
-                    print(f'Возникло исключение {exc}')
+                   scores.append(f'Недопустимая комбинация фрейма {exc}')
+                   names.append(name)
+                   results.append(result[:-1])
 
 
 def find_winner(scores):
-    int_scores = [int(item) for item in scores]
+    int_scores = []
+    for item in scores:
+        if isinstance(item, int):
+            int_scores.append(int(item))
+    # int_scores = [int(item) for item in scores]
+
     max_result = max(int_scores)
-    index = int_scores.index(max_result)
+    index = scores.index(max_result)
+    # index = int_scores.index(max_result)
     return index
 
 
