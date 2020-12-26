@@ -9,6 +9,7 @@ class ChildTest(unittest.TestCase):
         self.game1 = Game()
         self.game2 = Game()
         self.game3 = Game()
+        self.game4 = Game(rules='ext')
 
         self.get_score = get_score
 
@@ -27,6 +28,10 @@ class ChildTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.get_score(self.game3, result)
 
+    def test_external_rules(self):
+        result = '5311X332/3/62--XX'
+        self.get_score(self.game4, result)
+        self.assertEqual(self.game4.ext_result, 99)
 
 if __name__ == '__main__':
     unittest.main()
