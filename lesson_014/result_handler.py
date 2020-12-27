@@ -1,7 +1,7 @@
 from bowling import get_score, Game
 
 
-def result_hanler(input, output):
+def result_hanler(input, output, rules):
     names = []
     results = []
     scores = []
@@ -34,7 +34,7 @@ def result_hanler(input, output):
                 try:
                     name, result = line.split('\t')
 
-                    score = get_score(game=Game(), game_result=result[:-1])
+                    score = get_score(game=Game(rules=rules), game_result=result[:-1])
 
                     names.append(name)
                     results.append(result[:-1])
@@ -61,4 +61,4 @@ def find_winner(scores):
 
 
 if __name__ == '__main__':
-    result_hanler(input='tournament.txt', output='tournament_result.txt')
+    result_hanler(input='tournament.txt', output='tournament_result.txt', rules='internal')

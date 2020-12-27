@@ -24,5 +24,24 @@
 # Необходимые изменения сделать во всех модулях. Тесты - дополнить.
 
 # "И да, старые правила должны остаться! для внутреннего рынка..." - уточнил менеджер напоследок.
-# TODO Тут должен быть код как в 02
-# TODO с возможностью запуска расчётов по файлу + выбором правил по которым будут производиться расчёты
+#  Тут должен быть код как в 02
+# с возможностью запуска расчётов по файлу + выбором правил по которым будут производиться расчёты
+import argparse
+
+from result_handler import result_hanler
+
+
+class Parser:
+    def parser_func(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--input', type=str)
+        parser.add_argument('--output', type=str)
+        parser.add_argument('--rules', type=str)
+        args = parser.parse_args()
+        return args
+
+
+if __name__ == '__main__':
+    parser = Parser()
+    args = parser.parser_func()
+    result_hanler(input=args.input, output=args.output, rules=args.rules)

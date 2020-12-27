@@ -173,8 +173,9 @@ class SecondThrowExt(State):
                 # self.game.score += self.game.firstthrow_score
                 self.game.frames += 1
                 self.game.frames_dict[self.game.frames] = {1: self.game.firstthrow_score, 2: 0}
-            self.game.frames += 1
-            self.game.frames_dict[self.game.frames] = {1: 0, 2: 0}
+            else:
+                self.game.frames += 1
+                self.game.frames_dict[self.game.frames] = {1: 0, 2: 0}
 
         elif result.isdigit():
             sum = self.game.firstthrow_score + int(result)
@@ -216,9 +217,9 @@ if __name__ == '__main__':
     # get_score(game, '5500X332/3/62--XX')  #  сумма очков за один фрейм не должна превышать 9
     #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
     # get_score(game, '532X332/3/62--62X')  #  тут 10 и код не работает, почему?
-    print(get_score(game, '--8-X3/4/1/-12651X'))
+    # print(get_score(game, '--8-X3/4/1/-12651X'))
     print(get_score(game, '3-6/5/9/5---1/--5-52'))
-    # TODO Почему такие вводы выдают ошибку?
+
 
     #  сумма очков за один фрейм не должна превышать 9
     #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")
