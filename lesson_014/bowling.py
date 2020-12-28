@@ -54,7 +54,7 @@ class Game():
                     elif self.frames_dict[key + 1][2] == 'spare':
                         self.frames_dict_result[key] = 20
                     else:
-                        self.frames_dict_result[key] = 10 + self.frames_dict[key+1][1] + self.frames_dict[key+1][2]
+                        self.frames_dict_result[key] = 10 + self.frames_dict[key + 1][1] + self.frames_dict[key + 1][2]
 
             elif self.frames_dict[key][2] == 'spare':
                 if key == 10:
@@ -68,6 +68,7 @@ class Game():
                 self.frames_dict_result[key] = self.frames_dict[key][1] + self.frames_dict[key][2]
 
         self.ext_result = sum(self.frames_dict_result.values())
+
 
 class FirstThrow(State):
 
@@ -219,7 +220,6 @@ if __name__ == '__main__':
     # get_score(game, '532X332/3/62--62X')  #  тут 10 и код не работает, почему?
     # print(get_score(game, '--8-X3/4/1/-12651X'))
     print(get_score(game, '3-6/5/9/5---1/--5-52'))
-
 
     #  сумма очков за один фрейм не должна превышать 9
     #  0 - должен вызывать ошибку (в нашем случае такая информация кодируется через "-")

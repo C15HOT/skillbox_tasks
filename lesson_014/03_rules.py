@@ -37,7 +37,7 @@ class Parser:
         parser.add_argument('--input', type=str)
         parser.add_argument('--output', type=str)
         parser.add_argument('--rules', type=str)
-        args = parser.parse_args()
+        args = parser.parse_args('--input tournament.txt --output tour_test.txt --rules none'.split())
         return args
 
 
@@ -45,3 +45,4 @@ if __name__ == '__main__':
     parser = Parser()
     args = parser.parser_func()
     result_hanler(input=args.input, output=args.output, rules=args.rules)
+#зачёт!
