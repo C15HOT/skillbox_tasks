@@ -92,11 +92,18 @@
 #
 # и так далее...
 
+import json
+
 
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
 field_names = ['current_location', 'current_experience', 'current_date']
 
-# TODO тут ваш код
+with open('rpg.json', 'r') as read_file:
+    loaded_json_file = json.load(read_file)
 
+
+
+# json_data = json.dumps(loaded_json_file)
+# print(f'{json_data}')
 # Учитывая время и опыт, не забывайте о точности вычислений!
