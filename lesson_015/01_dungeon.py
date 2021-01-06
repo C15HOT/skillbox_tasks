@@ -91,18 +91,66 @@
 #  ...
 #
 # и так далее...
-
+import re
 import json
-
 
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
 field_names = ['current_location', 'current_experience', 'current_date']
+status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': 0, 'game_time': 0}
+location_pattern = r'Location_\d\w'
+monster_pattern = r'Mob_exp\d{2,3}_tm\d|Boss\d{3}_exp\d{2,3}_tm\d|Boss_exp\d{3}_tm\d\w'
 
 with open('rpg.json', 'r') as read_file:
     loaded_json_file = json.load(read_file)
 
+json_data = json.dumps(loaded_json_file)
+# found_location = re.findall(location_pattern, json_data)
+# found_monster = re.findall(monster_pattern, json_data)
 
+
+def find_location(current_location):
+    locations = []
+    for item in current_location:
+        if isinstance(item, dict):
+            for key, _item in item.items():
+                location = re.findall(location_pattern, key)
+                if location:
+                    locations.append(key)
+    return locations
+
+
+def find_monster(current_location):
+    monsters = []
+    for item in current_location:
+        if isinstance(item, str):
+            monster = re.findall(monster_pattern, item)
+            if monster:
+                monsters.append(item)
+    return monsters
+
+
+current_location = 'Location_0_tm0'
+
+# print(loaded_json_file[current_location])
+while True:
+
+    print(f"Вы находитесь в локации {current_location}")
+    print(f"У вас {status['exp']} опыта, {status['timeleft']} секунд до наводнения")
+    print(f"Прошло времени {status['game_time']} ")
+    locations = find_location(loaded_json_file[current_location])
+    monsters = find_monster(loaded_json_file[current_location])
+    print(f"Внутри вы видите: ")
+    for location in locations:
+        print(f'Вход в локацию {location}')
+    for monster in monsters:
+        print(f'Монстра {monster}')
+    print('Выберите действие:')
+
+    print('1. Атаковать монстра')
+    print('2. Перейти в другую локацию')
+    print('3. Сдаться')
+    event = input()
 
 # json_data = json.dumps(loaded_json_file)
 # print(f'{json_data}')
