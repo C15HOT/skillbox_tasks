@@ -93,7 +93,8 @@
 # и так далее...
 import re
 import json
-
+from decimal import Decimal, getcontext, ROUND_HALF_EVEN, ROUND_HALF_UP, ROUND_FLOOR
+getcontext().prec = 50
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
 field_names = ['current_location', 'current_experience', 'current_date']
@@ -101,6 +102,9 @@ status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'g
 location_pattern = r'Location_\d\w|Location_B\d\w|Hatch\w'
 monster_pattern = r'Mob_exp\d{2,3}_tm\d|Boss\d{3}_exp\d{2,3}_tm\d|Boss_exp\d{3}_tm\d\w'
 
+time_pattern = r'tm\d{0,10}\w'
+exp_pattern = r'exp\d{1,3}\w'
+number_pattern = r'\d{1,10}'
 with open('rpg.json', 'r') as read_file:
     loaded_json_file = json.load(read_file)
 
@@ -132,7 +136,11 @@ def find_monster(current_location):
     return monsters
 
 def attack(monster):
-    pass
+    time = re.findall(time_pattern, monster)
+    pure_time = re.findall(number_pattern, str(time))
+    exp = re.findall(exp_pattern, monster)
+    pure_exp = re.findall(number_pattern, str(exp))
+    return pure_time[0], pure_exp[0]
 
 def change_location(location, path):
     for item in path:
@@ -141,6 +149,7 @@ def change_location(location, path):
             new_path = path[index][location]
             status['location'] = location
             return new_path
+
 
 
 
@@ -162,7 +171,6 @@ while True:
         print(f'Монстра {monster}')
 
     print('Выберите действие:')
-
     print('1. Атаковать монстра')
     print('2. Перейти в другую локацию')
     print('3. Сдаться')
@@ -170,7 +178,19 @@ while True:
     event = input()
 
     if event == '1':
-        pass
+        print('Выберите монстра')
+        select = input()
+        if int(select) <= len(monsters):
+            time, exp = attack(monsters[int(select)-1])
+            remaining_time = Decimal(remaining_time) - Decimal(time)
+            status['timeleft'] = remaining_time
+            status['game_time'] += Decimal(time)
+            status['exp'] += Decimal(exp)
+            index = path_location.index(monsters[int(select)-1])
+            path_location.pop(index)
+            monsters.pop(int(select)-1)
+        else:
+            print('Вы ввели некорректное число \n')
     elif event == '2':
         print('Введите номер локации')
         change = input()
