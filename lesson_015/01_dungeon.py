@@ -94,6 +94,7 @@
 import re
 import json
 from decimal import Decimal, getcontext, ROUND_HALF_EVEN, ROUND_HALF_UP, ROUND_FLOOR
+
 getcontext().prec = 50
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
@@ -105,6 +106,7 @@ monster_pattern = r'Mob_exp\d{2,3}_tm\d|Boss\d{3}_exp\d{2,3}_tm\d|Boss_exp\d{3}_
 time_pattern = r'tm\d{0,10}\w'
 exp_pattern = r'exp\d{1,3}\w'
 number_pattern = r'\d{1,10}'
+
 with open('rpg.json', 'r') as read_file:
     loaded_json_file = json.load(read_file)
 
@@ -135,6 +137,7 @@ def find_monster(current_location):
                 monsters.append(item)
     return monsters
 
+
 def attack(monster):
     time = re.findall(time_pattern, monster)
     pure_time = re.findall(number_pattern, str(time))
@@ -142,67 +145,104 @@ def attack(monster):
     pure_exp = re.findall(number_pattern, str(exp))
     return pure_time[0], pure_exp[0]
 
+
 def change_location(location, path):
     for item in path:
         if location in item:
-            index = path.index(item)
-            new_path = path[index][location]
-            status['location'] = location
-            return new_path
-
-
+            if location == 'Hatch_tm159.098765432':
+                if status['exp'] >= 280:
+                    time = re.findall(time_pattern, location)
+                    pure_time = re.findall(number_pattern, str(time))
+                    index = path.index(item)
+                    new_path = path[index][location]
+                    status['location'] = location
+                    return new_path, pure_time[0]
+                else:
+                    print('У вас недостаточно опыта для открытия люка, нужно 280 \n')
+                    time = re.findall(time_pattern, location)
+                    pure_time = re.findall(number_pattern, str(time))
+                    return path, pure_time[0]
+            else:
+                time = re.findall(time_pattern, location)
+                pure_time = re.findall(number_pattern, str(time))
+                index = path.index(item)
+                new_path = path[index][location]
+                status['location'] = location
+                return new_path, pure_time[0]
 
 
 current_location = 'Location_0_tm0'
 
 path_location = loaded_json_file[current_location]
 
-while True:
+def start():
+    global current_location, path_location, json_data, remaining_time, status
+    while True:
+        if status['location'] == 'Hatch_tm159.098765432':
+            print('Вы нашли выход, победа')
+            break
+        if Decimal(status['timeleft']) <= Decimal('0'):
+            print('Вы не успели открыть люк!!! НАВОДНЕНИЕ!!!')
+            print('Игра начинается заново \n')
+            restart()
+        print(f"Вы находитесь в локации {status['location']}")
+        print(f"У вас {status['exp']} опыта, {status['timeleft']} секунд до наводнения")
+        print(f"Прошло времени {status['game_time']} ")
+        locations = find_location(path_location)
+        monsters = find_monster(path_location)
+        print(f"Внутри вы видите: ")
+        for location in locations:
+            print(f'Вход в локацию {location}')
+        for monster in monsters:
+            print(f'Монстра {monster}')
 
-    print(f"Вы находитесь в локации {status['location']}")
-    print(f"У вас {status['exp']} опыта, {status['timeleft']} секунд до наводнения")
-    print(f"Прошло времени {status['game_time']} ")
-    locations = find_location(path_location)
-    monsters = find_monster(path_location)
-    print(f"Внутри вы видите: ")
-    for location in locations:
-        print(f'Вход в локацию {location}')
-    for monster in monsters:
-        print(f'Монстра {monster}')
+        print('Выберите действие:')
+        print('1. Атаковать монстра')
+        print('2. Перейти в другую локацию')
+        print('3. Сдаться')
 
-    print('Выберите действие:')
-    print('1. Атаковать монстра')
-    print('2. Перейти в другую локацию')
-    print('3. Сдаться')
+        event = input()
 
-    event = input()
+        if event == '1':
+            print('Выберите монстра')
+            select = input()
+            if int(select) <= len(monsters):
+                time, exp = attack(monsters[int(select) - 1])
+                remaining_time = Decimal(remaining_time) - Decimal(time)
+                status['timeleft'] = remaining_time
+                status['game_time'] += Decimal(time)
+                status['exp'] += Decimal(exp)
+                index = path_location.index(monsters[int(select) - 1])
+                path_location.pop(index)
+                monsters.pop(int(select) - 1)
+            else:
+                print('Вы ввели некорректное число \n')
 
-    if event == '1':
-        print('Выберите монстра')
-        select = input()
-        if int(select) <= len(monsters):
-            time, exp = attack(monsters[int(select)-1])
-            remaining_time = Decimal(remaining_time) - Decimal(time)
-            status['timeleft'] = remaining_time
-            status['game_time'] += Decimal(time)
-            status['exp'] += Decimal(exp)
-            index = path_location.index(monsters[int(select)-1])
-            path_location.pop(index)
-            monsters.pop(int(select)-1)
+        elif event == '2':
+            print('Введите номер локации')
+            change = input()
+            if int(change) <= len(locations):
+
+                path_location, time = change_location(locations[int(change) - 1], path_location)
+                remaining_time = Decimal(remaining_time) - Decimal(time)
+                status['timeleft'] = remaining_time
+                status['game_time'] += Decimal(time)
+            else:
+                print('Вы ввели некорректное число \n')
+
+        elif event == '3':
+            restart()
         else:
             print('Вы ввели некорректное число \n')
-    elif event == '2':
-        print('Введите номер локации')
-        change = input()
-        if int(change) <= len(locations):
 
-            path_location = change_location(locations[int(change) - 1], path_location)
+def restart():
+    global status, remaining_time, path_location, current_location
+    current_location = 'Location_0_tm0'
+    path_location = loaded_json_file[current_location]
+    remaining_time = '123456.0987654321'
+    status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'game_time': 0}
+    start()
 
-        else:
-            print('Вы ввели некорректное число \n')
-    elif event == '3':
-        break
-    else:
-        print('Вы ввели некорректное число \n')
-
+if __name__ == '__main__':
+    start()
 # Учитывая время и опыт, не забывайте о точности вычислений!
