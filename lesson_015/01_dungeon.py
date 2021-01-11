@@ -93,7 +93,9 @@
 # и так далее...
 import re
 import json
-from decimal import Decimal, getcontext, ROUND_HALF_EVEN, ROUND_HALF_UP, ROUND_FLOOR
+from decimal import Decimal, getcontext
+import csv
+import datetime
 
 getcontext().prec = 50
 remaining_time = '123456.0987654321'
@@ -110,11 +112,13 @@ number_pattern = r'\d{1,10}'
 with open('rpg.json', 'r') as read_file:
     loaded_json_file = json.load(read_file)
 
+current_location = 'Location_0_tm0'
+path_location = loaded_json_file[current_location]
+
 json_data = json.dumps(loaded_json_file)
-
-
-# found_location = re.findall(location_pattern, json_data)
-# found_monster = re.findall(monster_pattern, json_data)
+with open('log.csv', 'a', newline='') as out_csv:
+    writer = csv.writer(out_csv)  # <_csv.writer object at 0x03B0AD80>
+    writer.writerow(field_names)
 
 
 def find_location(current_location):
@@ -171,19 +175,21 @@ def change_location(location, path):
                 return new_path, pure_time[0]
 
 
-current_location = 'Location_0_tm0'
-
-path_location = loaded_json_file[current_location]
-
 def start():
-    global current_location, path_location, json_data, remaining_time, status
+    global current_location, path_location, json_data, remaining_time, status, stat
     while True:
+
+        log(stat=[status['location'], status['exp'], datetime.datetime.now()])
         if status['location'] == 'Hatch_tm159.098765432':
             print('Вы нашли выход, победа')
+            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
+            stat = field_names
             break
         if Decimal(status['timeleft']) <= Decimal('0'):
             print('Вы не успели открыть люк!!! НАВОДНЕНИЕ!!!')
             print('Игра начинается заново \n')
+            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
+            stat = field_names
             restart()
         print(f"Вы находитесь в локации {status['location']}")
         print(f"У вас {status['exp']} опыта, {status['timeleft']} секунд до наводнения")
@@ -231,17 +237,29 @@ def start():
                 print('Вы ввели некорректное число \n')
 
         elif event == '3':
+            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
+            stat = field_names
             restart()
         else:
             print('Вы ввели некорректное число \n')
 
+
+def log(stat):
+    with open('log.csv', 'a', newline='') as out_csv:
+        writer = csv.writer(out_csv)  # <_csv.writer object at 0x03B0AD80>
+        writer.writerow(stat)
+
+
 def restart():
     global status, remaining_time, path_location, current_location
+    with open('rpg.json', 'r') as read_file:
+        loaded_json_file = json.load(read_file)
     current_location = 'Location_0_tm0'
     path_location = loaded_json_file[current_location]
     remaining_time = '123456.0987654321'
     status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'game_time': 0}
     start()
+
 
 if __name__ == '__main__':
     start()
