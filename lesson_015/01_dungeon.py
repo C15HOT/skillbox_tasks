@@ -97,6 +97,7 @@ from decimal import Decimal, getcontext
 import csv
 import datetime
 
+# TODO В идеале всю логику реализовать через классы
 getcontext().prec = 50
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
@@ -176,6 +177,7 @@ def change_location(location, path):
 
 
 def start():
+    # TODO объемная функция получается - подумайте, можно ли как-то разделить её логику по другим функциям(классам)
     global current_location, path_location, json_data, remaining_time, status, stat
     while True:
 
@@ -259,8 +261,10 @@ def restart():
     remaining_time = '123456.0987654321'
     status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'game_time': 0}
     start()
+    # TODO по возможности - старайтесь избегать рекурсий
 
 
 if __name__ == '__main__':
     start()
 # Учитывая время и опыт, не забывайте о точности вычислений!
+# TODO при выборе монстров/локаций - надо показывать возможные варианты и числа, которые им соответствуют
