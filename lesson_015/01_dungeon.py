@@ -93,178 +93,176 @@
 # и так далее...
 import re
 import json
-from decimal import Decimal, getcontext
+from decimal import Decimal
 import csv
 import datetime
 
-# TODO В идеале всю логику реализовать через классы
-getcontext().prec = 50
-remaining_time = '123456.0987654321'
-# если изначально не писать число в виде строки - теряется точность!
-field_names = ['current_location', 'current_experience', 'current_date']
-status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'game_time': 0}
-location_pattern = r'Location_\d\w|Location_B\d\w|Hatch\w'
-monster_pattern = r'Mob_exp\d{2,3}_tm\d|Boss\d{3}_exp\d{2,3}_tm\d|Boss_exp\d{3}_tm\d\w'
 
-time_pattern = r'tm\d{0,10}\w'
-exp_pattern = r'exp\d{1,3}\w'
-number_pattern = r'\d{1,10}'
+class Game:
+    location_pattern = r'Location_\d\w|Location_B\d\w|Hatch\w'
+    monster_pattern = r'Mob_exp\d{2,3}_tm\d|Boss\d{3}_exp\d{2,3}_tm\d|Boss_exp\d{3}_tm\d\w'
+    time_pattern = r'tm\d{0,10}\w'
+    exp_pattern = r'exp\d{1,3}\w'
+    number_pattern = r'\d{1,10}'
 
-with open('rpg.json', 'r') as read_file:
-    loaded_json_file = json.load(read_file)
+    def __init__(self, game_file, log_file):
+        self.game_file = game_file
+        self.log_file = log_file
+        self.remaining_time = '123456.0987654321'
+        self.status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': self.remaining_time, 'game_time': 0}
+        self.field_names = ['current_location', 'current_experience', 'current_date']
+        self.remaining_time = '123456.0987654321'
+        self.current_location = None
+        self.path_location = None
+        self.json_data = None
 
-current_location = 'Location_0_tm0'
-path_location = loaded_json_file[current_location]
+    def open_file(self):
+        with open(self.game_file, 'r') as read_file:
+            loaded_json_file = json.load(read_file)
+            self.current_location = 'Location_0_tm0'
+            self.path_location = loaded_json_file[self.current_location]
+            self.json_data = json.dumps(loaded_json_file)
+        with open(self.log_file, 'a', newline='') as out_csv:
+            writer = csv.writer(out_csv)
+            writer.writerow(self.field_names)
 
-json_data = json.dumps(loaded_json_file)
-with open('log.csv', 'a', newline='') as out_csv:
-    writer = csv.writer(out_csv)  # <_csv.writer object at 0x03B0AD80>
-    writer.writerow(field_names)
+    def find_location(self, current_location):
+        locations = []
+        for item in current_location:
+            if isinstance(item, dict):
+                for key, _ in item.items():
+                    location = re.findall(Game.location_pattern, key)
+                    if location:
+                        locations.append(key)
+        return locations
 
+    def find_monster(self, current_location):
+        monsters = []
+        for item in current_location:
+            if isinstance(item, str):
+                monster = re.findall(Game.monster_pattern, item)
+                if monster:
+                    monsters.append(item)
+        return monsters
 
-def find_location(current_location):
-    locations = []
-    for item in current_location:
-        if isinstance(item, dict):
-            for key, _ in item.items():
-                location = re.findall(location_pattern, key)
-                if location:
-                    locations.append(key)
-    return locations
+    def attack(self, monster):
+        time = re.findall(Game.time_pattern, monster)
+        pure_time = re.findall(Game.number_pattern, str(time))
+        exp = re.findall(Game.exp_pattern, monster)
+        pure_exp = re.findall(Game.number_pattern, str(exp))
+        return pure_time[0], pure_exp[0]
 
-
-def find_monster(current_location):
-    monsters = []
-    for item in current_location:
-        if isinstance(item, str):
-            monster = re.findall(monster_pattern, item)
-            if monster:
-                monsters.append(item)
-    return monsters
-
-
-def attack(monster):
-    time = re.findall(time_pattern, monster)
-    pure_time = re.findall(number_pattern, str(time))
-    exp = re.findall(exp_pattern, monster)
-    pure_exp = re.findall(number_pattern, str(exp))
-    return pure_time[0], pure_exp[0]
-
-
-def change_location(location, path):
-    for item in path:
-        if location in item:
-            if location == 'Hatch_tm159.098765432':
-                if status['exp'] >= 280:
-                    time = re.findall(time_pattern, location)
-                    pure_time = re.findall(number_pattern, str(time))
+    def change_location(self, location, path):
+        for item in path:
+            if location in item:
+                if location == 'Hatch_tm159.098765432':
+                    if self.status['exp'] >= 280:
+                        time = re.findall(Game.time_pattern, location)
+                        pure_time = re.findall(Game.number_pattern, str(time))
+                        index = path.index(item)
+                        new_path = path[index][location]
+                        self.status['location'] = location
+                        return new_path, pure_time[0]
+                    else:
+                        print('У вас недостаточно опыта для открытия люка, нужно 280 \n')
+                        time = re.findall(Game.time_pattern, location)
+                        pure_time = re.findall(Game.number_pattern, str(time))
+                        return path, pure_time[0]
+                else:
+                    time = re.findall(Game.time_pattern, location)
+                    pure_time = re.findall(Game.number_pattern, str(time))
                     index = path.index(item)
                     new_path = path[index][location]
-                    status['location'] = location
+                    self.status['location'] = location
                     return new_path, pure_time[0]
+
+    def start(self):
+
+        while True:
+
+            self.log(stat=[self.status['location'], self.status['exp'], datetime.datetime.now()])
+            if self.status['location'] == 'Hatch_tm159.098765432':
+                print('Вы нашли выход, победа')
+                self.log(stat=[self.status['location'], self.status['exp'], datetime.datetime.now()])
+
+                break
+            if Decimal(self.status['timeleft']) <= Decimal('0'):
+                print('Вы не успели открыть люк!!! НАВОДНЕНИЕ!!!')
+                print('Игра начинается заново \n')
+                self.log(stat=[self.status['location'], self.status['exp'], datetime.datetime.now()])
+
+                self.restart()
+            print(f"Вы находитесь в локации {self.status['location']}")
+            print(f"У вас {self.status['exp']} опыта, {self.status['timeleft']} секунд до наводнения")
+            print(f"Прошло времени {self.status['game_time']} ")
+            locations = self.find_location(self.path_location)
+            monsters = self.find_monster(self.path_location)
+            print(f"Внутри вы видите: ")
+            for location in locations:
+                print(f'{locations.index(location) + 1}. Вход в локацию {location}')
+            for index, monster in enumerate(monsters):
+                print(f'{index + 1}. Монстра {monster}')
+
+            print('Выберите действие:')
+            print('1. Атаковать монстра')
+            print('2. Перейти в другую локацию')
+            print('3. Сдаться')
+
+            event = input()
+
+            if event == '1':
+                print('Выберите монстра')
+                select = input()
+                if int(select) <= len(monsters):
+                    time, exp = self.attack(monsters[int(select) - 1])
+                    self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
+                    self.status['timeleft'] = self.remaining_time
+                    self.status['game_time'] += Decimal(time)
+                    self.status['exp'] += Decimal(exp)
+                    index = self.path_location.index(monsters[int(select) - 1])
+                    self.path_location.pop(index)
+                    monsters.pop(int(select) - 1)
                 else:
-                    print('У вас недостаточно опыта для открытия люка, нужно 280 \n')
-                    time = re.findall(time_pattern, location)
-                    pure_time = re.findall(number_pattern, str(time))
-                    return path, pure_time[0]
-            else:
-                time = re.findall(time_pattern, location)
-                pure_time = re.findall(number_pattern, str(time))
-                index = path.index(item)
-                new_path = path[index][location]
-                status['location'] = location
-                return new_path, pure_time[0]
+                    print('Вы ввели некорректное число \n')
 
+            elif event == '2':
+                print('Введите номер локации')
+                change = input()
+                if int(change) <= len(locations):
 
-def start():
-    # TODO объемная функция получается - подумайте, можно ли как-то разделить её логику по другим функциям(классам)
-    global current_location, path_location, json_data, remaining_time, status, stat
-    while True:
+                    self.path_location, time = self.change_location(locations[int(change) - 1], self.path_location)
+                    self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
+                    self.status['timeleft'] = self.remaining_time
+                    self.status['game_time'] += Decimal(time)
+                else:
+                    print('Вы ввели некорректное число \n')
 
-        log(stat=[status['location'], status['exp'], datetime.datetime.now()])
-        if status['location'] == 'Hatch_tm159.098765432':
-            print('Вы нашли выход, победа')
-            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
-            stat = field_names
-            break
-        if Decimal(status['timeleft']) <= Decimal('0'):
-            print('Вы не успели открыть люк!!! НАВОДНЕНИЕ!!!')
-            print('Игра начинается заново \n')
-            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
-            stat = field_names
-            restart()
-        print(f"Вы находитесь в локации {status['location']}")
-        print(f"У вас {status['exp']} опыта, {status['timeleft']} секунд до наводнения")
-        print(f"Прошло времени {status['game_time']} ")
-        locations = find_location(path_location)
-        monsters = find_monster(path_location)
-        print(f"Внутри вы видите: ")
-        for location in locations:
-            print(f'Вход в локацию {location}')
-        for monster in monsters:
-            print(f'Монстра {monster}')
+            elif event == '3':
+                self.log(stat=[self.status['location'], self.status['exp'], datetime.datetime.now()])
 
-        print('Выберите действие:')
-        print('1. Атаковать монстра')
-        print('2. Перейти в другую локацию')
-        print('3. Сдаться')
-
-        event = input()
-
-        if event == '1':
-            print('Выберите монстра')
-            select = input()
-            if int(select) <= len(monsters):
-                time, exp = attack(monsters[int(select) - 1])
-                remaining_time = Decimal(remaining_time) - Decimal(time)
-                status['timeleft'] = remaining_time
-                status['game_time'] += Decimal(time)
-                status['exp'] += Decimal(exp)
-                index = path_location.index(monsters[int(select) - 1])
-                path_location.pop(index)
-                monsters.pop(int(select) - 1)
+                self.restart()
             else:
                 print('Вы ввели некорректное число \n')
 
-        elif event == '2':
-            print('Введите номер локации')
-            change = input()
-            if int(change) <= len(locations):
+    def log(self, stat):
+        with open(self.log_file, 'a', newline='') as out_csv:
+            writer = csv.writer(out_csv)
+            writer.writerow(stat)
 
-                path_location, time = change_location(locations[int(change) - 1], path_location)
-                remaining_time = Decimal(remaining_time) - Decimal(time)
-                status['timeleft'] = remaining_time
-                status['game_time'] += Decimal(time)
-            else:
-                print('Вы ввели некорректное число \n')
+    def restart(self):
 
-        elif event == '3':
-            log(stat=[status['location'], status['exp'], datetime.datetime.now()])
-            stat = field_names
-            restart()
-        else:
-            print('Вы ввели некорректное число \n')
-
-
-def log(stat):
-    with open('log.csv', 'a', newline='') as out_csv:
-        writer = csv.writer(out_csv)  # <_csv.writer object at 0x03B0AD80>
-        writer.writerow(stat)
-
-
-def restart():
-    global status, remaining_time, path_location, current_location
-    with open('rpg.json', 'r') as read_file:
-        loaded_json_file = json.load(read_file)
-    current_location = 'Location_0_tm0'
-    path_location = loaded_json_file[current_location]
-    remaining_time = '123456.0987654321'
-    status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': remaining_time, 'game_time': 0}
-    start()
-    # TODO по возможности - старайтесь избегать рекурсий
+        with open(self.game_file, 'r') as read_file:
+            self.loaded_json_file = json.load(read_file)
+        self.current_location = 'Location_0_tm0'
+        self.path_location = self.loaded_json_file[self.current_location]
+        self.remaining_time = '123456.0987654321'
+        self.status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': self.remaining_time, 'game_time': 0}
+        # self.start()
 
 
 if __name__ == '__main__':
-    start()
+    game = Game(game_file='rpg.json', log_file='log.csv')
+    game.open_file()
+    game.start()
+
 # Учитывая время и опыт, не забывайте о точности вычислений!
-# TODO при выборе монстров/локаций - надо показывать возможные варианты и числа, которые им соответствуют
