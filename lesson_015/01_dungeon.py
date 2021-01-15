@@ -211,6 +211,15 @@ class Game:
             event = input()
 
             if event == '1':
+                # TODO действия внутри - можно вынести в отдельные методы
+                # TODO чтобы было
+                # TODO if event == '1':
+                # TODO    self.attack_mob()
+                # TODO elif event == '2':
+                # TODO    self.change_loc()
+                # TODO ...
+                # TODO и в целом можно из действий создать словарь (как было в 04.03)
+                # TODO и вызывать действия из словаря (но это не обязательно)
                 print('Выберите монстра')
                 select = input()
                 if int(select) <= len(monsters):
@@ -254,6 +263,8 @@ class Game:
     def restart(self):
 
         with open(self.game_file, 'r') as read_file:
+            # TODO если атрибут нужен - его сперва надо инициализировать в init
+            # TODO а уже потом использовать в остальных методах
             self.loaded_json_file = json.load(read_file)
         self.current_location = 'Location_0_tm0'
         self.path_location = self.loaded_json_file[self.current_location]
