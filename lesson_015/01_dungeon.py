@@ -216,8 +216,7 @@ class Game:
                 if int(select) <= len(monsters):
                     time, exp = self.attack(monsters[int(select) - 1])
                     self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
-                    self.status['timeleft'] = self.remaining_time
-                    self.status['game_time'] += Decimal(time)
+                    self.change_status(time=time)
                     self.status['exp'] += Decimal(exp)
                     index = self.path_location.index(monsters[int(select) - 1])
                     self.path_location.pop(index)
@@ -232,8 +231,7 @@ class Game:
 
                     self.path_location, time = self.change_location(locations[int(change) - 1], self.path_location)
                     self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
-                    self.status['timeleft'] = self.remaining_time
-                    self.status['game_time'] += Decimal(time)
+                    self.change_status(time=time)
                 else:
                     print('Вы ввели некорректное число \n')
 
@@ -243,6 +241,10 @@ class Game:
                 self.restart()
             else:
                 print('Вы ввели некорректное число \n')
+
+    def change_status(self,time):
+        self.status['timeleft'] = self.remaining_time
+        self.status['game_time'] += Decimal(time)
 
     def log(self, stat):
         with open(self.log_file, 'a', newline='') as out_csv:
