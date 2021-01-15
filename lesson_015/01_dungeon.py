@@ -115,6 +115,7 @@ class Game:
         self.current_location = None
         self.path_location = None
         self.json_data = None
+        self.loaded_json_file = None
 
     def open_file(self):
         with open(self.game_file, 'r') as read_file:
@@ -176,6 +177,31 @@ class Game:
                     self.status['location'] = location
                     return new_path, pure_time[0]
 
+    def attack_event(self, monsters):
+        print('Выберите монстра')
+        select = input()
+        if int(select) <= len(monsters):
+            time, exp = self.attack(monsters[int(select) - 1])
+            self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
+            self.change_status(time=time)
+            self.status['exp'] += Decimal(exp)
+            index = self.path_location.index(monsters[int(select) - 1])
+            self.path_location.pop(index)
+            monsters.pop(int(select) - 1)
+        else:
+            print('Вы ввели некорректное число \n')
+
+    def change_locationt_event(self, locations):
+        print('Введите номер локации')
+        change = input()
+        if int(change) <= len(locations):
+
+            self.path_location, time = self.change_location(locations[int(change) - 1], self.path_location)
+            self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
+            self.change_status(time=time)
+        else:
+            print('Вы ввели некорректное число \n')
+
     def start(self):
 
         while True:
@@ -211,47 +237,16 @@ class Game:
             event = input()
 
             if event == '1':
-                # TODO действия внутри - можно вынести в отдельные методы
-                # TODO чтобы было
-                # TODO if event == '1':
-                # TODO    self.attack_mob()
-                # TODO elif event == '2':
-                # TODO    self.change_loc()
-                # TODO ...
-                # TODO и в целом можно из действий создать словарь (как было в 04.03)
-                # TODO и вызывать действия из словаря (но это не обязательно)
-                print('Выберите монстра')
-                select = input()
-                if int(select) <= len(monsters):
-                    time, exp = self.attack(monsters[int(select) - 1])
-                    self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
-                    self.change_status(time=time)
-                    self.status['exp'] += Decimal(exp)
-                    index = self.path_location.index(monsters[int(select) - 1])
-                    self.path_location.pop(index)
-                    monsters.pop(int(select) - 1)
-                else:
-                    print('Вы ввели некорректное число \n')
-
+                self.attack_event(monsters=monsters)
             elif event == '2':
-                print('Введите номер локации')
-                change = input()
-                if int(change) <= len(locations):
-
-                    self.path_location, time = self.change_location(locations[int(change) - 1], self.path_location)
-                    self.remaining_time = Decimal(self.remaining_time) - Decimal(time)
-                    self.change_status(time=time)
-                else:
-                    print('Вы ввели некорректное число \n')
-
+                self.change_locationt_event(locations=locations)
             elif event == '3':
                 self.log(stat=[self.status['location'], self.status['exp'], datetime.datetime.now()])
-
                 self.restart()
             else:
                 print('Вы ввели некорректное число \n')
 
-    def change_status(self,time):
+    def change_status(self, time):
         self.status['timeleft'] = self.remaining_time
         self.status['game_time'] += Decimal(time)
 
@@ -263,8 +258,6 @@ class Game:
     def restart(self):
 
         with open(self.game_file, 'r') as read_file:
-            # TODO если атрибут нужен - его сперва надо инициализировать в init
-            # TODO а уже потом использовать в остальных методах
             self.loaded_json_file = json.load(read_file)
         self.current_location = 'Location_0_tm0'
         self.path_location = self.loaded_json_file[self.current_location]
