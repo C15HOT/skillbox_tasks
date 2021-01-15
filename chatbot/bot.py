@@ -135,8 +135,8 @@ class Bot:
 
         return text_to_send
 
-
-
+# telephone = r'\b\+?[7,8](\s*\d{3}\s*\d{3}\s*\d{2}\s*\d{2})\b'
+# date =  r'\d\d-\d\d-\d{4}'
 if __name__ == '__main__':
     configure_logging()
     bot = Bot(group_id=settings.GROUP_ID, token=settings.TOKEN)
