@@ -27,18 +27,42 @@ SCENARIOS = {
         "first_step": "step1",
         "steps":{
             "step1":{
-                "text": "Чтобы зарегистрироваться, введите ваше имя. Оно будет написано на бейджике.",
+                "text": "Введите город отправления.",
                 "failure_text": "Имя должно состоять из 3-30 букв и дефиса. Попробуйте еще раз",
                 "handler": "handle_name",
                 "next_step": "step2"
             },
             "step2":{
-                "text": "Введите email. Мы отправим на него все данные",
+                "text": "Введите город назначения",
                 "failure_text": "Во введенном адресе ошибка. Попробуйте еще раз",
                 "handler": "handle_email",
                 "next_step": "step3"
             },
             "step3":{
+                "text": "Введите дату отправления в формате ДД-ММ-ГГГГ.",
+                "failure_text": None,
+                "handler": None,
+                "next_step": None
+            },
+            "step4":{
+                "text": "Спасибо за регистрацию, {name}! Мы отправили на {email} билет, распечатайте его.",
+                "failure_text": None,
+                "handler": None,
+                "next_step": None
+            },
+            "step5":{
+                "text": "Спасибо за регистрацию, {name}! Мы отправили на {email} билет, распечатайте его.",
+                "failure_text": None,
+                "handler": None,
+                "next_step": None
+            },
+            "step6":{
+                "text": "Спасибо за регистрацию, {name}! Мы отправили на {email} билет, распечатайте его.",
+                "failure_text": None,
+                "handler": None,
+                "next_step": None
+            },
+            "step7":{
                 "text": "Спасибо за регистрацию, {name}! Мы отправили на {email} билет, распечатайте его.",
                 "failure_text": None,
                 "handler": None,

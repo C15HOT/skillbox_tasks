@@ -5,6 +5,7 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import logging
 import time
 import handlers
+import data_generator
 
 try:
     import settings
