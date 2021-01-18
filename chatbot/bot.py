@@ -1,5 +1,5 @@
 from random import randint
-
+import json
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import logging
@@ -35,7 +35,7 @@ class UserState:
     def __init__(self, scenario_name, step_name, context=None):
         self.scenario_name = scenario_name
         self.step_name = step_name
-        self. context = context or {}
+        self.context = context or {}
 
 
 class Bot:
@@ -127,7 +127,7 @@ class Bot:
                 state.step_name = step['next_step']
             else:
                 # finish
-                log.info('Зарегистрирован {name} {email}'.format(**state.context))
+                log.info('Зарегистрирован {phone}'.format(**state.context))
                 self.user_states.pop(user_id)
 
         else:
@@ -136,8 +136,27 @@ class Bot:
 
         return text_to_send
 
-# telephone = r'\b\+?[7,8](\s*\d{3}\s*\d{3}\s*\d{2}\s*\d{2})\b'
-# date =  r'\d\d-\d\d-\d{4}'
+    def dispatcher(self, user_id):
+        state = self.user_states[user_id]
+        source = state.context['source']
+        destination = state.context['destination']
+        date = state.context['date']
+        races = []
+        with open('date.json', 'r') as read_file:
+            loaded_json_file = json.load(read_file)
+            if loaded_json_file[source]:
+                if loaded_json_file[source][destination]:
+                    for key, race in loaded_json_file[source][destination].items():
+                        if race[0] == date:
+                            races.append((key, race[0], race[1]))
+        if races:
+            return races
+        else:
+            return 'По указанным параметрам рейсов не найдено'
+
+
+
+
 if __name__ == '__main__':
     configure_logging()
     bot = Bot(group_id=settings.GROUP_ID, token=settings.TOKEN)
