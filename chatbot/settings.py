@@ -4,20 +4,19 @@ TOKEN = 'ff1ffe20c93b89dbde9bc23e3c84409c6b39ab197281056df0147914d414d3dd5063d96
 INTENTS = [
     {
         "name": "Заказ билетов",
-        "tokens": ("/ticket"),
+        "tokens": ("/ticket",),
         "scenario": "registration",
         "answer": None,
     },
 {
         "name": "Справка",
-        "tokens": ("/help"),
+        "tokens": ("/help",),
         "scenario": None,
-        "answer": 'Данный бот позволяет заказать билет на самолет'
-        'Для заказа билета введите /ticket',
+        "answer": "Данный бот позволяет заказать билет на самолет Для заказа билета введите /ticket",
     },
     {
         "name": "Регистрация",
-        "tokens": ("регист", "купи", "заказ"),
+        "tokens": ("регист", "купи", "заказ",),
         "scenario": "registration",
         "answer": None
     },

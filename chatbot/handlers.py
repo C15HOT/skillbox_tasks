@@ -75,3 +75,12 @@ def handle_phone(text, context):
         return True
     else:
         return False
+
+
+def handle_date(text, context):
+    match = re.match(re_date, text)
+    if match:
+        context['date'] = text
+        return True
+    else:
+        return False
