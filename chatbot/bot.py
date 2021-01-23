@@ -79,10 +79,7 @@ class Bot:
         user_id = event.object.message['peer_id']
         text = event.object.message['text']
         if user_id in self.user_states:
-            state = self.user_states[user_id]
-            try:
-                if isinstance(state.context['races'], list):
-                    text_to_send =
+
             text_to_send = self.continue_scenario(user_id, text=text)
         else:
             #search intent
