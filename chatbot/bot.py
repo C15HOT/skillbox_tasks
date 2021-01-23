@@ -79,7 +79,10 @@ class Bot:
         user_id = event.object.message['peer_id']
         text = event.object.message['text']
         if user_id in self.user_states:
-
+            state = self.user_states[user_id]
+            try:
+                if isinstance(state.context['races'], list):
+                    text_to_send =
             text_to_send = self.continue_scenario(user_id, text=text)
         else:
             #search intent
@@ -119,6 +122,10 @@ class Bot:
 
         handler = getattr(handlers, step['handler'])
         if handler(text=text, context=state.context):
+            state.context['races'] = handler(text=text, context=state.context)
+            if state.step_name == 'step3':
+                text_to_send = f"Доступные рейсы: {state.context['races']}"
+                return text_to_send
             # next step
             next_step = steps[step['next_step']]
             text_to_send = next_step['text'].format(**state.context)
@@ -136,23 +143,7 @@ class Bot:
 
         return text_to_send
 
-    def dispatcher(self, user_id):
-        state = self.user_states[user_id]
-        source = state.context['source']
-        destination = state.context['destination']
-        date = state.context['date']
-        races = []
-        with open('date.json', 'r') as read_file:
-            loaded_json_file = json.load(read_file)
-            if loaded_json_file[source]:
-                if loaded_json_file[source][destination]:
-                    for key, race in loaded_json_file[source][destination].items():
-                        if race[0] == date:
-                            races.append((key, race[0], race[1]))
-        if races:
-            return races
-        else:
-            return 'По указанным параметрам рейсов не найдено'
+
 
 
 
