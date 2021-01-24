@@ -5,6 +5,7 @@ from random import randint
 import calendar
 from collections import defaultdict
 
+
 class Generator:
     def __init__(self):
         self.cities = {'Москва': {'Париж': {}, 'Лондон': {}, 'Нью-Йорк': {}},
@@ -24,7 +25,7 @@ class Generator:
     def dates_generator(self):
         races = defaultdict()
         for count in range(randint(1, 5)):
-            races[randint(0, 999)] = [self.date_generator(), randint(1,5)]
+            races[randint(0, 999)] = [self.date_generator(), randint(1, 5)]
         return races
 
     def count_of_days(self, year, month):

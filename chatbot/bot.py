@@ -12,14 +12,14 @@ try:
 except ImportError:
     exit('Do cp settings.py.defoault settings.py and set token')
 
-
 log = logging.getLogger('bot')
+
 
 def configure_logging():
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(logging.Formatter(' %(levelname)s %(message)s'))
 
-    file_handler = logging.FileHandler('bot.log',  'w', 'utf-8')
+    file_handler = logging.FileHandler('bot.log', 'w', 'utf-8')
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s',
                                                 datefmt=time.strftime("%d-%m-%Y %H:%M")))
 
@@ -43,6 +43,7 @@ class Bot:
     Echo bot for vk.com
     use python 3.7
     """
+
     def __init__(self, group_id, token):
         """
 
@@ -54,7 +55,7 @@ class Bot:
         self.vk = vk_api.VkApi(token=token)
         self.long_poller = VkBotLongPoll(self.vk, self.group_id)
         self.api = self.vk.get_api()
-        self.user_states = dict() # user_id -> user_state
+        self.user_states = dict()  # user_id -> user_state
 
     def run(self):
         """
@@ -82,11 +83,11 @@ class Bot:
 
             text_to_send = self.continue_scenario(user_id, text=text)
         else:
-            #search intent
+            # search intent
             for intent in settings.INTENTS:
                 log.debug(f'User gets {intent}')
                 if any(token in text.lower() for token in intent['tokens']):
-                    #run intent
+                    # run intent
                     if intent['answer']:
                         text_to_send = intent['answer']
                     else:
@@ -110,8 +111,6 @@ class Bot:
 
         return text_to_send
 
-
-
     def continue_scenario(self, user_id, text):
         state = self.user_states[user_id]
         steps = settings.SCENARIOS[state.scenario_name]['steps']
@@ -121,11 +120,16 @@ class Bot:
         if handler(text=text, context=state.context):
             state.context['races'] = handler(text=text, context=state.context)
             if state.step_name == 'step3':
+                # TODO вам не нужно этот шаг прописывать отдельно
+                # TODO нужно переходить на step4
                 text_to_send = f"Доступные рейсы: {state.context['races']}"
                 return text_to_send
             # next step
-            next_step = steps[step['next_step']]
+            next_step = steps[step['next_step']]  # TODO вот этот переход будет
+            # TODO и в next_step['text'] вместо "Введите номер рейса",
+            # TODO должно быть "Доступные рейсы: {races}. Введите номер рейса "
             text_to_send = next_step['text'].format(**state.context)
+            # TODO и тогда в этой строке мы подставим вместо races информацию из state.context['races']
             if next_step['next_step']:
                 # switch to next step
                 state.step_name = step['next_step']
@@ -139,10 +143,6 @@ class Bot:
             text_to_send = step['failure_text'].format(**state.context)
 
         return text_to_send
-
-
-
-
 
 
 if __name__ == '__main__':
