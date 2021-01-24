@@ -118,18 +118,14 @@ class Bot:
 
         handler = getattr(handlers, step['handler'])
         if handler(text=text, context=state.context):
-            state.context['races'] = handler(text=text, context=state.context)
-            if state.step_name == 'step3':
-                # TODO вам не нужно этот шаг прописывать отдельно
-                # TODO нужно переходить на step4
-                text_to_send = f"Доступные рейсы: {state.context['races']}"
-                return text_to_send
+
+
             # next step
-            next_step = steps[step['next_step']]  # TODO вот этот переход будет
-            # TODO и в next_step['text'] вместо "Введите номер рейса",
-            # TODO должно быть "Доступные рейсы: {races}. Введите номер рейса "
+            next_step = steps[step['next_step']]  #  вот этот переход будет
+            #  и в next_step['text'] вместо "Введите номер рейса",
+            #  должно быть "Доступные рейсы: {races}. Введите номер рейса "
             text_to_send = next_step['text'].format(**state.context)
-            # TODO и тогда в этой строке мы подставим вместо races информацию из state.context['races']
+            # и тогда в этой строке мы подставим вместо races информацию из state.context['races']
             if next_step['next_step']:
                 # switch to next step
                 state.step_name = step['next_step']

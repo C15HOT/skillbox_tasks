@@ -45,7 +45,7 @@ SCENARIOS = {
                 "next_step": "step4"
             },
             "step4":{
-                "text": "Введите номер рейса",
+                "text": "Доступные рейсы: {races}. Введите номер рейса",
                 "failure_text": None,
                 "handler": "handle_race_number",
                 "next_step": "step5"

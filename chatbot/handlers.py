@@ -55,7 +55,8 @@ def handle_destination(text, context):
                 if loaded_json_file[context['source']][context['destination']]:
                     for race in loaded_json_file[context['source']][context['destination']]:
                         races.append(race)
-            return races
+            context['allraces'] = races
+            return True
 
     else:
         return False
@@ -70,11 +71,12 @@ def handle_date(text, context):
         context['date'] = text
         with open('date.json', 'r') as read_file:
             loaded_json_file = json.load(read_file)
-            for number in context['races']:
+            for number in context['allraces']:
                 race = loaded_json_file[context['source']][context['destination']][number]
                 if race[0] == context['date']:
                     races.append((number, race[0], race[1]))
-        return races
+        context['races'] = races
+        return True
     else:
         return False
 
