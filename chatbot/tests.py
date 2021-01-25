@@ -41,23 +41,32 @@ class Test1(TestCase):
                 assert bot.on_event.call_count == count
 
     INPUTS = [
-        'Привет',
-        'А когда?',
-        'Где будет конференция?',
-        'Зарегистрируй меня',
-        'Вениамин',
-        'Мой адрес email@email',
-        'email@email.ru'
+        'привет',
+        '/help',
+        '/ticket',
+        'москва',
+        'орел',
+        'лондон',
+        '28-02-2021',
+        '174',
+        '-',
+        'да',
+        '89990002211'
     ]
 
     EXPECTED_OUTPUTS = [
         settings.DEFAULT_ANSWER,
         settings.INTENTS[0]['answer'],
-        settings.INTENTS[1]['answer'],
         settings.SCENARIOS['registration']['steps']['step1']['text'],
         settings.SCENARIOS['registration']['steps']['step2']['text'],
         settings.SCENARIOS['registration']['steps']['step2']['failure_text'],
-        settings.SCENARIOS['registration']['steps']['step3']['text'].format(name='Вениамин', email='email@email.ru'),
+        settings.SCENARIOS['registration']['steps']['step3']['text'],
+        settings.SCENARIOS['registration']['steps']['step4']['text'].format(races= [('174', '28-02-2021', 5), ('175', '01-03-2021', 5)]),
+        settings.SCENARIOS['registration']['steps']['step5']['text'],
+        settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=('174', '28-02-2021',5), comment='-'),
+        settings.SCENARIOS['registration']['steps']['step7']['text'],
+        settings.SCENARIOS['registration']['steps']['step8']['text'].format(phone='89990002211'),
+
 
     ]
 

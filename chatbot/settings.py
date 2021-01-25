@@ -2,13 +2,7 @@ GROUP_ID = 201143207
 TOKEN = 'ff1ffe20c93b89dbde9bc23e3c84409c6b39ab197281056df0147914d414d3dd5063d96a6fe9db4039f2c'
 
 INTENTS = [
-    # {
-    #     "name": "Заказ билетов",
-    #     "tokens": ("/ticket",),
-    #     "scenario": "registration",
-    #     "answer": None,
-    # },
-{
+    {
         "name": "Справка",
         "tokens": ("/help",),
         "scenario": None,
