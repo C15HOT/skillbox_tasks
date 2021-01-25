@@ -5,24 +5,26 @@ from bot import Bot
 import settings
 from vk_api.bot_longpoll import VkBotMessageEvent
 
+
 class Test1(TestCase):
-    RAW_EVENT= {'type': 'message_new', 'object': {'message': {'date': 1608217802,
-                                                         'from_id': 79363018, 'id': 63, 'out': 0, 'peer_id': 79363018,
-                                                         'text': 'sdfds', 'conversation_message_id': 62,
-                                                         'fwd_messages': [], 'important': False, 'random_id': 0,
-                                                         'attachments': [], 'is_hidden': False},
-                                             'client_info': {'button_actions': ['text', 'vkpay', 'open_app',
-                                                                                'location', 'open_link',
-                                                                                'intent_subscribe',
-                                                                                'intent_unsubscribe'],
-                                                             'keyboard': True, 'inline_keyboard': True,
-                                                             'carousel': False, 'lang_id': 0}},
-           'group_id': 201143207, 'event_id': '434f2834af92089e8e7f2e9e0e7fa97c2a236f84'}
+    RAW_EVENT = {'type': 'message_new', 'object': {'message': {'date': 1608217802,
+                                                               'from_id': 79363018, 'id': 63, 'out': 0,
+                                                               'peer_id': 79363018,
+                                                               'text': 'sdfds', 'conversation_message_id': 62,
+                                                               'fwd_messages': [], 'important': False, 'random_id': 0,
+                                                               'attachments': [], 'is_hidden': False},
+                                                   'client_info': {'button_actions': ['text', 'vkpay', 'open_app',
+                                                                                      'location', 'open_link',
+                                                                                      'intent_subscribe',
+                                                                                      'intent_unsubscribe'],
+                                                                   'keyboard': True, 'inline_keyboard': True,
+                                                                   'carousel': False, 'lang_id': 0}},
+                 'group_id': 201143207, 'event_id': '434f2834af92089e8e7f2e9e0e7fa97c2a236f84'}
 
     def test_ok(self):
 
         count = 5
-        obj = {'a' : 1}
+        obj = {'a': 1}
         events = [obj] * count
         long_poller_mock = Mock(return_value=events)
         long_poller_listen_mock = Mock()
@@ -30,7 +32,7 @@ class Test1(TestCase):
 
         with patch('bot.vk_api.VkApi'):
             with patch('bot.VkBotLongPoll', return_value=long_poller_listen_mock):
-                bot = Bot('','')
+                bot = Bot('', '')
                 bot.on_event = Mock()
                 bot.run()
 
@@ -73,7 +75,7 @@ class Test1(TestCase):
         long_poller_mock.listen = Mock(return_value=events)
 
         with patch('bot.VkBotLongPoll', return_value=long_poller_mock):
-            bot = Bot('','')
+            bot = Bot('', '')
             bot.api = api_mock
             bot.run()
         assert send_mock.call_count == len(self.INPUTS)
@@ -82,4 +84,11 @@ class Test1(TestCase):
         for call in send_mock.call_args_list:
             args, kwargs = call
             real_outputs.append(kwargs['message'])
+        for real, expec in zip(real_outputs, self.EXPECTED_OUTPUTS):
+            print(real)
+            print('-' * 50)
+            print(expec)
+            print('-' * 50)
+            print(real == expec)
+            print('_' * 50)
         assert real_outputs == self.EXPECTED_OUTPUTS
