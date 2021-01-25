@@ -2,21 +2,21 @@ GROUP_ID = 201143207
 TOKEN = 'ff1ffe20c93b89dbde9bc23e3c84409c6b39ab197281056df0147914d414d3dd5063d96a6fe9db4039f2c'
 
 INTENTS = [
-    {
-        "name": "Заказ билетов",
-        "tokens": ("/ticket",),
-        "scenario": "registration",
-        "answer": None,
-    },
+    # {
+    #     "name": "Заказ билетов",
+    #     "tokens": ("/ticket",),
+    #     "scenario": "registration",
+    #     "answer": None,
+    # },
 {
         "name": "Справка",
         "tokens": ("/help",),
         "scenario": None,
-        "answer": "Данный бот позволяет заказать билет на самолет Для заказа билета введите /ticket",
+        "answer": "Данный бот позволяет заказать билет на самолет \n Для заказа билета введите /ticket",
     },
     {
         "name": "Регистрация",
-        "tokens": ("регист", "купи", "заказ",),
+        "tokens": ("регист", "купи", "заказ", "/ticket",),
         "scenario": "registration",
         "answer": None
     },
@@ -46,7 +46,7 @@ SCENARIOS = {
             },
             "step4":{
                 "text": "Доступные рейсы: {races}. Введите номер рейса",
-                "failure_text": None,
+                "failure_text": "Неверно введен номер рейса",
                 "handler": "handle_race_number",
                 "next_step": "step5"
             },
@@ -57,14 +57,20 @@ SCENARIOS = {
                 "next_step": "step6"
             },
             "step6":{
-                "text": "Уточняем введенные данные, введите 'Да' или 'Нет'",
-                "failure_text": None,
+                "text": "Уточняем введенные данные, введите 'Да' или 'Нет' \n" \
+                "Город отправления: {source}\n" \
+                "Город назначения: {destination}\n" \
+                "Дата вылета: {selected_race[1]}\n" \
+                "Рейс : № {selected_race[0]}, количество свободных мест {selected_race[2]} \n" \
+                "Комментарий: {comment}",
+                "failure_text": "Возвращаемся к оформлению заказа \n" \
+                "Введите город отправления",
                 "handler": "handle_commit",
                 "next_step": "step7"
             },
             "step7":{
                 "text": "Введите номер телефона",
-                "failure_text": None,
+                "failure_text": "Неправильно введен номер телефона",
                 "handler": "handle_phone",
                 "next_step": "step8"
             },
@@ -78,8 +84,6 @@ SCENARIOS = {
     }
 }
 
-DEFAULT_ANSWER = 'К сожалению, рейсов с такими параметрами нет '\
+DEFAULT_ANSWER = 'К сожалению, рейсов с такими параметрами нет \n '\
                  'Вы можете ознакомиться с расписанием рейсов'
 
-HElP = 'Данный бот позволяет заказать билет на самолет'\
-    'Для заказа билета введите /ticket'

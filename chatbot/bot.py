@@ -10,7 +10,7 @@ import data_generator
 try:
     import settings
 except ImportError:
-    exit('Do cp settings.py.defoault settings.py and set token')
+    exit('Do cp settings.py.default settings.py and set token')
 
 log = logging.getLogger('bot')
 
@@ -80,8 +80,11 @@ class Bot:
         user_id = event.object.message['peer_id']
         text = event.object.message['text']
         if user_id in self.user_states:
-
-            text_to_send = self.continue_scenario(user_id, text=text)
+            if text == '/ticket':
+                self.user_states[user_id].step_name = 'step1'
+                text_to_send = self.start_scenario(user_id, settings.INTENTS[1]['scenario'])
+            else:
+                text_to_send = self.continue_scenario(user_id, text=text)
         else:
             # search intent
             for intent in settings.INTENTS:
@@ -117,7 +120,7 @@ class Bot:
         step = steps[state.step_name]
 
         handler = getattr(handlers, step['handler'])
-        if handler(text=text, context=state.context):
+        if handler(text=text, context=state.context, step=state):
 
 
             # next step
@@ -139,6 +142,7 @@ class Bot:
             text_to_send = step['failure_text'].format(**state.context)
 
         return text_to_send
+
 
 
 if __name__ == '__main__':
