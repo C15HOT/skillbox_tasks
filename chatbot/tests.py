@@ -1,9 +1,47 @@
 from copy import deepcopy
+import datetime
 from unittest import TestCase
-from unittest.mock import patch, Mock, ANY
+from unittest.mock import patch, Mock
 from bot import Bot
 import settings
 from vk_api.bot_longpoll import VkBotMessageEvent
+from data_generator import Generator
+import json
+
+
+
+allraces = []
+date = Generator()
+date.append_races()
+date.writer(file_name='date.json')
+# text_date = date.date_generator()
+with open('date.json', 'r') as read_file:
+    loaded_json_file = json.load(read_file)
+    for race in loaded_json_file['Москва']['Лондон']:
+        allraces.append(race)
+    text_date = loaded_json_file['Москва']['Лондон'][allraces[0]][0]
+def loader():
+    dates = []
+    allraces = []
+    races = []
+    user_date = datetime.datetime.strptime(text_date, '%d-%m-%Y')
+    for day in range(5):
+        last_date = user_date + datetime.timedelta(days=day)
+        date = last_date.strftime("%d-%m-%Y")
+        dates.append(date)
+    with open('date.json', 'r') as read_file:
+        loaded_json_file = json.load(read_file)
+
+        for race in loaded_json_file['Москва']['Лондон']:
+            allraces.append(race)
+        for number in allraces:
+            race = loaded_json_file['Москва']['Лондон'][number]
+            for day in dates:
+                if race[0] == day:
+                    races.append((number, race[0], race[1]))
+        return races
+
+
 
 
 class Test1(TestCase):
@@ -40,6 +78,8 @@ class Test1(TestCase):
                 bot.on_event.assert_any_call(obj)
                 assert bot.on_event.call_count == count
 
+    races = loader()
+
     INPUTS = [
         'привет',
         '/help',
@@ -47,13 +87,13 @@ class Test1(TestCase):
         'москва',
         'орел',
         'лондон',
-        '28-02-2021',  # TODO эту дату надо формировать не вручную
-        # TODO лучше задавать дату через datetime, относительно текущей
-        '174',
+        text_date,
+        allraces[0],
         '-',
         'да',
         '89990002211'
     ]
+
 
     EXPECTED_OUTPUTS = [
         settings.DEFAULT_ANSWER,
@@ -62,11 +102,11 @@ class Test1(TestCase):
         settings.SCENARIOS['registration']['steps']['step2']['text'],
         settings.SCENARIOS['registration']['steps']['step2']['failure_text'],
         settings.SCENARIOS['registration']['steps']['step3']['text'],
-        # TODO и подгружать в ответы надо рейсы не вручную - а из json файла
-        # TODO + подумайте - что можно сделать с длинными строками, так их оставлять нельзя
-        settings.SCENARIOS['registration']['steps']['step4']['text'].format(races= [('174', '28-02-2021', 5), ('175', '01-03-2021', 5)]),
+        # и подгружать в ответы надо рейсы не вручную - а из json файла
+        #  + подумайте - что можно сделать с длинными строками, так их оставлять нельзя
+        settings.SCENARIOS['registration']['steps']['step4']['text'].format(races=races),
         settings.SCENARIOS['registration']['steps']['step5']['text'],
-        settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=('174', '28-02-2021',5), comment='-'),
+        settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=races[0], comment='-'),
         settings.SCENARIOS['registration']['steps']['step7']['text'],
         settings.SCENARIOS['registration']['steps']['step8']['text'].format(phone='89990002211'),
 
