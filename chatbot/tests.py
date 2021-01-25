@@ -47,7 +47,8 @@ class Test1(TestCase):
         'москва',
         'орел',
         'лондон',
-        '28-02-2021',
+        '28-02-2021',  # TODO эту дату надо формировать не вручную
+        # TODO лучше задавать дату через datetime, относительно текущей
         '174',
         '-',
         'да',
@@ -61,6 +62,8 @@ class Test1(TestCase):
         settings.SCENARIOS['registration']['steps']['step2']['text'],
         settings.SCENARIOS['registration']['steps']['step2']['failure_text'],
         settings.SCENARIOS['registration']['steps']['step3']['text'],
+        # TODO и подгружать в ответы надо рейсы не вручную - а из json файла
+        # TODO + подумайте - что можно сделать с длинными строками, так их оставлять нельзя
         settings.SCENARIOS['registration']['steps']['step4']['text'].format(races= [('174', '28-02-2021', 5), ('175', '01-03-2021', 5)]),
         settings.SCENARIOS['registration']['steps']['step5']['text'],
         settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=('174', '28-02-2021',5), comment='-'),
