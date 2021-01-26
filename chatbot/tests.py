@@ -9,7 +9,8 @@ from data_generator import Generator
 import json
 
 
-
+# TODO Если что-то надо выполнить в начале тестов -- используйте метод setUp внутри класса с тестами
+# TODO он будет вызываться перед вызовом методов
 allraces = []
 date = Generator()
 date.append_races()
@@ -106,6 +107,9 @@ class Test1(TestCase):
         #  + подумайте - что можно сделать с длинными строками, так их оставлять нельзя
         settings.SCENARIOS['registration']['steps']['step4']['text'].format(races=races),
         settings.SCENARIOS['registration']['steps']['step5']['text'],
+        # TODO длинную строку надо сделать поменьше
+        # TODO возможно собрать данные в словаре и в формат передавать **словарь
+        # TODO как это делается в самом боте при формировании строки
         settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=races[0], comment='-'),
         settings.SCENARIOS['registration']['steps']['step7']['text'],
         settings.SCENARIOS['registration']['steps']['step8']['text'].format(phone='89990002211'),
