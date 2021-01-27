@@ -43,7 +43,6 @@ def handle_source(text, context, step):
 
 
 def handle_destination(text, context, step):
-
     races = []
     # if any(token in text.lower() for token in cities):
     #     context['destination'] = text
@@ -67,7 +66,6 @@ def handle_destination(text, context, step):
 
 
 def handle_date(text, context, step):
-
     dates = []
     match = re.match(re_date, text)
     races = []
@@ -126,4 +124,3 @@ def handle_phone(text, context, step):
         return True
     else:
         return False
-

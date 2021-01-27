@@ -122,9 +122,8 @@ class Bot:
         handler = getattr(handlers, step['handler'])
         if handler(text=text, context=state.context, step=state):
 
-
             # next step
-            next_step = steps[step['next_step']]  #  вот этот переход будет
+            next_step = steps[step['next_step']]  # вот этот переход будет
             #  и в next_step['text'] вместо "Введите номер рейса",
             #  должно быть "Доступные рейсы: {races}. Введите номер рейса "
             text_to_send = next_step['text'].format(**state.context)
@@ -142,7 +141,6 @@ class Bot:
             text_to_send = step['failure_text'].format(**state.context)
 
         return text_to_send
-
 
 
 if __name__ == '__main__':

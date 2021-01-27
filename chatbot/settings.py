@@ -17,58 +17,58 @@ INTENTS = [
 ]
 
 SCENARIOS = {
-    "registration":{
+    "registration": {
         "first_step": "step1",
-        "steps":{
-            "step1":{
+        "steps": {
+            "step1": {
                 "text": "Введите город отправления.",
                 "failure_text": "Из данного города нет рейсов",
                 "handler": "handle_source",
                 "next_step": "step2"
             },
-            "step2":{
+            "step2": {
                 "text": "Введите город назначения",
                 "failure_text": "В данный город нет рейсов",
                 "handler": "handle_destination",
                 "next_step": "step3"
             },
-            "step3":{
+            "step3": {
                 "text": "Введите дату отправления в формате ДД-ММ-ГГГГ.",
                 "failure_text": "В указанный день рейсов нет",
                 "handler": "handle_date",
                 "next_step": "step4"
             },
-            "step4":{
+            "step4": {
                 "text": "Доступные рейсы: {races}. Введите номер рейса",
                 "failure_text": "Неверно введен номер рейса",
                 "handler": "handle_race_number",
                 "next_step": "step5"
             },
-            "step5":{
+            "step5": {
                 "text": "Вы можете оставить комментарий к заказу",
                 "failure_text": None,
                 "handler": "handle_comment",
                 "next_step": "step6"
             },
-            "step6":{
+            "step6": {
                 "text": "Уточняем введенные данные, введите 'Да' или 'Нет' \n" \
-                "Город отправления: {source}\n" \
-                "Город назначения: {destination}\n" \
-                "Дата вылета: {selected_race[1]}\n" \
-                "Рейс : № {selected_race[0]}, количество свободных мест {selected_race[2]} \n" \
-                "Комментарий: {comment}",
+                        "Город отправления: {source}\n" \
+                        "Город назначения: {destination}\n" \
+                        "Дата вылета: {selected_race[1]}\n" \
+                        "Рейс : № {selected_race[0]}, количество свободных мест {selected_race[2]} \n" \
+                        "Комментарий: {comment}",
                 "failure_text": "Возвращаемся к оформлению заказа \n" \
-                "Введите город отправления",
+                                "Введите город отправления",
                 "handler": "handle_commit",
                 "next_step": "step7"
             },
-            "step7":{
+            "step7": {
                 "text": "Введите номер телефона",
                 "failure_text": "Неправильно введен номер телефона",
                 "handler": "handle_phone",
                 "next_step": "step8"
             },
-            "step8":{
+            "step8": {
                 "text": "Спасибо за регистрацию! Мы свяжемся с вами по телефону {phone}",
                 "failure_text": None,
                 "handler": None,
@@ -78,6 +78,5 @@ SCENARIOS = {
     }
 }
 
-DEFAULT_ANSWER = 'К сожалению, рейсов с такими параметрами нет \n '\
+DEFAULT_ANSWER = 'К сожалению, рейсов с такими параметрами нет \n ' \
                  'Вы можете ознакомиться с расписанием рейсов'
-

@@ -8,19 +8,20 @@ from vk_api.bot_longpoll import VkBotMessageEvent
 from data_generator import Generator
 import json
 
-
-# TODO Если что-то надо выполнить в начале тестов -- используйте метод setUp внутри класса с тестами
-# TODO он будет вызываться перед вызовом методов
+# Если что-то надо выполнить в начале тестов -- используйте метод setUp внутри класса с тестами
+#  он будет вызываться перед вызовом методов
 allraces = []
 date = Generator()
 date.append_races()
 date.writer(file_name='date.json')
-# text_date = date.date_generator()
+
 with open('date.json', 'r') as read_file:
     loaded_json_file = json.load(read_file)
     for race in loaded_json_file['Москва']['Лондон']:
         allraces.append(race)
     text_date = loaded_json_file['Москва']['Лондон'][allraces[0]][0]
+
+
 def loader():
     dates = []
     allraces = []
@@ -41,8 +42,6 @@ def loader():
                 if race[0] == day:
                     races.append((number, race[0], race[1]))
         return races
-
-
 
 
 class Test1(TestCase):
@@ -95,7 +94,6 @@ class Test1(TestCase):
         '89990002211'
     ]
 
-
     EXPECTED_OUTPUTS = [
         settings.DEFAULT_ANSWER,
         settings.INTENTS[0]['answer'],
@@ -107,13 +105,14 @@ class Test1(TestCase):
         #  + подумайте - что можно сделать с длинными строками, так их оставлять нельзя
         settings.SCENARIOS['registration']['steps']['step4']['text'].format(races=races),
         settings.SCENARIOS['registration']['steps']['step5']['text'],
-        # TODO длинную строку надо сделать поменьше
-        # TODO возможно собрать данные в словаре и в формат передавать **словарь
-        # TODO как это делается в самом боте при формировании строки
-        settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва', destination='Лондон', selected_race=races[0], comment='-'),
+        #  длинную строку надо сделать поменьше
+        #  возможно собрать данные в словаре и в формат передавать **словарь
+        #  как это делается в самом боте при формировании строки
+        settings.SCENARIOS['registration']['steps']['step6']['text'].format(source='Москва',
+                                                                            destination='Лондон',
+                                                                            selected_race=races[0], comment='-'),
         settings.SCENARIOS['registration']['steps']['step7']['text'],
         settings.SCENARIOS['registration']['steps']['step8']['text'].format(phone='89990002211'),
-
 
     ]
 
