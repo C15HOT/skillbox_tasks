@@ -80,3 +80,11 @@ SCENARIOS = {
 
 DEFAULT_ANSWER = 'К сожалению, рейсов с такими параметрами нет \n ' \
                  'Вы можете ознакомиться с расписанием рейсов'
+
+DB_CONFIG = dict(
+     provider='postgres',
+     user='postgres',
+     password='csv16xp',
+     host='localhost',
+     database='vk_chat_bot'
+)

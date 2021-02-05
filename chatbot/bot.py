@@ -6,6 +6,7 @@ import logging
 import time
 import handlers
 import data_generator
+from chatbot.models import UserState
 
 try:
     import settings
@@ -31,11 +32,11 @@ def configure_logging():
     file_handler.setLevel(logging.DEBUG)
 
 
-class UserState:
-    def __init__(self, scenario_name, step_name, context=None):
-        self.scenario_name = scenario_name
-        self.step_name = step_name
-        self.context = context or {}
+# class UserState:
+#     def __init__(self, scenario_name, step_name, context=None):
+#         self.scenario_name = scenario_name
+#         self.step_name = step_name
+#         self.context = context or {}
 
 
 class Bot:
@@ -55,7 +56,7 @@ class Bot:
         self.vk = vk_api.VkApi(token=token)
         self.long_poller = VkBotLongPoll(self.vk, self.group_id)
         self.api = self.vk.get_api()
-        self.user_states = dict()  # user_id -> user_state
+        # self.user_states = dict()  # user_id -> user_state
 
     def run(self):
         """
@@ -110,7 +111,7 @@ class Bot:
         first_step = scenario['first_step']
         step = scenario['steps'][first_step]
         text_to_send = step['text']
-        self.user_states[user_id] = UserState(scenario_name=scenario_name, step_name=first_step)
+        UserState(scenario_name=scenario_name, step_name=first_step, context={} )
 
         return text_to_send
 
