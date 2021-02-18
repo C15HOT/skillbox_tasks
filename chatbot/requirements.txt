@@ -5,3 +5,4 @@ colorama==0.4.3
 coverage==5.3
 decorator==4.4.2
 idna==2.10
+Pillow==8.0.1

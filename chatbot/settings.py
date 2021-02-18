@@ -69,7 +69,8 @@ SCENARIOS = {
                 "next_step": "step8"
             },
             "step8": {
-                "text": "Спасибо за регистрацию! Мы свяжемся с вами по телефону {phone}",
+                "text": "Спасибо за регистрацию! Мы свяжемся с вами по телефону {phone}. Мы пришлем ваш билет через несколько секунд",
+                "image": "generate_ticket_handler",
                 "failure_text": None,
                 "handler": None,
                 "next_step": None
@@ -82,9 +83,9 @@ DEFAULT_ANSWER = 'К сожалению, рейсов с такими парам
                  'Вы можете ознакомиться с расписанием рейсов'
 
 DB_CONFIG = dict(
-     provider='postgres',
-     user='postgres',
-     password='csv16xp',
-     host='localhost',
-     database='vk_chat_bot'
+    provider='postgres',
+    user='postgres',
+    password='csv16xp',
+    host='localhost',
+    database='vk_chat_bot'
 )

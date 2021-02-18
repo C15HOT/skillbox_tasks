@@ -2,6 +2,8 @@ import re
 import json
 import datetime
 
+from chatbot.generate_ticket import generate_ticket
+
 re_name = re.compile(r'^[\w\-\s]{3,40}$')
 re_email = re.compile(r"\b[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+\b")
 re_telephone = re.compile(r'\b\+?[7,8](\s*\d{3}\s*\d{3}\s*\d{2}\s*\d{2})\b')
@@ -124,3 +126,12 @@ def handle_phone(text, context, step):
         return True
     else:
         return False
+
+
+def generate_ticket_handler(text, context, step):
+    return generate_ticket(source=context['source'],
+                           destination=context['destination'],
+                           date=context['selected_race'][1],
+                           race=context['selected_race'][0],
+                           phone=context['phone'],
+                           )
