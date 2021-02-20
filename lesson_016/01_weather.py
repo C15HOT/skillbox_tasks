@@ -55,7 +55,7 @@ r = re.compile("[а-яА-Я]+")
 
 
 class WeatherMaker:
-    DAYS = 3
+    DAYS = 10
 
     def __init__(self):
         self.response = None
@@ -65,11 +65,17 @@ class WeatherMaker:
         self.allstates = []
         self.moments = ['Ночь', 'Утро', 'День', 'Вечер']
 
+
+        self.data = {}
+        self.coop = {}
+
+
         self.headers = {
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
             'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 '
+                          'Safari/537.36 OPR/40.0.2308.81',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'DNT': '1',
             'Accept-Encoding': 'gzip, deflate, lzma, sdch',
@@ -91,21 +97,26 @@ class WeatherMaker:
                 self.allstates.append(text)
 
             for day in range(self.DAYS):
-                for temp in range(day * self.DAYS, day * self.DAYS + 4):
+                for temp in range(day * 4, day * 4 + 4):
                     self.temperature.append(list_of_values[temp].text)
-                for state in range(day * self.DAYS, day * self.DAYS + 4):
+                for state in range(day * 4, day * 4 + 4):
                     self.states.append(self.allstates[state])
+
+                # for moment in range(4):
+                #     self.data[list_of_dates[day].text] = {self.moments[moment]: [self.states[moment], self.temperature[moment]]}
+                for moment in range(4):
+                    self.coop[self.moments[moment]] = [self.states[moment], self.temperature[moment]]
+                    self.data[list_of_dates[day].text] = self.coop
+                self.coop = {}
+
+
                 self.dates[list_of_dates[day].text] = self.temperature, self.states
                 self.states = []
                 self.temperature = []
         print(self.dates)
+        print(self.data)
 
-    def data_handler(self, days, moments, states, temperature):
-        data = {}
-        for day in days:
-            for moment in range(4):
-                data[day] = {moments[moment]: [states[moment], temperature[moment]]}
-        return data
+
 
 
 class ImageMaker:
