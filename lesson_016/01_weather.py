@@ -50,12 +50,13 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-
+import cv2
+from PIL import Image
 r = re.compile("[а-яА-Я]+")
 
 
 class WeatherMaker:
-    DAYS = 10
+    DAYS = 3
 
     def __init__(self):
         self.response = None
@@ -65,10 +66,8 @@ class WeatherMaker:
         self.allstates = []
         self.moments = ['Ночь', 'Утро', 'День', 'Вечер']
 
-
         self.data = {}
         self.coop = {}
-
 
         self.headers = {
             'Connection': 'keep-alive',
@@ -109,18 +108,37 @@ class WeatherMaker:
                     self.data[list_of_dates[day].text] = self.coop
                 self.coop = {}
 
-
-                self.dates[list_of_dates[day].text] = self.temperature, self.states
+                # self.dates[list_of_dates[day].text] = self.temperature, self.states
                 self.states = []
                 self.temperature = []
-        print(self.dates)
+        # print(self.dates)
         print(self.data)
 
 
-
-
 class ImageMaker:
-    pass
+    PATTERN = cv2.imread('external_data/weather_img/probe.jpg')
+    LINKS = {
+        'Пасмурно': cv2.imread('png/gray.png'),
+        'Ясно': cv2.imread('png/clear.png'),
+        'снег': cv2.imread('png/snow.png'),
+        'Облачно': cv2.imread('png/cloudy.png'),
+        'Мокрый снег': cv2.imread('png/snow_rain.png'),
+        'Дождь с грозой': cv2.imread('png/thunder.png'),
+        'Небольшая облачность': cv2.imread('png/little_cloudy.png'),
+        'Небольшой снег': cv2.imread('png/little_snow.png')
+    }
+
+    def viewImage(self, image, name_of_window):
+        cv2.namedWindow(name_of_window, cv2.WINDOW_NORMAL)
+        cv2.imshow(name_of_window, image)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+    def put_data(self,state, text):
+        cv2.putText(self.PATTERN, text, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 15, (0, 0, 0), 40)
+        img_to_paste = Image.open(state)
+        img_to_paste.paste(self.PATTERN, (40, 40))
+        img_to_paste.save('images/img.png', 'PNG')
 
 
 class DatabaseUpdater:
@@ -130,3 +148,11 @@ class DatabaseUpdater:
 if __name__ == '__main__':
     parse = WeatherMaker()
     parse.parse()
+    for day, values in parse.data.items():
+        print(day)
+        for states, items in values.items():
+            text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
+            print(text)
+
+
+
