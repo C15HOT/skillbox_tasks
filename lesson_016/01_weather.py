@@ -51,7 +51,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import cv2
-from PIL import Image
+
 r = re.compile("[а-яА-Я]+")
 
 
@@ -116,16 +116,16 @@ class WeatherMaker:
 
 
 class ImageMaker:
-    PATTERN = cv2.imread('external_data/weather_img/probe.jpg')
+    PATTERN = 'python_snippets/external_data/probe.jpg'
     LINKS = {
-        'Пасмурно': cv2.imread('png/gray.png'),
-        'Ясно': cv2.imread('png/clear.png'),
-        'снег': cv2.imread('png/snow.png'),
-        'Облачно': cv2.imread('png/cloudy.png'),
-        'Мокрый снег': cv2.imread('png/snow_rain.png'),
-        'Дождь с грозой': cv2.imread('png/thunder.png'),
-        'Небольшая облачность': cv2.imread('png/little_cloudy.png'),
-        'Небольшой снег': cv2.imread('png/little_snow.png')
+        'Пасмурно': 'png/gray.png',
+        'Ясно': 'png/clear.png',
+        'снег': 'png/snow.png',
+        'Облачно': 'png/cloudy.png',
+        'Мокрый снег': 'png/snow_rain.png',
+        'Дождь с грозой': 'png/thunder.png',
+        'Небольшая облачность': 'png/little_cloudy.png',
+        'Небольшой снег': 'png/little_snow.png'
     }
 
     def viewImage(self, image, name_of_window):
@@ -134,11 +134,55 @@ class ImageMaker:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def put_data(self,state, text):
-        cv2.putText(self.PATTERN, text, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 15, (0, 0, 0), 40)
-        img_to_paste = Image.open(state)
-        img_to_paste.paste(self.PATTERN, (40, 40))
-        img_to_paste.save('images/img.png', 'PNG')
+    def put_data(self, state, data):
+
+        y = 50
+        for day, values in data.items():
+            image = cv2.imread(self.PATTERN)
+
+            cv2.putText(image, day, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
+            for states, items in values.items():
+                y += 80
+                # text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
+                text = (f"{states}: {items[0][0]}, Температура: {items[1]}")
+                print(text)
+                cv2.putText(image, text, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
+            y = 50
+
+            img = self.put_image(background=image, state=state)
+
+            self.viewImage(img, 'Line')
+            # cv2.imwrite(f'images/image_{day}.jpg',img)
+
+
+    def put_image(self, background, state):
+        img1 = background
+        img2 = cv2.imread(self.LINKS[state])
+
+
+        rows, cols, channels = img2.shape
+        roi = img1[0:rows, 0:cols]
+
+
+        img2gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+        ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
+        mask_inv = cv2.bitwise_not(mask)
+
+
+        img1_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
+
+
+        img2_fg = cv2.bitwise_and(img2, img2, mask=mask)
+
+
+        dst = cv2.add(img1_bg, img2_fg)
+        img1[0:rows, 0:cols] = dst
+
+        return img1
+
+
+
+
 
 
 class DatabaseUpdater:
@@ -148,11 +192,12 @@ class DatabaseUpdater:
 if __name__ == '__main__':
     parse = WeatherMaker()
     parse.parse()
-    for day, values in parse.data.items():
-        print(day)
-        for states, items in values.items():
-            text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
-            print(text)
+    data = parse.data
+    img = ImageMaker()
+    img.put_data(state='Пасмурно', data=data)
 
-
-
+    # for day, values in parse.data.items():
+    #     print(day)
+    #     for states, items in values.items():
+    #         text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
+    #         print(text)
