@@ -115,6 +115,8 @@ class WeatherMaker:
         print(self.data)
 
 
+
+
 class ImageMaker:
     PATTERN = 'python_snippets/external_data/probe.jpg'
     LINKS = {
@@ -124,8 +126,9 @@ class ImageMaker:
         'Облачно': 'png/cloudy.png',
         'Мокрый снег': 'png/snow_rain.png',
         'Дождь с грозой': 'png/thunder.png',
-        'Небольшая облачность': 'png/little_cloudy.png',
-        'Небольшой снег': 'png/little_snow.png'
+        'Малооблачно': 'png/little_cloudy.png',
+        'Небольшой снег': 'png/little_snow.png',
+        'дождь': 'png/rain.png'
     }
 
     def viewImage(self, image, name_of_window):
@@ -134,55 +137,109 @@ class ImageMaker:
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    def put_data(self, state, data):
+    def put_data(self, data):
 
         y = 50
+
+        img_x = 700
         for day, values in data.items():
             image = cv2.imread(self.PATTERN)
+            image = self.gradient(image=image, state=data[day]['День'][0][0])
 
             cv2.putText(image, day, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
             for states, items in values.items():
-                y += 80
+                y += 100
+
                 # text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
                 text = (f"{states}: {items[0][0]}, Температура: {items[1]}")
+
+                if len(items[0]) > 1:
+                    if items[0][1] =='небольшой' or items[0][1] =='мокрый':
+                        state = items[0][2]
+                    else:
+                        state = items[0][1]
+
+                else:
+                    state = items[0][0]
+
+                image = self.put_image(background=image, state=state, x=img_x, y=y)
+
+
                 print(text)
                 cv2.putText(image, text, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
             y = 50
 
-            img = self.put_image(background=image, state=state)
 
-            self.viewImage(img, 'Line')
+
+
+            self.viewImage(image, 'Line')
+
+
             # cv2.imwrite(f'images/image_{day}.jpg',img)
 
-
-    def put_image(self, background, state):
+    def put_image(self, background, state, x, y):
         img1 = background
+
         img2 = cv2.imread(self.LINKS[state])
 
+        scale_percent = 20  # Процент от изначального размера
+        width = int(img2.shape[1] * scale_percent / 100)
+        height = int(img2.shape[0] * scale_percent / 100)
+        dim = (width, height)
+        img2 = cv2.resize(img2, dim, interpolation=cv2.INTER_AREA)
 
         rows, cols, channels = img2.shape
         roi = img1[0:rows, 0:cols]
-
 
         img2gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
         ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
         mask_inv = cv2.bitwise_not(mask)
 
-
         img1_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
-
 
         img2_fg = cv2.bitwise_and(img2, img2, mask=mask)
 
-
         dst = cv2.add(img1_bg, img2_fg)
-        img1[0:rows, 0:cols] = dst
+        img1[0 + y:rows + y, 0 + x:cols + x] = dst
 
         return img1
 
+    def gradient(self, image, state):
+        y = image.shape[0]
+        x = image.shape[1]
 
+        for i in range(y):
+            for j in range(x):
+                if state == 'Ясно':
+                    k = j / x
+                    k_g = 1
+                    k_r = 1
+                    k_b = k
+                elif state == 'Дождь':
+                    k = j / x
+                    k_g = k
+                    k_r = k
+                    k_b = 1
+                elif state == 'cнег':
+                    k = j / x
+                    k_g = 1
+                    k_r = k
+                    k_b = 1
+                elif state == 'Пасмурно':
+                    k = j / (j + 100)
+                    k_g = k
+                    k_r = k
+                    k_b = k
+                else:
 
-
+                    k_g = 1
+                    k_r = 1
+                    k_b = 1
+                g = 255 * k_g
+                r = 255 * k_r
+                b = 255 * k_b
+                image[i, j] = (b, g, r)
+        return image
 
 
 class DatabaseUpdater:
@@ -194,10 +251,5 @@ if __name__ == '__main__':
     parse.parse()
     data = parse.data
     img = ImageMaker()
-    img.put_data(state='Пасмурно', data=data)
+    img.put_data(data=data)
 
-    # for day, values in parse.data.items():
-    #     print(day)
-    #     for states, items in values.items():
-    #         text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
-    #         print(text)
