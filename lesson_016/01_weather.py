@@ -128,7 +128,8 @@ class ImageMaker:
         'Дождь с грозой': 'png/thunder.png',
         'Малооблачно': 'png/little_cloudy.png',
         'Небольшой снег': 'png/little_snow.png',
-        'дождь': 'png/rain.png'
+        'дождь': 'png/rain.png',
+        'осадки': 'png/rain.png'
     }
 
     def viewImage(self, image, name_of_window):
@@ -154,7 +155,7 @@ class ImageMaker:
                 text = (f"{states}: {items[0][0]}, Температура: {items[1]}")
 
                 if len(items[0]) > 1:
-                    if items[0][1] =='небольшой' or items[0][1] =='мокрый':
+                    if items[0][1] =='небольшой' or items[0][1] =='мокрый' or items[0][1] =='небольшие':
                         state = items[0][2]
                     else:
                         state = items[0][1]
@@ -182,7 +183,7 @@ class ImageMaker:
 
         img2 = cv2.imread(self.LINKS[state])
 
-        scale_percent = 20  # Процент от изначального размера
+        scale_percent = 40  # Процент от изначального размера
         width = int(img2.shape[1] * scale_percent / 100)
         height = int(img2.shape[0] * scale_percent / 100)
         dim = (width, height)
