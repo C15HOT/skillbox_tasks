@@ -46,13 +46,18 @@
 # Приконнектится по полученному url-пути к базе данных
 # Инициализировать её через DatabaseProxy()
 # https://peewee.readthedocs.io/en/latest/peewee/database.html#dynamically-defining-a-database
+import datetime
 
 import requests
 from bs4 import BeautifulSoup
 import re
 import cv2
+import peewee
+import sqlite3
 
 r = re.compile("[а-яА-Я]+")
+
+re_date = re.compile(r'\d\d')
 
 
 class WeatherMaker:
@@ -114,22 +119,19 @@ class WeatherMaker:
         # print(self.dates)
         print(self.data)
 
-
-
-
 class ImageMaker:
     PATTERN = 'python_snippets/external_data/probe.jpg'
     LINKS = {
-        'Пасмурно': 'png/gray.png',
-        'Ясно': 'png/clear.png',
-        'снег': 'png/snow.png',
-        'Облачно': 'png/cloudy.png',
-        'Мокрый снег': 'png/snow_rain.png',
-        'Дождь с грозой': 'png/thunder.png',
-        'Малооблачно': 'png/little_cloudy.png',
-        'Небольшой снег': 'png/little_snow.png',
-        'дождь': 'png/rain.png',
-        'осадки': 'png/rain.png'
+        'Пасмурно': 'python_snippets/external_data/weather_img/cloud.jpg',
+        'Ясно': 'python_snippets/external_data/weather_img/sun.jpg',
+        'снег': 'python_snippets/external_data/weather_img/snow.jpg',
+        'Облачно': 'python_snippets/external_data/weather_img/cloud.jpg',
+        'Мокрый снег': 'python_snippets/external_data/weather_img/snow.jpg',
+        'Дождь с грозой':'python_snippets/external_data/weather_img/rain.jpg',
+        'Малооблачно': 'python_snippets/external_data/weather_img/cloud.jpg',
+        'Небольшой снег': 'python_snippets/external_data/weather_img/snow.jpg',
+        'дождь': 'python_snippets/external_data/weather_img/rain.jpg',
+        'осадки': 'python_snippets/external_data/weather_img/rain.jpg'
     }
 
     def viewImage(self, image, name_of_window):
@@ -142,21 +144,29 @@ class ImageMaker:
 
         y = 50
 
-        img_x = 700
+        img_x = 900
         for day, values in data.items():
             image = cv2.imread(self.PATTERN)
             image = self.gradient(image=image, state=data[day]['День'][0][0])
 
-            cv2.putText(image, day, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
+            cv2.putText(image, self.day_handler(day).strftime("%Y-%m-%d"), (50, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
             for states, items in values.items():
                 y += 100
 
+                temp = items[1].replace('−','-')
                 # text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
-                text = (f"{states}: {items[0][0]}, Температура: {items[1]}")
+                text = (f"{states}: {items[0][0]}, Температура: {temp}")
 
                 if len(items[0]) > 1:
-                    if items[0][1] =='небольшой' or items[0][1] =='мокрый' or items[0][1] =='небольшие':
-                        state = items[0][2]
+
+                    if items[0][1] =='небольшой' or items[0][1] =='мокрый' or items[0][1] =='небольшие' \
+                            or items[0][1] =='сильный':
+                        if items[0][2] =='мокрый':
+                            state = items[0][3]
+                        else:
+                            state = items[0][2]
+
+
                     else:
                         state = items[0][1]
 
@@ -166,8 +176,10 @@ class ImageMaker:
                 image = self.put_image(background=image, state=state, x=img_x, y=y)
 
 
+
+
                 print(text)
-                cv2.putText(image, text, (10, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
+                cv2.putText(image, text, (50, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
             y = 50
 
 
@@ -183,7 +195,7 @@ class ImageMaker:
 
         img2 = cv2.imread(self.LINKS[state])
 
-        scale_percent = 40  # Процент от изначального размера
+        scale_percent = 100  # Процент от изначального размера
         width = int(img2.shape[1] * scale_percent / 100)
         height = int(img2.shape[0] * scale_percent / 100)
         dim = (width, height)
@@ -201,7 +213,7 @@ class ImageMaker:
         img2_fg = cv2.bitwise_and(img2, img2, mask=mask)
 
         dst = cv2.add(img1_bg, img2_fg)
-        img1[0 + y:rows + y, 0 + x:cols + x] = dst
+        img1[0 + y-50:rows + y-50, 0 + x:cols + x] = dst
 
         return img1
 
@@ -231,20 +243,45 @@ class ImageMaker:
                     k_g = k
                     k_r = k
                     k_b = k
+                elif state == 'Малооблачно':
+                    k = j / (j + 100)
+                    k_g = k
+                    k_r = k
+                    k_b = k
+                elif state == 'Облачно':
+                    k = j / (j + 100)
+                    k_g = k
+                    k_r = k
+                    k_b = k
                 else:
-
                     k_g = 1
                     k_r = 1
                     k_b = 1
+
                 g = 255 * k_g
                 r = 255 * k_r
                 b = 255 * k_b
                 image[i, j] = (b, g, r)
         return image
 
+    def day_handler(self, day):
+
+        _, number, month = day.split(' ')
+
+        equal = {'янв': 1, 'фев': 2,
+                 'мар': 3, 'апр': 4,
+                 'май': 5, 'июн': 6,
+                 'июл': 7, 'авг': 8,
+                 'сен': 9, 'окт': 10,
+                 'ноя': 11, 'дек': 12,
+                 }
+        date = datetime.date(year=datetime.date.today().year, month=equal[month], day=int(number))
+        return date
 
 class DatabaseUpdater:
     pass
+
+
 
 
 if __name__ == '__main__':
@@ -253,4 +290,5 @@ if __name__ == '__main__':
     data = parse.data
     img = ImageMaker()
     img.put_data(data=data)
+
 
