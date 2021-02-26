@@ -264,6 +264,7 @@ class Game:
         self.remaining_time = '123456.0987654321'
         self.status = {'location': 'Location_0_tm0', 'exp': 0, 'timeleft': self.remaining_time, 'game_time': 0}
         # self.start()
+1
 
 
 if __name__ == '__main__':
