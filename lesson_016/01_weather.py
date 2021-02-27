@@ -46,14 +46,17 @@
 # Приконнектится по полученному url-пути к базе данных
 # Инициализировать её через DatabaseProxy()
 # https://peewee.readthedocs.io/en/latest/peewee/database.html#dynamically-defining-a-database
+import argparse
 import datetime
 
 import requests
 from bs4 import BeautifulSoup
 import re
 import cv2
-import peewee
-import sqlite3
+
+from playhouse.db_url import connect
+
+import models
 
 r = re.compile("[а-яА-Я]+")
 
@@ -61,9 +64,10 @@ re_date = re.compile(r'\d\d')
 
 
 class WeatherMaker:
-    DAYS = 3
 
-    def __init__(self):
+
+    def __init__(self, days):
+        self.DAYS = days
         self.response = None
         self.dates = {}
         self.temperature = []
@@ -117,7 +121,8 @@ class WeatherMaker:
                 self.states = []
                 self.temperature = []
         # print(self.dates)
-        print(self.data)
+        # print(self.data)
+
 
 class ImageMaker:
     PATTERN = 'python_snippets/external_data/probe.jpg'
@@ -127,7 +132,7 @@ class ImageMaker:
         'снег': 'python_snippets/external_data/weather_img/snow.jpg',
         'Облачно': 'python_snippets/external_data/weather_img/cloud.jpg',
         'Мокрый снег': 'python_snippets/external_data/weather_img/snow.jpg',
-        'Дождь с грозой':'python_snippets/external_data/weather_img/rain.jpg',
+        'Дождь с грозой': 'python_snippets/external_data/weather_img/rain.jpg',
         'Малооблачно': 'python_snippets/external_data/weather_img/cloud.jpg',
         'Небольшой снег': 'python_snippets/external_data/weather_img/snow.jpg',
         'дождь': 'python_snippets/external_data/weather_img/rain.jpg',
@@ -149,19 +154,20 @@ class ImageMaker:
             image = cv2.imread(self.PATTERN)
             image = self.gradient(image=image, state=data[day]['День'][0][0])
 
-            cv2.putText(image, self.day_handler(day).strftime("%Y-%m-%d"), (50, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
+            cv2.putText(image, self.day_handler(day).strftime("%Y-%m-%d"), (50, y), cv2.FONT_HERSHEY_COMPLEX, 1,
+                        (0, 0, 0), 2)
             for states, items in values.items():
                 y += 100
 
-                temp = items[1].replace('−','-')
+                temp = items[1].replace('−', '-')
                 # text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
                 text = (f"{states}: {items[0][0]}, Температура: {temp}")
 
                 if len(items[0]) > 1:
 
-                    if items[0][1] =='небольшой' or items[0][1] =='мокрый' or items[0][1] =='небольшие' \
-                            or items[0][1] =='сильный':
-                        if items[0][2] =='мокрый':
+                    if items[0][1] == 'небольшой' or items[0][1] == 'мокрый' or items[0][1] == 'небольшие' \
+                            or items[0][1] == 'сильный':
+                        if items[0][2] == 'мокрый':
                             state = items[0][3]
                         else:
                             state = items[0][2]
@@ -175,20 +181,13 @@ class ImageMaker:
 
                 image = self.put_image(background=image, state=state, x=img_x, y=y)
 
-
-
-
-                print(text)
+                # print(text)
                 cv2.putText(image, text, (50, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
             y = 50
 
+            # self.viewImage(image, 'Line')
 
-
-
-            self.viewImage(image, 'Line')
-
-
-            # cv2.imwrite(f'images/image_{day}.jpg',img)
+            cv2.imwrite(f'images/image_{self.day_handler(day).strftime("%Y-%m-%d")}.jpg',image)
 
     def put_image(self, background, state, x, y):
         img1 = background
@@ -213,7 +212,7 @@ class ImageMaker:
         img2_fg = cv2.bitwise_and(img2, img2, mask=mask)
 
         dst = cv2.add(img1_bg, img2_fg)
-        img1[0 + y-50:rows + y-50, 0 + x:cols + x] = dst
+        img1[0 + y - 50:rows + y - 50, 0 + x:cols + x] = dst
 
         return img1
 
@@ -278,17 +277,76 @@ class ImageMaker:
         date = datetime.date(year=datetime.date.today().year, month=equal[month], day=int(number))
         return date
 
+
 class DatabaseUpdater:
-    pass
+    def __init__(self):
+        self.database = connect('sqlite:///weather.db')
+        models.database_proxy.initialize(self.database)
+
+        self.database.create_tables([models.Weather])
 
 
 
+    def set_info(self, data):
+        for day, values in data.items():
+            date = ImageMaker().day_handler(day).strftime("%Y-%m-%d")
+
+            try:
+                info = models.Weather.create(
+                    date=date,
+                    night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
+                    morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
+                    afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
+                    evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}",
+                )
+            except:
+                print('Повторение записи')
+
+    def get_info(self, date_low=None, date_high=None):
+        if (date_low is not None) and (date_high is not None):
+            range_low = date_low
+            range_high = date_high
+
+            for weather in models.Weather.select().where((models.Weather.date >= range_low) &
+                                                         (models.Weather.date <= range_high)):
+                print(f'{weather.date}: '
+                      f'Ночь: {weather.night},'
+                      f' Утро: {weather.morning}, '
+                      f'День: {weather.afternoon}, '
+                      f'Вечер: {weather.evening}')
+        else:
+            for weather in models.Weather.select(models.Weather):
+                print(f'{weather.date}: '
+                      f'Ночь: {weather.night},'
+                      f' Утро: {weather.morning}, '
+                      f'День: {weather.afternoon}, '
+                      f'Вечер: {weather.evening}')
+
+
+class Parser:
+    def parser_func(self):
+        parser = argparse.ArgumentParser()
+
+        parser.add_argument('--days_count', type=int)
+        parser.add_argument('--date_low', type=str)
+        parser.add_argument('--date_high', type=str)
+        parser.add_argument('--create_ticket', default=False, type=bool)
+
+
+        args = parser.parse_args()
+        return args
 
 if __name__ == '__main__':
-    parse = WeatherMaker()
+    parser = Parser()
+    args = parser.parser_func()
+    parse = WeatherMaker(days=args.days_count)
     parse.parse()
     data = parse.data
-    img = ImageMaker()
-    img.put_data(data=data)
+    if args.create_ticket:
+        img = ImageMaker()
+        img.put_data(data=data)
+    db = DatabaseUpdater()
+    db.set_info(data=parse.data)
+    db.get_info(date_low=args.date_low, date_high=args.date_high)
 
 
