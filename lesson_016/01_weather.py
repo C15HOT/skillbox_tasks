@@ -62,10 +62,19 @@ r = re.compile("[а-яА-Я]+")
 
 re_date = re.compile(r'\d\d')
 
+# TODO каждый класс стоит выделить в отдельный модуль
+# TODO и добавить в конце модуля проверку работы текущего класса
+# TODO (чтобы убедиться, что каждый класс может выполнять свои функции независимо от других)
 
+# TODO просто открытый код оставлять нельзя, надо предполагать, что нашу программу захотят импортировать
+# TODO и использовать в своих программах
+# TODO значит весь код должен быть внутри классов и функций
+# TODO тут например стоит сформировать класс-менеджер, который будет получать какой-то запрос от пользователя
+# TODO и, управляя другими классами-рабочими, будет выполнять этот запрос.
+# TODO И выводить информацию о том, какие действия он смог выполнить, а какие нет.
 class WeatherMaker:
 
-
+    # TODO стиль кода
     def __init__(self, days):
         self.DAYS = days
         self.response = None
@@ -161,10 +170,10 @@ class ImageMaker:
 
                 temp = items[1].replace('−', '-')
                 # text = (f"{states}: {','.join(items[0])}, Температура: {items[1]}")
-                text = (f"{states}: {items[0][0]}, Температура: {temp}")
+                text = (f"{states}: {items[0][0]}, Температура: {temp}")  # TODO лишние скобки
 
                 if len(items[0]) > 1:
-
+                    # TODO можно упростить проверку при помощи оператора in и кортежа из вариантов
                     if items[0][1] == 'небольшой' or items[0][1] == 'мокрый' or items[0][1] == 'небольшие' \
                             or items[0][1] == 'сильный':
                         if items[0][2] == 'мокрый':
@@ -221,6 +230,10 @@ class ImageMaker:
         x = image.shape[1]
 
         for i in range(y):
+            # TODO градиент можно упростить
+            # TODO 1) вложенный цикл убрать и использовать cv2.line
+            # TODO 2) определить начальный цвет ДО вызова функции градиента
+            # TODO передавать в функцию начальный цвет и к нему прибавлять +1 по каждому каналу, если он меньше 255
             for j in range(x):
                 if state == 'Ясно':
                     k = j / x
@@ -290,8 +303,33 @@ class DatabaseUpdater:
     def set_info(self, data):
         for day, values in data.items():
             date = ImageMaker().day_handler(day).strftime("%Y-%m-%d")
+            # TODO все классы должны быть независимыми друг от дружки
+            # TODO если нужен какой-то общий метод - сделайте его простой функцией
 
             try:
+                # TODO При добавлении новых данных в базу попробуйте использовать метод get_or_create
+                # TODO Он либо создаст новую запись, либо укажет на то, что запись уже существует
+                # TODO По возвращенному айди можно будет обновить старую запись, вместо создания новой.
+                # TODO Обратите внимание на описание этого метода и на то, что он возвращает при использовании
+                # http://docs.peewee-orm.com/en/latest/peewee/api.html#Model.get_or_create
+                # TODO Returns:
+                #  Tuple of Model instance and boolean indicating if a new object was created.
+                # TODO Т.е. возвращается кортеж с ID элемента, который был найден или был создан
+                # TODO И возвращается True/False объект, который говорит о том, был ли объект создан
+                # TODO Если объект не был создан - его хорошо было бы обновить по вернувшемуся ID
+                # TODO Принцип примерно следующий:
+                # for data in data_to_save:
+                # TODO Сперва получаем данные из get_or_create по одному из полей(в данном случае по дате)
+                #     weather, created = Weather.get_or_create(
+                #         date=data['date'],
+                # TODO В defaults указываются остальные данные, которые будут использованы при создании записи
+                #         defaults={'temperature': data['temperature'], 'pressure': data['pressure'],
+                #                   'conditions': data['conditions'], 'wind': data['wind']})
+                #     if not created:
+                # TODO Если запись не создана - обновляем её
+                #         query = Weather.update(temperature=data['temperature'], pressure=data['pressure'],
+                #                                conditions=data['conditions'], wind=data['wind']).where(Weather.id == weather.id)
+                #         query.execute()
                 info = models.Weather.create(
                     date=date,
                     night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
@@ -303,6 +341,9 @@ class DatabaseUpdater:
                 print('Повторение записи')
 
     def get_info(self, date_low=None, date_high=None):
+        # TODO нужно убрать дублирование кода
+        # TODO + этот метод должен формировать список прогнозов и возвращать его
+        # TODO печатью пусть занимается менеджер
         if (date_low is not None) and (date_high is not None):
             range_low = date_low
             range_high = date_high
@@ -323,7 +364,12 @@ class DatabaseUpdater:
                       f'Вечер: {weather.evening}')
 
 
-class Parser:
+class Parser:  # TODO этот класс стоит расширить до менеджера
+    # TODO чтобы он полностью выполнял организационную часть работы
+    # TODO 1) получал ввод пользователя
+    # TODO 2) обрабатывал его
+    # TODO 3) выполнял запросы через классы-работники
+    # TODO 4) формировал результат
     def parser_func(self):
         parser = argparse.ArgumentParser()
 

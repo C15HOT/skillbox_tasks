@@ -2,7 +2,7 @@ import peewee
 
 
 database_proxy= peewee.DatabaseProxy()
-
+# TODO не забывайте про стиль кода
 class BaseModel(peewee.Model):
     class Meta:
         database = database_proxy
