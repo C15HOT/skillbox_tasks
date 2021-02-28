@@ -75,7 +75,6 @@ class ImageMaker:
             os.makedirs('images', exist_ok=True)
             cv2.imwrite(f'images/image_{day_handler(day).strftime("%Y-%m-%d")}.jpg', image)
 
-
     def put_image(self, background, state, x, y):
         img1 = background
 

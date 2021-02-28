@@ -48,8 +48,6 @@
 # https://peewee.readthedocs.io/en/latest/peewee/database.html#dynamically-defining-a-database
 import argparse
 
-
-
 #  каждый класс стоит выделить в отдельный модуль
 #  и добавить в конце модуля проверку работы текущего класса
 #  (чтобы убедиться, что каждый класс может выполнять свои функции независимо от других)
@@ -61,11 +59,9 @@ import argparse
 # и, управляя другими классами-рабочими, будет выполнять этот запрос.
 # И выводить информацию о том, какие действия он смог выполнить, а какие нет.
 
-from image_maker import  ImageMaker
+from image_maker import ImageMaker
 from lesson_016.databaseupdater import DatabaseUpdater
 from weather_maker import WeatherMaker
-
-
 
 
 class Parser:  # этот класс стоит расширить до менеджера
@@ -145,7 +141,7 @@ class Parser:  # этот класс стоит расширить до мене
             print(data)
 
 
-
 if __name__ == '__main__':
     parser = Parser()
     parser.handler()
+#зачёт!

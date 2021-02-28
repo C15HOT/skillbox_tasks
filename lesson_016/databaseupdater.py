@@ -2,6 +2,8 @@ import peewee
 from playhouse.db_url import connect
 import models
 from image_maker import day_handler
+
+
 #  используйте относительный путь (относительно рабочей директории, без lesson_016)
 
 class DatabaseUpdater:
@@ -63,13 +65,12 @@ class DatabaseUpdater:
 
             result = (models.Weather
                       .insert(date=date,
-                                night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
-                                morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
-                                afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
-                                evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}")
+                              night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
+                              morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
+                              afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
+                              evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}")
                       .on_conflict('replace')
                       .execute())
-
 
     def get_info(self, date_low=None, date_high=None):
         # нужно убрать дублирование кода
@@ -91,6 +92,5 @@ class DatabaseUpdater:
                         f' Утро: {weather.morning}, '
                         f'День: {weather.afternoon}, '
                         f'Вечер: {weather.evening}')
-
 
         return list
