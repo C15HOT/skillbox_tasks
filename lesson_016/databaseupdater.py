@@ -12,11 +12,11 @@ class DatabaseUpdater:
         self.database.create_tables([models.Weather])
 
     def set_info(self, data):
-        # TODO кстати, если у вас есть столбец уникальных записей (в нашем случае дата)
-        # TODO можно использовать более высокоуровневый метод
-        # TODO https://stackoverflow.com/questions/33485312/insert-or-update-a-peewee-record-in-python
-        # TODO можно даже сочетать http://docs.peewee-orm.com/en/latest/peewee/api.html#Model.insert_many
-        # TODO с методом http://docs.peewee-orm.com/en/latest/peewee/api.html?highlight=on%20conflict#Insert.on_conflict
+        #  кстати, если у вас есть столбец уникальных записей (в нашем случае дата)
+        #  можно использовать более высокоуровневый метод
+        #  https://stackoverflow.com/questions/33485312/insert-or-update-a-peewee-record-in-python
+        #  можно даже сочетать http://docs.peewee-orm.com/en/latest/peewee/api.html#Model.insert_many
+        #  с методом http://docs.peewee-orm.com/en/latest/peewee/api.html?highlight=on%20conflict#Insert.on_conflict
         for day, values in data.items():
             date = day_handler(day).strftime("%Y-%m-%d")
 
@@ -43,22 +43,33 @@ class DatabaseUpdater:
             #         query = Weather.update(temperature=data['temperature'], pressure=data['pressure'],
             #                                conditions=data['conditions'], wind=data['wind']).where(Weather.id == weather.id)
             #         query.execute()
-            weather, created = models.Weather.get_or_create(
-                date=date,
-                defaults={
-                    'night': f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
-                    'morning': f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
-                    'afternoon': f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
-                    'evening': f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}"
-                })
-            if not created:
-                query = models.Weather.update(
-                    night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
-                    morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
-                    afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
-                    evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}"
-                )
-                query.execute()
+            # weather, created = models.Weather.get_or_create(
+            #     date=date,
+            #     defaults={
+            #         'night': f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
+            #         'morning': f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
+            #         'afternoon': f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
+            #         'evening': f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}"
+            #     })
+            # if not created:
+            #     query = models.Weather.update(
+            #         date=date,
+            #         night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
+            #         morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
+            #         afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
+            #         evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}"
+            #     )
+            #     query.execute()
+
+            result = (models.Weather
+                      .insert(date=date,
+                                night=f"{values['Ночь'][0][0]}, Температура: {values['Ночь'][1].replace('−', '-')}",
+                                morning=f"{values['Утро'][0][0]}, Температура: {values['Утро'][1].replace('−', '-')}",
+                                afternoon=f"{values['День'][0][0]}, Температура: {values['День'][1].replace('−', '-')}",
+                                evening=f"{values['Вечер'][0][0]}, Температура: {values['Вечер'][1].replace('−', '-')}")
+                      .on_conflict('replace')
+                      .execute())
+
 
     def get_info(self, date_low=None, date_high=None):
         # нужно убрать дублирование кода
