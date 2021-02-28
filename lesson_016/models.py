@@ -1,17 +1,17 @@
 import peewee
 
+database_proxy = peewee.DatabaseProxy()
 
-database_proxy= peewee.DatabaseProxy()
-# TODO не забывайте про стиль кода
+
+#  не забывайте про стиль кода
 class BaseModel(peewee.Model):
     class Meta:
         database = database_proxy
 
-class Weather(BaseModel):
 
+class Weather(BaseModel):
     date = peewee.DateTimeField(unique=True)
     night = peewee.CharField()
     morning = peewee.CharField()
     afternoon = peewee.CharField()
     evening = peewee.CharField()
-

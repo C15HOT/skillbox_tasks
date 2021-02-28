@@ -1,7 +1,8 @@
+import peewee
 from playhouse.db_url import connect
 import models
-from lesson_016.image_maker import day_handler
-# TODO используйте относительный путь (относительно рабочей директории, без lesson_016)
+from image_maker import day_handler
+#  используйте относительный путь (относительно рабочей директории, без lesson_016)
 
 class DatabaseUpdater:
     def __init__(self):
@@ -68,19 +69,17 @@ class DatabaseUpdater:
             range_low = date_low
             range_high = date_high
 
-            for weather in models.Weather.select().where((models.Weather.date >= range_low) &
-                                                         (models.Weather.date <= range_high)):
-                list.append(f'{weather.date}: '
-                            f'Ночь: {weather.night},'
-                            f' Утро: {weather.morning}, '
-                            f'День: {weather.afternoon}, '
-                            f'Вечер: {weather.evening}')
-
         else:
-            for weather in models.Weather.select(models.Weather):
-                list.append(f'{weather.date}: '
-                            f'Ночь: {weather.night},'
-                            f' Утро: {weather.morning}, '
-                            f'День: {weather.afternoon}, '
-                            f'Вечер: {weather.evening}')
+            range_low = peewee.fn.MIN(models.Weather).alias('date')
+            range_high = peewee.fn.Max(models.Weather).alias('date')
+
+        for weather in models.Weather.select().where((models.Weather.date >= range_low) &
+                                                     (models.Weather.date <= range_high)):
+            list.append(f'{weather.date}: '
+                        f'Ночь: {weather.night},'
+                        f' Утро: {weather.morning}, '
+                        f'День: {weather.afternoon}, '
+                        f'Вечер: {weather.evening}')
+
+
         return list

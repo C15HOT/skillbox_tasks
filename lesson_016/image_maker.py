@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import cv2
 
@@ -70,8 +71,10 @@ class ImageMaker:
             y = 50
 
             # self.viewImage(image, 'Line')
-            # TODO нужна проверка на наличие папки images и её создание
+            #  нужна проверка на наличие папки images и её создание
+            os.makedirs('images', exist_ok=True)
             cv2.imwrite(f'images/image_{day_handler(day).strftime("%Y-%m-%d")}.jpg', image)
+
 
     def put_image(self, background, state, x, y):
         img1 = background
@@ -143,6 +146,6 @@ class ImageMaker:
 if __name__ == '__main__':
     img = ImageMaker()
     img.put_data(data={'Сб, 27 фев': {'Ночь': [['Пасмурно', 'небольшие', 'осадки'], '+3'],
-                                      'Утро': [['Пасмурно', 'небольшие', 'осадки'], '+2'],
+                                      'Утро': [['Пасмурно', 'небольшие', 'осадки'], '+1'],
                                       'День': [['Малооблачно', 'небольшой', 'снег'], '0'],
                                       'Вечер': [['Облачно'], '−3']}})
