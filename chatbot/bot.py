@@ -101,7 +101,7 @@ class Bot:
                     # run intent
                     if intent['answer']:
 
-                        self.send_text(self.send_text(settings.DEFAULT_ANSWER, user_id), user_id)
+                        self.send_text(intent['answer'], user_id)
                     else:
                         self.start_scenario(user_id, intent['scenario'], text)
                     break
