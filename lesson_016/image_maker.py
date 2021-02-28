@@ -70,7 +70,7 @@ class ImageMaker:
             y = 50
 
             # self.viewImage(image, 'Line')
-
+            # TODO нужна проверка на наличие папки images и её создание
             cv2.imwrite(f'images/image_{day_handler(day).strftime("%Y-%m-%d")}.jpg', image)
 
     def put_image(self, background, state, x, y):
