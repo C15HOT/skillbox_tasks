@@ -1,7 +1,7 @@
 from playhouse.db_url import connect
 import models
 from lesson_016.image_maker import day_handler
-
+# TODO используйте относительный путь (относительно рабочей директории, без lesson_016)
 
 class DatabaseUpdater:
     def __init__(self):
@@ -11,6 +11,11 @@ class DatabaseUpdater:
         self.database.create_tables([models.Weather])
 
     def set_info(self, data):
+        # TODO кстати, если у вас есть столбец уникальных записей (в нашем случае дата)
+        # TODO можно использовать более высокоуровневый метод
+        # TODO https://stackoverflow.com/questions/33485312/insert-or-update-a-peewee-record-in-python
+        # TODO можно даже сочетать http://docs.peewee-orm.com/en/latest/peewee/api.html#Model.insert_many
+        # TODO с методом http://docs.peewee-orm.com/en/latest/peewee/api.html?highlight=on%20conflict#Insert.on_conflict
         for day, values in data.items():
             date = day_handler(day).strftime("%Y-%m-%d")
 
